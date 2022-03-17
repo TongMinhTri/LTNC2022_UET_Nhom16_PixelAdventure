@@ -1,6 +1,16 @@
 #pragma once
 #include "BoardGame.h"
 using namespace std;
+
+typedef struct Input
+{
+	int left;
+	int right;
+	int up;
+	int down;
+	int jump;
+};
+
 class Object
 {
 protected:

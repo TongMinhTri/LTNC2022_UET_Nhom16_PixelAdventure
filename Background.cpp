@@ -28,3 +28,7 @@ void Background::setImg(SDL_Renderer* renderer, string path)
 {
 	body = BG::loadTexture(renderer, path);
 }
+
+
+
+

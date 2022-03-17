@@ -6,7 +6,7 @@ void BG::init(SDL_Window*& window, SDL_Renderer*& renderer)
 	{
 		std::cout << "Khong khoi tao duoc" << '\n' << SDL_GetError();
 	}
-	window = SDL_CreateWindow("Hii", SDL_WINDOWPOS_CENTERED,
+	window = SDL_CreateWindow("Ahihi!", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == NULL)
 	{

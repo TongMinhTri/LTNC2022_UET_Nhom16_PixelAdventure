@@ -13,6 +13,4 @@ public:
 	void show(SDL_Renderer* renderer, int x, int y, int w, int h);
 	void setImg(SDL_Renderer* renderer, string path);
 	SDL_Rect getRect() const { return rect; }
-
 };
-

@@ -15,6 +15,7 @@ static SDL_Renderer* renderer;
 static SDL_Event event;
 static bool quit = false;
 
+
 namespace BG {
 	void init(SDL_Window*& window, SDL_Renderer*& renderer);
 	void quitSDL(SDL_Window* window, SDL_Renderer* renderer);
