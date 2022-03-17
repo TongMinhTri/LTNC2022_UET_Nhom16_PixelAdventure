@@ -7,8 +7,8 @@ Ninja_Frog::Ninja_Frog()
 
 Ninja_Frog::Ninja_Frog(SDL_Renderer *renderer)
 { 
-	x = SCREEN_WIDTH/2;
-	y = SCREEN_HEIGHT*3/4;
+	x = 434;
+	y = 187;
 	setPos(x, y);
 	frame = 0;
 	width_frame = 32;
