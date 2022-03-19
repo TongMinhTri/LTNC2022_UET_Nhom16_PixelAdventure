@@ -2,8 +2,8 @@
 
 Object::Object()
 {
-	rect.x = 200;
-	rect.y = 200;
+	rect.x = 434;
+	rect.y = 187;
 	rect.w = 32;
 	rect.h = 32;
 	body = NULL;
@@ -11,8 +11,8 @@ Object::Object()
 
 Object::Object(SDL_Renderer* renderer, std::string path)
 {
-	rect.x = 200;
-	rect.y = 200;
+	rect.x = 434;
+	rect.y = 197;
 	rect.w = 32;
 	rect.h = 32;
 	body = BG::loadTexture(renderer, path);
@@ -41,12 +41,12 @@ void Object::setPos(int x, int y)
 	rect.y = y;
 }
 
-void Object::Gety( int y)
+void Object::Gety( int a)
 {
-	rect.y += y;
+	rect.y += a;
 }
 
-void Object::Getx( int x )
+void Object::Getx( int a )
 {
-	rect.x += x;
+	rect.x += a;
 }

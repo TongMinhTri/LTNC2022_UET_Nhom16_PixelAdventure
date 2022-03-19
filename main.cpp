@@ -1,7 +1,10 @@
 #include "BoardGame.h"
 #include "Ninja_Frog.h"
 #include "Background.h"
+#include "Time.h"
 using namespace BG;
+
+const int frame_per_second = 20; //fps
 
 void in_bgrnen(Background a,SDL_Renderer *renderer)
 {
@@ -89,13 +92,13 @@ void in_Background_P(Background a, SDL_Renderer* renderer)
 	a.show(renderer, 464, 18, 16, 9);
 }
 
-
 int main(int argc, char* argv[])
 {
-	srand(time(0));
+	//srand(time(NULL));
 	init(window, renderer);
-
-	Background bgrnen(renderer,"Green.png");
+	Time *fps_timer = new Time();
+	//Time* time = new Time();
+	Background bgrnen(renderer, "Green.png");
 	Background Background_A(renderer, "Terrain_Project/Background/Background_A.png");
 	Background Background_B(renderer, "Terrain_Project/Background/Background_B.png");
 	Background Background_C(renderer, "Terrain_Project/Background/Background_C.png");
@@ -113,16 +116,19 @@ int main(int argc, char* argv[])
 	Background Background_P(renderer, "Terrain_Project/Background/Background_P.png");
 
 	Ninja_Frog fall(renderer);
+	fall.set_clips();
 	
 	while (!quit)
 	{
+		fps_timer->start();
+		//time->tick();
 		while (SDL_PollEvent(&event) != 0)
 		{
 			if (event.type == SDL_QUIT)
 			{
 				quit = true;
 			}
-			fall.move(event);
+			fall.move(event, renderer);
 		}
 		SDL_RenderClear(renderer);
 
@@ -143,9 +149,19 @@ int main(int argc, char* argv[])
 		in_Background_O(Background_O, renderer);
 		in_Background_P(Background_P, renderer);
 		
-		fall.show(renderer);
+		fall.show_frame(renderer);
 
 		SDL_RenderPresent(renderer);
+
+		//time->delay();
+		int real_time = fps_timer->get_ticks();
+		int time_one_frame = 1000 / frame_per_second;
+		if (real_time < time_one_frame)
+		{
+			int delay_time = time_one_frame - real_time;
+			if( delay_time >= 0 )
+				SDL_Delay(delay_time);
+		}
 	}
 	quitSDL(window, renderer);
 	return 0;
