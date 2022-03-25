@@ -15,7 +15,7 @@ static SDL_Renderer* renderer = NULL;
 static SDL_Event event;
 
 // Screen'size
-const int FPS = 20;
+const int FPS = 30;
 const int SCREEN_WIDTH = 960;
 const int SCREEN_HEIGHT = 480;
 const int SCREEN_BPP = 32;
@@ -29,14 +29,14 @@ const int RENDER_DRAW_COLOR = 0xFF;
 #define GRAVITY_SPEED 2
 #define MAX_FALL_SPEED 10
 #define BLANK_TILE 0 
-#define PLAYER_SPEED 8
+#define PLAYER_SPEED 5
 #define TILE_SIZE 48
 #define MAP_X 20
 #define MAP_Y 10
 
 struct Input
 {
-	int left, right, down_left, down_right, jump, idle;
+	int left, right, down, jump, idle;
 };
 
 struct Map

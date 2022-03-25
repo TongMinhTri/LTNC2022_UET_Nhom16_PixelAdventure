@@ -7,12 +7,13 @@ MainObject::MainObject()
 	y_pos = SCREEN_HEIGHT - TILE_SIZE - 100;
 	x = y = 0;
 	frame_w = frame_h = 0;
-	status = -1;
+	status = IDLE_RIGHT;
 	input_type.left = input_type.right = 0;
 	input_type.jump = 0;
-	input_type.down_left = input_type.down_right = 0;
+	input_type.down = 0;
 	input_type.idle = 1;
 	on_ground = false;
+	jump = false;
 
 	for (int i = 0; i < 12; i++)
 	{
@@ -39,15 +40,53 @@ bool MainObject::LoadIMG(string path, SDL_Renderer* renderer)
 
 void MainObject::show(SDL_Renderer* des)
 {
-	if (on_ground)
+	if (!on_ground)
 	{
-		if (status == IDLE)
+		if (status == FALL_RIGHT)
 		{
-			input_type.down_right = 0;
-			LoadIMG("Character/Idle_right.png", renderer);
+			LoadIMG("Character/Fall_right.png", des);
+		}
+		else if (status == FALL_LEFT)
+		{
+			LoadIMG("Character/Fall_left.png", des);
+		}
+		else if (status == JUMP_RIGHT)
+		{
+			LoadIMG("Character/Jump_right.png", des);
+		}
+		else if (status == JUMP_LEFT)
+		{
+			LoadIMG("Character/Jump_left.png", des);
 		}
 	}
-	if (input_type.left == 1 || input_type.right == 1 || input_type.idle == 1 || input_type.down_left == 1 || input_type.down_right == 1 || input_type.jump == 1)
+	else
+	{
+		jump = false;
+		
+		if (status == FALL_RIGHT)
+		{
+			LoadIMG("Character/Idle_right.png", des);
+			status = IDLE_RIGHT;
+		}
+		else if (status == FALL_LEFT)
+		{
+			LoadIMG("Character/Idle_left.png", des);
+			status = IDLE_LEFT;
+		}
+		else if (status == JUMP_RIGHT)
+		{
+			LoadIMG("Character/Idle_right.png", des);
+			status = IDLE_RIGHT;
+
+		}
+		else if (status == JUMP_LEFT)
+		{
+			LoadIMG("Character/Idle_left.png", des);
+			status = IDLE_LEFT;
+		}
+	}
+
+	if (input_type.left == 1 || input_type.right == 1 || input_type.idle == 1 || input_type.down || input_type.jump == 1)
 	{
 		{
 			frame++;
@@ -58,14 +97,14 @@ void MainObject::show(SDL_Renderer* des)
 		frame = 0;
 	}
 
-	if (frame >= 12)
+	if (2 * frame / 3 >= 11)
 	{
 		frame = 0;
 	}
 	rect.x = x_pos;
 	rect.y = y_pos;
 
-	SDL_Rect* currentClip = &frame_clip_run[frame];
+	SDL_Rect* currentClip = &frame_clip_run[2 * frame / 3];
 	
 	SDL_Rect renderQuad = { rect.x, rect.y, frame_w, frame_h };
 	
@@ -85,8 +124,7 @@ void MainObject::handleEvents(SDL_Event event, SDL_Renderer* renderer)
 			input_type.right = 1;
 			input_type.left = 0;
 			input_type.jump = 0;
-			input_type.down_left = 0;
-			input_type.down_right = 0;
+			input_type.down = 0;
 			input_type.idle = 0;
 			if (on_ground)
 			{
@@ -94,8 +132,11 @@ void MainObject::handleEvents(SDL_Event event, SDL_Renderer* renderer)
 			}
 			else
 			{
-				input_type.jump = 1;
-				LoadIMG("Character/Jump_right.png", renderer);
+				if (jump) status = JUMP_RIGHT;
+				else
+				{
+					status = FALL_RIGHT;
+				}
 			}
 		}
 			break;
@@ -105,8 +146,7 @@ void MainObject::handleEvents(SDL_Event event, SDL_Renderer* renderer)
 			input_type.left = 1;
 			input_type.right = 0;
 			input_type.jump = 0;
-			input_type.down_left = 0;
-			input_type.down_right = 0;
+			input_type.down = 0;
 			input_type.idle = 0;
 			if (on_ground)
 			{
@@ -114,18 +154,27 @@ void MainObject::handleEvents(SDL_Event event, SDL_Renderer* renderer)
 			}
 			else
 			{
-				input_type.jump = 1;
-				LoadIMG("Character/Jump_left.png", renderer);
+				if (jump) status = JUMP_LEFT;
+				else
+				{
+					status = FALL_LEFT;
+				}
 			}
 		}
 			break;
 		case SDLK_UP:
 		{
-			status = JUMP;
-			//LoadIMG("Character/Jump_right.png", renderer);
 			input_type.jump = 1;
-			input_type.down_left = 0;
-			input_type.down_right = 0;
+			jump = true;
+			if (status == IDLE_RIGHT)
+			{
+				status = JUMP_RIGHT;
+			}
+			else if (status == IDLE_LEFT)
+			{
+				status = JUMP_LEFT;
+			}
+			input_type.down = 0;
 			input_type.left = 0;
 			input_type.right = 0;
 			input_type.idle = 0;
@@ -141,42 +190,49 @@ void MainObject::handleEvents(SDL_Event event, SDL_Renderer* renderer)
 		{
 		case SDLK_RIGHT:
 		{
-			status = IDLE;
 			input_type.right = 0;
 			if (on_ground)
 			{
+				status = IDLE_RIGHT;
 				input_type.idle = 1;
 				LoadIMG("Character/Idle_right.png", renderer);
 			}
 			else
 			{
-				input_type.down_right = 1;
-				input_type.idle = 0;
-				LoadIMG("Character/Fall_right.png", renderer);
+				input_type.down = 1;
+				status = FALL_RIGHT;
 			}
 			
 		}
 		break;
 		case SDLK_LEFT:
 		{
-			status = IDLE;
 			input_type.left = 0;
 			if (on_ground)
 			{
+				status = IDLE_LEFT;
 				input_type.idle = 1;
 				LoadIMG("Character/Idle_left.png", renderer);
 			}
 			else
 			{
-				input_type.down_left = 1;
-				input_type.idle = 0;
-				LoadIMG("Character/Fall_left.png", renderer);
+				input_type.down = 1;
+				status = FALL_LEFT;
 			}
 		}
 		case SDLK_UP:
 		{
-			status = IDLE;
 			input_type.jump = 0;
+			if (status == JUMP_RIGHT)
+			{
+				status = FALL_RIGHT;
+				LoadIMG("Character/Fall_right.png", renderer);
+			}
+			else if (status == JUMP_LEFT)
+			{
+				status = FALL_LEFT;
+				LoadIMG("Character/Fall_left.png", renderer);
+			}
 			input_type.idle = 1;
 		}
 		break;  
