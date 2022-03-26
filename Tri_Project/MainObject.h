@@ -24,11 +24,11 @@ public:
 	};
 
 	bool LoadIMG(string path, SDL_Renderer* renderer);
-	void show(SDL_Renderer* des);
-	void handleEvents(SDL_Event event, SDL_Renderer* renderer);
+	void showImage(SDL_Renderer* des);
+	void handleMovement(SDL_Event event, SDL_Renderer* renderer);
 	void setClips();
-	void doPlayer(Map& map_data);
-	void checkMap(Map& map_data);
+	void updatePlayerPosition(Map& map_data);
+	void checkCollisionS(Map& map_data);
 private:
 	int x, y;
 	int x_pos, y_pos;

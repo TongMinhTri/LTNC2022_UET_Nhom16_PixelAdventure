@@ -10,11 +10,11 @@ BaseOject background;
 bool init()
 {
 	bool success = true;
-	int ref = SDL_Init(SDL_INIT_VIDEO);
-	if (ref < 0)
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		success = false;
 	}
+
  	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	window = SDL_CreateWindow("Pixel Adventure", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == NULL)
@@ -30,7 +30,7 @@ bool init()
 		}
 		else
 		{
-			SDL_SetRenderDrawColor(renderer, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
+			SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 			int imgFlags = IMG_INIT_PNG;
 			if (!(IMG_Init(imgFlags) && imgFlags))
 			{
@@ -81,7 +81,7 @@ int main(int argc, char* args[])
 
 
 	GameMap gm;
-	gm.loadMap("map.dat.txt");
+	gm.loadMap("Map_data.txt");
 	gm.loadTiles(renderer);
 
 	MainObject character;
@@ -99,19 +99,22 @@ int main(int argc, char* args[])
 				quit = true;
 			}
 
-			character.handleEvents(event, renderer);
+			character.handleMovement(event, renderer);
 		}
 
-		SDL_SetRenderDrawColor(renderer, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
+		SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 		SDL_RenderClear(renderer);
 
 		background.Render(renderer, NULL);
 		gm.DrawMap(renderer);
 		Map map_data = gm.getMap();
 			
-		character.doPlayer(map_data);
-		character.show(renderer);
+		character.updatePlayerPosition(map_data);
+		character.showImage(renderer);
 		SDL_RenderPresent(renderer);
+
+		//Xu ly Timer va chi so FPS
+		// Nguon tham khao: https://www.youtube.com/watch?v=qhqtxum_uA0
 
 		int real_time = timer.get_ticks();
 		int time_one_frame = 1000 / FPS;

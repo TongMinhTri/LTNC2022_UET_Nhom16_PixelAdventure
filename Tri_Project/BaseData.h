@@ -18,17 +18,11 @@ static SDL_Event event;
 const int FPS = 30;
 const int SCREEN_WIDTH = 960;
 const int SCREEN_HEIGHT = 480;
-const int SCREEN_BPP = 32;
+const int SCREEN_BPP = 32; //Bit per pixel
 
-const int COLOR_KEY_R = 167;
-const int COLOR_KEY_G = 175;
-const int COLOR_KEY_B = 180;
-
-const int RENDER_DRAW_COLOR = 0xFF;
 #define JUMP_VALUE 15
-#define GRAVITY_SPEED 2
+#define FALL_SPEED 2
 #define MAX_FALL_SPEED 10
-#define BLANK_TILE 0 
 #define PLAYER_SPEED 5
 #define TILE_SIZE 48
 #define MAP_X 20

@@ -15,7 +15,7 @@ bool BaseOject::loadImg(string path, SDL_Renderer* ren)
 
 	if (loadedSurface != NULL)
 	{
-		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, COLOR_KEY_R, COLOR_KEY_G, COLOR_KEY_B));
+		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
 		newTexture = SDL_CreateTextureFromSurface(ren, loadedSurface);
 		if (newTexture != NULL)
 		{

@@ -1,5 +1,8 @@
 #include "Timer.h"
 
+// Cac ham xu ly thoi gian va FPS
+// Nguon tham khao: https://www.youtube.com/watch?v=qhqtxum_uA0
+
 Time::Time()
 {
 	start_tick = pause_tick = 0;

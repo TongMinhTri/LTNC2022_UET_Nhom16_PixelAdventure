@@ -10,6 +10,9 @@ GameMap::~GameMap()
 {
 }
 
+// Ham doc du lieu tu file Map_data
+// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
+
 void GameMap::loadMap(const char* path)
 {
 	FILE* p = NULL;
@@ -50,6 +53,8 @@ void GameMap::loadMap(const char* path)
 
 }
 
+// Ham load hinh anh theo trang thai Map
+// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
 void GameMap::loadTiles(SDL_Renderer* renderer)
 {
 	char file_img[30];
@@ -68,6 +73,10 @@ void GameMap::loadTiles(SDL_Renderer* renderer)
 		tile_map[i].loadImg(file_img, renderer);
 	}
 }
+
+
+// Ham load hinh anh cac vat the
+// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
 
 void GameMap::DrawMap(SDL_Renderer* renderer)
 {

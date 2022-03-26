@@ -38,7 +38,10 @@ bool MainObject::LoadIMG(string path, SDL_Renderer* renderer)
 	return res;
 }
 
-void MainObject::show(SDL_Renderer* des)
+// Ham load hinh anh sau moi thao tac di chuyen
+// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
+
+void MainObject::showImage(SDL_Renderer* des)
 {
 	if (!on_ground)
 	{
@@ -112,7 +115,10 @@ void MainObject::show(SDL_Renderer* des)
 
 }
 
-void MainObject::handleEvents(SDL_Event event, SDL_Renderer* renderer)
+// Ham xy ly su kien
+// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
+
+void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 {
 	if (event.type == SDL_KEYDOWN)
 	{
@@ -242,6 +248,9 @@ void MainObject::handleEvents(SDL_Event event, SDL_Renderer* renderer)
 	}
 }
 
+
+// Ham chia anh thanh 12 frame
+
 void MainObject::setClips()
 {
 	if (frame_w > 0 && frame_h > 0)
@@ -257,10 +266,13 @@ void MainObject::setClips()
 	}
 }
 
-void MainObject::doPlayer(Map& map_data)
+
+// Ham thay doi vi tri cua nhan vat sau moi thao tac di chuyen
+// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
+void MainObject::updatePlayerPosition(Map& map_data)
 {
 	x = 0;
-	y += 2;
+	y += FALL_SPEED;
 
 	if (y >= MAX_FALL_SPEED)
 	{
@@ -284,10 +296,14 @@ void MainObject::doPlayer(Map& map_data)
 		on_ground = false;
 		input_type.jump = 0;
 	}
-	checkMap(map_data);
+	checkCollisionS(map_data);
 }
 
-void MainObject::checkMap(Map& map_data)
+
+// Ham xu ly va cham 
+// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
+
+void MainObject::checkCollisionS(Map& map_data)
 {
 	int x1 = 0;
 	int x2 = 0;
@@ -306,7 +322,7 @@ void MainObject::checkMap(Map& map_data)
 	{
 		if (x > 0) //character is moving to right
 		{
-			if (map_data.tile[y1][x2] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
+			if (map_data.tile[y1][x2] != 0 || map_data.tile[y2][x2] != 0)
 			{
 				x_pos = x2 * TILE_SIZE;
 				x_pos -= frame_w + 1;
@@ -315,7 +331,7 @@ void MainObject::checkMap(Map& map_data)
 		}
 		else if (x < 0)
 		{
-			if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y2][x1] != BLANK_TILE)
+			if (map_data.tile[y1][x1] != 0 || map_data.tile[y2][x1] != 0)
 			{
 				x_pos = (x1 + 1) * TILE_SIZE;
 				x = 0;
@@ -334,7 +350,7 @@ void MainObject::checkMap(Map& map_data)
 	{
 		if (y > 0)
 		{
-			if (map_data.tile[y2][x1] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
+			if (map_data.tile[y2][x1] != 0 || map_data.tile[y2][x2] != 0)
 			{
 				y_pos = y2 * TILE_SIZE;
 				y_pos -= (frame_h + 1);
@@ -344,7 +360,7 @@ void MainObject::checkMap(Map& map_data)
 		}
 		else if (y < 0)
 		{
-			if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y1][x2] != BLANK_TILE)
+			if (map_data.tile[y1][x1] != 0 || map_data.tile[y1][x2] != 0)
 			{
 				y_pos = (y1 + 1) * TILE_SIZE;
 				y = 0;
