@@ -20,7 +20,7 @@ RockHead::RockHead(SDL_Renderer* renderer, int x, int y)
 	status = -1;
 	input_type_.left = 1;
 	input_type_.up = 1;
-	setImg(renderer, "Rock Head/Idle.png");
+	setImg(renderer, "Rock_Head/Idle.png");
 }
 RockHead::RockHead(SDL_Renderer* renderer, int x, int y,int z)
 {
@@ -31,7 +31,7 @@ RockHead::RockHead(SDL_Renderer* renderer, int x, int y,int z)
 	status = -1;
 	input_type_.left = 0;
 	input_type_.up = 0;
-	setImg(renderer, "Rock Head/Idle.png");
+	setImg(renderer, "Rock_Head/Idle.png");
 }
 RockHead::~RockHead()
 {
@@ -51,7 +51,7 @@ void RockHead::set_clips()
 
 void RockHead::show_frames(SDL_Renderer* renderer)
 {
-	setImg(renderer, "Rock Head/Blink (42x42).png");
+	setImg(renderer, "Rock_Head/Blink (42x42).png");
 	frame++;
 	if(frame >= 4)
 	{
@@ -93,7 +93,7 @@ void RockHead::ImMoveType(SDL_Renderer* renderer)
 		{
 			input_type_.left = 1;
 			input_type_.right = 0;
-			/*setImg(renderer, "Rock Head/Left Hit (42x42).png");
+			/*setImg(renderer, "Rock_Head/Left Hit (42x42).png");
 			frame++;
 			if (frame >= 4)
 			{
@@ -108,7 +108,7 @@ void RockHead::ImMoveType(SDL_Renderer* renderer)
 			{
 				input_type_.right = 1;
 				input_type_.left = 0;
-				/*setImg(renderer, "Rock Head/Right Hit (42x42).png");
+				/*setImg(renderer, "Rock_Head/Right Hit (42x42).png");
 				frame++;
 				if (frame >= 4)
 				{
@@ -174,21 +174,21 @@ void RockHead::Doplayer_upandleft()
 	if (input_type_.up == 1)
 	{
 		rect.y = rect.y - 5;
-		cout << "rect.x" << " " << rect.x << " " << "rect.y" << " " << rect.y << endl;
+		//cout << "rect.x" << " " << rect.x << " " << "rect.y" << " " << rect.y << endl;
 	}
 	if (input_type_.down == 1)
 	{
 		rect.y = rect.y + 5;
-		cout << "rect.x" << " " << rect.x << " " << "rect.y" << " " << rect.y << endl;
+		//cout << "rect.x" << " " << rect.x << " " << "rect.y" << " " << rect.y << endl;
 	}
 	if (input_type_.left == 1)
 	{
 		rect.x = rect.x - 5;
-		cout << "rect.x" << " " << rect.x << " " << "rect.y" << " " << rect.y << endl;
+		//cout << "rect.x" << " " << rect.x << " " << "rect.y" << " " << rect.y << endl;
 	}
 	if (input_type_.right == 1)
 	{
 		rect.x = rect.x + 5;
-		cout << "rect.x" << " " << rect.x << " " << "rect.y" << " " << rect.y << endl;
+		//cout << "rect.x" << " " << rect.x << " " << "rect.y" << " " << rect.y << endl;
 	}
 }
