@@ -3,6 +3,7 @@
 #include "Background.h"
 #include "Time.h"
 #include "Fruits.h"
+#include "RockHead.h"
 using namespace BG;
 
 const int frame_per_second = 20; //fps
@@ -47,35 +48,45 @@ int main(int argc, char* argv[])
 	Background Background_T(renderer, "Terrain_Project/Thung_cam_nho.png");
 
 	Ninja_Frog ninja_frog(renderer);
-	Fruits* apple  = new Fruits[6];
+	Fruits* apple = new Fruits[6];
 	Fruits* orange = new Fruits[14];
-	Fruits* kiwi   = new Fruits[7];
+	Fruits* kiwi = new Fruits[7];
+
+	RockHead rock(renderer, 200, 220);
+	rock.set_clips();
+
+	RockHead rock1(renderer, 450, 20, 100);
+	rock1.set_clips();
+
+	RockHead rock2(renderer, 50, 100);
+	rock2.set_clips();
+
 	for (int i = 0; i < 6; i++)
 	{
 		int a;
-		if ( i % 2 == 0) a = -5;
+		if (i % 2 == 0) a = -5;
 		else a = 5;
-		apple[i].setFruits(renderer, 50+a, 56+i*22, "Fruits/Apple.png");
+		apple[i].setFruits(renderer, 50 + a, 56 + i * 22, "Fruits/Apple.png");
 		apple[i].set_clips();
 	}
 	for (int i = 0; i < 7; i++)
 	{
-		orange[i].setFruits(renderer, 230+i*30, 50, "Fruits/Orange.png");
+		orange[i].setFruits(renderer, 230 + i * 30, 50, "Fruits/Orange.png");
 		orange[i].set_clips();
 	}
 	for (int i = 7; i < 14; i++)
 	{
-		orange[i].setFruits(renderer, 230+(i-7)*30, 100, "Fruits/Orange.png");
+		orange[i].setFruits(renderer, 230 + (i - 7) * 30, 100, "Fruits/Orange.png");
 		orange[i].set_clips();
 	}
 	for (int i = 0; i < 3; i++)
 	{
-		kiwi[i].setFruits(renderer, 254+i*28, 184, "Fruits/Kiwi.png");
+		kiwi[i].setFruits(renderer, 254 + i * 28, 184, "Fruits/Kiwi.png");
 		kiwi[i].set_clips();
 	}
 	for (int i = 3; i < 7; i++)
 	{
-		kiwi[i].setFruits(renderer, 240+(i-3)*28, 197, "Fruits/Kiwi.png");
+		kiwi[i].setFruits(renderer, 240 + (i - 3) * 28, 197, "Fruits/Kiwi.png");
 		kiwi[i].set_clips();
 	}
 	ninja_frog.set_clips();
@@ -95,28 +106,44 @@ int main(int argc, char* argv[])
 		SDL_RenderClear(renderer);
 
 		in_bgrnen(bgrnen, renderer);
-		Background_A.show(renderer,   0,   0,  34, 288);
-		Background_B.show(renderer,  34,   0, 383,  27);
-		Background_C.show(renderer,  34, 251, 475,  37);
-		Background_D.show(renderer, 466, 155,  46,  96);
-		Background_E.show(renderer,  98, 155, 368,  32);
-		Background_F.show(renderer,  98,  75,  96,  80);
-		Background_G.show(renderer, 242,  75, 192,  32);
-		Background_H.show(renderer, 482,  44,  30, 111);
-		Background_I.show(renderer, 434, 219,  32,  33);
-		Background_K.show(renderer, 417,   0,  95,  18);
-		Background_L.show(renderer, 491,  18,  21,  26);
-		Background_M.show(renderer, 417,  18,  47,   9);
-		Background_N.show(renderer, 482,  28,   9,  16);
-		Background_O.show(renderer, 482,  18,   9,   9);
-		Background_P.show(renderer, 464,  18,  16,   9);
-		Background_Q.show(renderer, 114, 219,  48,  32);
-		Background_R.show(renderer,  98, 235,  16,  16);
-		Background_U.show(renderer, 194, 187,  32,  32);
-		Background_S.show(renderer, 226, 187,  16,  16);
-		Background_T.show(renderer, 354, 187,  16,  16);
+		Background_A.show(renderer, 0, 0, 34, 288);
+		Background_B.show(renderer, 34, 0, 383, 27);
+		Background_C.show(renderer, 34, 251, 475, 37);
+		Background_D.show(renderer, 466, 155, 46, 96);
+		Background_E.show(renderer, 98, 155, 368, 32);
+		Background_F.show(renderer, 98, 75, 96, 80);
+		Background_G.show(renderer, 242, 75, 192, 32);
+		Background_H.show(renderer, 482, 44, 30, 111);
+		Background_I.show(renderer, 434, 219, 32, 33);
+		Background_K.show(renderer, 417, 0, 95, 18);
+		Background_L.show(renderer, 491, 18, 21, 26);
+		Background_M.show(renderer, 417, 18, 47, 9);
+		Background_N.show(renderer, 482, 28, 9, 16);
+		Background_O.show(renderer, 482, 18, 9, 9);
+		Background_P.show(renderer, 464, 18, 16, 9);
+		Background_Q.show(renderer, 114, 219, 48, 32);
+		Background_R.show(renderer, 98, 235, 16, 16);
+		Background_U.show(renderer, 194, 187, 32, 32);
+		Background_S.show(renderer, 226, 187, 16, 16);
+		Background_T.show(renderer, 354, 187, 16, 16);
 		ninja_frog.handle_move();
 		ninja_frog.show_frame(renderer);
+
+		rock.show_frames(renderer);
+		rock.setAnimationPos(160, 400);
+		rock.Doplayer_left();
+		rock.ImMoveType(renderer);
+
+		rock1.show_frames(renderer);
+		rock1.setAnimationPos(185, 120);
+		rock1.Doplayer_upandleft();
+		rock1.ImMoveType_UpandLeft(renderer);
+
+		rock2.show_frames(renderer);
+		rock2.setAnimationPos(50, 200);
+		rock2.Doplayer_up();
+		rock2.ImMoveType_Up(renderer);
+		
 		for (int i = 0; i < 6; i++)
 		{
 			apple[i].show_frame(renderer, "Fruits/Apple.png");

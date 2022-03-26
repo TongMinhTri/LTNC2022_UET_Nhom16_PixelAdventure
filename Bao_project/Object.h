@@ -2,7 +2,7 @@
 #include "BoardGame.h"
 using namespace std;
 
-struct Input // kieu de ckeck input dau vao
+struct Input_ // kieu de ckeck input dau vao
 {
 	int left;
 	int right;
@@ -11,7 +11,7 @@ struct Input // kieu de ckeck input dau vao
 	int jump;
 	int idle_l;
 	int idle_r;
-	Input()
+	Input_()
 	{
 		left = 0;
 		right = 0;
@@ -27,17 +27,16 @@ class Object
 {
 protected:
 	SDL_Rect rect;
-	SDL_Texture *body;
+	SDL_Texture* body;
 public:
 	Object();
-	Object(SDL_Renderer *renderer, string path);
+	Object(SDL_Renderer* renderer, string path);
 	~Object();
-	void show(SDL_Renderer *renderer);
-	void setImg(SDL_Renderer *renderer,string path);
+	void show(SDL_Renderer* renderer);
+	void setImg(SDL_Renderer* renderer, string path);
 	void setPos(int x, int y);//xet kich thuoc anh
 	SDL_Rect getRect() const { return rect; }
 	void Getx(int x);
 	void Gety(int y);
 
 };
-
