@@ -2,6 +2,9 @@
 
 MainObject::MainObject()
 {
+	object = NULL;
+	rect.x = rect.y = rect.w = rect.h = 0;
+
 	frame = 0;
 	x_pos = 0;
 	y_pos = SCREEN_HEIGHT - TILE_SIZE - 100;
@@ -17,8 +20,8 @@ MainObject::MainObject()
 
 	for (int i = 0; i < 12; i++)
 	{
-		frame_clip_run[i].w = frame_clip_run[i].h = 0;
-		frame_clip_run[i].x = frame_clip_run[i].y = 0;
+		frame_clips[i].w = frame_clips[i].h = 0;
+		frame_clips[i].x = frame_clips[i].y = 0;
 	}
 }
 
@@ -28,7 +31,27 @@ MainObject::~MainObject()
 
 bool MainObject::LoadIMG(string path, SDL_Renderer* renderer)
 {
-	bool res = BaseOject::loadImg(path, renderer);
+	bool res;
+	SDL_Texture* newTexture = NULL;
+	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+
+	if (loadedSurface != NULL)
+	{
+		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
+		newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+		if (newTexture != NULL)
+		{
+			rect.w = loadedSurface->w;
+			rect.h = loadedSurface->h;
+		}
+
+		SDL_FreeSurface(loadedSurface);
+	}
+	object = newTexture;
+
+	if (object != NULL) res = true;
+	else res = false;
+
 	if (res)
 	{
 		frame_w = rect.w / 12;
@@ -41,25 +64,25 @@ bool MainObject::LoadIMG(string path, SDL_Renderer* renderer)
 // Ham load hinh anh sau moi thao tac di chuyen
 // Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
 
-void MainObject::showImage(SDL_Renderer* des)
+void MainObject::showImage(SDL_Renderer* renderer)
 {
 	if (!on_ground)
 	{
 		if (status == FALL_RIGHT)
 		{
-			LoadIMG("Character/Fall_right.png", des);
+			LoadIMG("Character/Fall_right.png", renderer);
 		}
 		else if (status == FALL_LEFT)
 		{
-			LoadIMG("Character/Fall_left.png", des);
+			LoadIMG("Character/Fall_left.png", renderer);
 		}
 		else if (status == JUMP_RIGHT)
 		{
-			LoadIMG("Character/Jump_right.png", des);
+			LoadIMG("Character/Jump_right.png", renderer);
 		}
 		else if (status == JUMP_LEFT)
 		{
-			LoadIMG("Character/Jump_left.png", des);
+			LoadIMG("Character/Jump_left.png", renderer);
 		}
 	}
 	else
@@ -68,23 +91,23 @@ void MainObject::showImage(SDL_Renderer* des)
 		
 		if (status == FALL_RIGHT)
 		{
-			LoadIMG("Character/Idle_right.png", des);
+			LoadIMG("Character/Idle_right.png", renderer);
 			status = IDLE_RIGHT;
 		}
 		else if (status == FALL_LEFT)
 		{
-			LoadIMG("Character/Idle_left.png", des);
+			LoadIMG("Character/Idle_left.png", renderer);
 			status = IDLE_LEFT;
 		}
 		else if (status == JUMP_RIGHT)
 		{
-			LoadIMG("Character/Idle_right.png", des);
+			LoadIMG("Character/Idle_right.png", renderer);
 			status = IDLE_RIGHT;
 
 		}
 		else if (status == JUMP_LEFT)
 		{
-			LoadIMG("Character/Idle_left.png", des);
+			LoadIMG("Character/Idle_left.png", renderer);
 			status = IDLE_LEFT;
 		}
 	}
@@ -107,16 +130,13 @@ void MainObject::showImage(SDL_Renderer* des)
 	rect.x = x_pos;
 	rect.y = y_pos;
 
-	SDL_Rect* currentClip = &frame_clip_run[2 * frame / 3];
+	SDL_Rect* currentClip = &frame_clips[2 * frame / 3];
 	
 	SDL_Rect renderQuad = { rect.x, rect.y, frame_w, frame_h };
 	
-	SDL_RenderCopy(des, object, currentClip, &renderQuad);
+	SDL_RenderCopy(renderer, object, currentClip, &renderQuad);
 
 }
-
-// Ham xy ly su kien
-// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
 
 void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 {
@@ -257,26 +277,26 @@ void MainObject::setClips()
 	{
 		for (int i = 0; i < 12; i++)
 		{
-			frame_clip_run[i].x = frame_w * i;
-			frame_clip_run[i].y = 0;
-			frame_clip_run[i].w = frame_w;
-			frame_clip_run[i].h = frame_h;
+			frame_clips[i].x = frame_w * i;
+			frame_clips[i].y = 0;
+			frame_clips[i].w = frame_w;
+			frame_clips[i].h = frame_h;
 		}
-
 	}
 }
 
 
 // Ham thay doi vi tri cua nhan vat sau moi thao tac di chuyen
 // Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
+
 void MainObject::updatePlayerPosition(Map& map_data)
 {
 	x = 0;
 	y += FALL_SPEED;
 
-	if (y >= MAX_FALL_SPEED)
+	if (y >= 10)
 	{
-		y = MAX_FALL_SPEED;
+		y = 10;
 	}
 
 	if (input_type.left == 1)
@@ -318,9 +338,9 @@ void MainObject::checkCollisionS(Map& map_data)
 	y1 = (y_pos) / TILE_SIZE;
 	y2 = (y_pos + height_min - 1) / TILE_SIZE;
 
-	if (x1 >= 0 && x2 < MAP_X && y1 >= 0 && y2 < MAP_Y)
+	if (x1 >= 0 && x2 < TILEMAP_NUM_X && y1 >= 0 && y2 < TILEMAP_NUM_Y)
 	{
-		if (x > 0) //character is moving to right
+		if (x > 0) //Nhan vat di chuyen sang phai
 		{
 			if (map_data.tile[y1][x2] != 0 || map_data.tile[y2][x2] != 0)
 			{
@@ -329,7 +349,7 @@ void MainObject::checkCollisionS(Map& map_data)
 				x = 0;
 			}
 		}
-		else if (x < 0)
+		else if (x < 0) //Nhan vat di chuyen sang trai
 		{
 			if (map_data.tile[y1][x1] != 0 || map_data.tile[y2][x1] != 0)
 			{
@@ -346,7 +366,7 @@ void MainObject::checkCollisionS(Map& map_data)
 	y1 = (y_pos + y) / TILE_SIZE;
 	y2 = (y_pos + y + frame_h - 1) / TILE_SIZE;
 
-	if (x1 >= 0 && x2 < MAP_X && y1 >= 0 && y2 < MAP_Y)
+	if (x1 >= 0 && x2 < TILEMAP_NUM_X && y1 >= 0 && y2 < TILEMAP_NUM_Y)
 	{
 		if (y > 0)
 		{
@@ -373,9 +393,9 @@ void MainObject::checkCollisionS(Map& map_data)
 	{
 		x_pos = 0;
 	}
-	else if (x_pos + frame_w > map_data.xpos)
+	else if (x_pos + frame_w > SCREEN_WIDTH)
 	{
-		x_pos = map_data.xpos - frame_w - 1;
+		x_pos = SCREEN_WIDTH - frame_w - 1;
 	}
 	if (y_pos < 0)
 	{

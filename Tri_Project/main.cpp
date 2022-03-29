@@ -81,7 +81,7 @@ int main(int argc, char* args[])
 
 
 	GameMap gm;
-	gm.loadMap("Map_data.txt");
+	//gm.loadMap("Map_data.txt");
 	gm.loadTiles(renderer);
 
 	MainObject character;
@@ -113,8 +113,7 @@ int main(int argc, char* args[])
 		character.showImage(renderer);
 		SDL_RenderPresent(renderer);
 
-		//Xu ly Timer va chi so FPS
-		// Nguon tham khao: https://www.youtube.com/watch?v=qhqtxum_uA0
+		// Xu ly thoi gian va FPS
 
 		int real_time = timer.get_ticks();
 		int time_one_frame = 1000 / FPS;

@@ -18,15 +18,13 @@ static SDL_Event event;
 const int FPS = 30;
 const int SCREEN_WIDTH = 960;
 const int SCREEN_HEIGHT = 480;
-const int SCREEN_BPP = 32; //Bit per pixel
 
 #define JUMP_VALUE 15
 #define FALL_SPEED 2
-#define MAX_FALL_SPEED 10
 #define PLAYER_SPEED 5
 #define TILE_SIZE 48
-#define MAP_X 20
-#define MAP_Y 10
+#define TILEMAP_NUM_X 20
+#define TILEMAP_NUM_Y 10
 
 struct Input
 {
@@ -35,9 +33,17 @@ struct Input
 
 struct Map
 {
-	int xstart, ystart;
-	int	xpos, ypos;
-	int tile[MAP_Y][MAP_X];
-	const char* file_name;
+	int tile[TILEMAP_NUM_Y][TILEMAP_NUM_X] = { 
+		{5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5},
+		{5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5},
+		{5,0,0,0,8,8,8,0,0,0,0,0,0,0,0,0,0,0,0,5},
+		{5,0,0,8,0,0,0,8,8,0,5,5,0,5,5,5,0,0,8,5},
+		{5,5,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,8,8,5},
+		{5,5,5,5,0,8,8,0,0,0,0,0,0,5,0,5,5,5,5,5},
+		{0,0,0,0,0,0,0,8,5,5,5,0,0,5,0,0,0,0,0,5},
+		{0,0,0,8,0,0,0,0,0,0,0,0,5,5,0,0,8,0,0,5},
+		{0,0,8,8,0,0,0,0,0,0,0,5,6,5,6,0,8,8,0,0},
+		{5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5}
+	};
 };
 #endif // !BASE_DATA_H

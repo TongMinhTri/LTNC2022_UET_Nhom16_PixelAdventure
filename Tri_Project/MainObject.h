@@ -5,7 +5,7 @@
 #include "BaseData.h"
 #include "BaseObject.h"
 
-class MainObject : public BaseOject
+class MainObject
 {
 public:
 	MainObject();
@@ -24,18 +24,21 @@ public:
 	};
 
 	bool LoadIMG(string path, SDL_Renderer* renderer);
-	void showImage(SDL_Renderer* des);
+	void showImage(SDL_Renderer* renderer);
 	void handleMovement(SDL_Event event, SDL_Renderer* renderer);
 	void setClips();
 	void updatePlayerPosition(Map& map_data);
 	void checkCollisionS(Map& map_data);
 private:
+	SDL_Texture* object;
+	SDL_Rect rect;
+
 	int x, y;
 	int x_pos, y_pos;
 
 	int frame_w, frame_h;
 
-	SDL_Rect frame_clip_run[12]; //Luu frame
+	SDL_Rect frame_clips[12]; //Luu frame
 	Input input_type;
 	int frame;
 	int status;

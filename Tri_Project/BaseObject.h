@@ -18,11 +18,11 @@ public:
 	SDL_Rect GetRect() const { return rect; }
 	SDL_Texture* GetOject() const { return object; }
 
-	virtual bool loadImg(string path, SDL_Renderer* ren);
+	bool loadImg(string path, SDL_Renderer* ren);
 	void Render(SDL_Renderer* des, const SDL_Rect* clip = NULL);
 	void Free();
 
-protected:
+private:
 	SDL_Texture* object;
 	SDL_Rect rect;
 };

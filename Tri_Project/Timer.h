@@ -10,14 +10,8 @@ public:
 	~Time();
 
 	void start();
-	void stop();
-	void pause();
-	void resume();
-
 	int get_ticks();
 
-	bool is_start();
-	bool is_pause();
 private:
 	int start_tick;
 	int pause_tick;

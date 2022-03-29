@@ -4,13 +4,27 @@
 
 #include "BaseData.h"
 #include "BaseObject.h"
-#define map_type_num 20
+#define mapNums 20
 
-class TileMap : public BaseOject
+class TileMap
 {
 public:
-	TileMap() { ; }
+	TileMap() 
+	{
+		object = NULL;
+		rect.x = rect.y = rect.w = rect.h = 0;
+	}
 	~TileMap() { ; }
+	bool loadImg(string path, SDL_Renderer* renderer);
+	void SetRect(const int& x, const int& y)
+	{
+		rect.x = x;
+		rect.y = y;
+	}
+	void renderImg(SDL_Renderer* renderer, const SDL_Rect* clip = NULL);
+protected:
+	SDL_Texture* object;
+	SDL_Rect rect;
 };
 
 class GameMap
@@ -19,14 +33,14 @@ public:
 	GameMap();
 	~GameMap();
 
-	void loadMap(const char* path);
-	void loadTiles(SDL_Renderer* renderer);
-	void DrawMap(SDL_Renderer* renderer);
-	Map getMap() const { return game_map; }
+	//void loadMap(const char* path); // Doc thong tin tu file Map_data
+	void loadTiles(SDL_Renderer* renderer); // Load hinh anh cho tile map
+	void DrawMap(SDL_Renderer* renderer); // Fill hinh anh vao cac vi tri
+	Map getMap() const { return firstMap; }
 
 private:
-	Map game_map;
-	TileMap tile_map[map_type_num];
+	Map firstMap; // Chua thong tin ve ban do: trang thai, vi tri va chi so cua cac o tile map
+	TileMap tile_map[mapNums]; // Mang luu tru cac loai hinh anh cho ban do
 };
 
 #endif // !MAP_H

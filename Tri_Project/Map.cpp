@@ -2,112 +2,82 @@
 
 GameMap::GameMap()
 {
-	game_map.xpos = game_map.ypos = 0;
-	game_map.xstart = game_map.ystart = 0;
 }
 
 GameMap::~GameMap()
 {
 }
 
-// Ham doc du lieu tu file Map_data
+// Ham load cac loai map vao mang tile_map
 // Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
 
-void GameMap::loadMap(const char* path)
-{
-	FILE* p = NULL;
-	fopen_s(&p, path, "rb");
-	if (p == NULL)
-	{
-		return;
-	}
-	game_map.xpos = game_map.ypos = 0;
-
-	for (int i = 0; i < MAP_Y; i++)
-	{
-		for (int j = 0; j < MAP_X; j++)
-		{
-			fscanf_s(p, "%d", &game_map.tile[i][j]);
-			int value = game_map.tile[i][j];
-			if (value > 0)
-			{
-				if (j > game_map.xpos)
-				{
-					game_map.xpos = j;
-				}
-
-				if (i > game_map.ypos)
-				{
-					game_map.ypos = i;
-				}
-			}
-		}
-	}
-
-	game_map.xpos = (game_map.xpos + 1) * TILE_SIZE;
-	game_map.ypos = (game_map.ypos + 1) * TILE_SIZE;
-
-	game_map.xstart = game_map.ystart = 0;
-	game_map.file_name = path;
-	fclose(p);
-
-}
-
-// Ham load hinh anh theo trang thai Map
-// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
 void GameMap::loadTiles(SDL_Renderer* renderer)
 {
-	char file_img[30];
+	char file_img[30]; // Mang luu tru ten file
 	FILE* p = NULL;
-	for (int i = 0; i < map_type_num; i++)
+	for (int i = 0; i < mapNums; i++)
 	{
-		sprintf_s(file_img, "Maps/map%d.png", i);
+		sprintf_s(file_img, "Maps/map%d.png", i); // Chuyen xau "Maps/map%d.png" vao mang file_img (VD: i = 1 se chuyen hinh anh co ten map1.png vao file_img)
 
-		fopen_s(&p, file_img, "rb");
-		if (p == NULL)
+		fopen_s(&p, file_img, "rb"); // Mo file
+		if (p == NULL) // Neu khong mo duoc file
 		{
 			continue;
 		}
 
 		fclose(p);
-		tile_map[i].loadImg(file_img, renderer);
+		tile_map[i].loadImg(file_img, renderer); // Cac hinh anh duoc load san va cho de render
 	}
 }
 
 
-// Ham load hinh anh cac vat the
-// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
-
 void GameMap::DrawMap(SDL_Renderer* renderer)
 {
-	int x1 = 0, x2 = 0, y1 = 0, y2 = 0;
-	int map_x = 0;
-	int map_y = 0;
 
-	x1 = (game_map.xstart % TILE_SIZE) * -1;
-	x2 = x1 + SCREEN_WIDTH + (x1 == 0 ? 0 : TILE_SIZE);
+	int id_x = 0, id_y = 0;
 
-	y1 = (game_map.ystart % TILE_SIZE) * -1;
-	y2 = y1 + SCREEN_HEIGHT + (y1 == 0 ? 0 : TILE_SIZE);
-
-	map_x = game_map.xstart / TILE_SIZE;
-	map_y = game_map.ystart / TILE_SIZE;
-
-
-	for (int i = y1; i < y2; i += TILE_SIZE)
+	for (int i = 0; i < SCREEN_HEIGHT; i += TILE_SIZE)
 	{
-		map_x = game_map.xstart / TILE_SIZE;
-		for (int j = x1; j < x2; j += TILE_SIZE)
+		id_x = 0;
+		for (int j = 0; j < SCREEN_WIDTH; j += TILE_SIZE)
 		{
-			int value = game_map.tile[map_y][map_x];
+			int value = firstMap.tile[id_y][id_x];
 			if (value > 0)
 			{
 				tile_map[value].SetRect(j, i);
-				tile_map[value].Render(renderer);
+				tile_map[value].renderImg(renderer);
 			}
-			map_x++;
+			id_x++;
 		}
-		map_y++;
+		id_y++;
 	}
 
+}
+
+bool TileMap::loadImg(string path, SDL_Renderer* renderer)
+{
+	SDL_Texture* newTexture = NULL;
+	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+
+	if (loadedSurface != NULL)
+	{
+		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
+		newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+		if (newTexture != NULL)
+		{
+			rect.w = loadedSurface->w;
+			rect.h = loadedSurface->h;
+		}
+
+		SDL_FreeSurface(loadedSurface);
+	}
+	object = newTexture;
+
+	return object != NULL;
+}
+
+void TileMap::renderImg(SDL_Renderer* renderer, const SDL_Rect* clip)
+{
+	SDL_Rect r = { rect.x, rect.y, rect.w, rect.h };
+	SDL_RenderCopy(renderer, object, clip, &r);
 }
