@@ -3,11 +3,12 @@
 MainObject::MainObject()
 {
 	object = NULL;
-	rect.x = rect.y = rect.w = rect.h = 0;
+	rect.x = rect.y = 0;
+	rect.w = rect.h = 48;
 
 	frame = 0;
 	x_pos = 0;
-	y_pos = SCREEN_HEIGHT - TILE_SIZE - 100;
+	y_pos = 384;
 	x = y = 0;
 	frame_w = frame_h = 0;
 	status = IDLE_RIGHT;
@@ -17,7 +18,7 @@ MainObject::MainObject()
 	input_type.idle = 1;
 	on_ground = false;
 	jump = false;
-
+	setPos(x_pos, y_pos);
 	for (int i = 0; i < 12; i++)
 	{
 		frame_clips[i].w = frame_clips[i].h = 0;
@@ -403,4 +404,15 @@ void MainObject::checkCollisionS(Map& map_data)
 	}
 	y_pos += y;
 
+}
+
+SDL_Rect MainObject::getRect()
+{
+	return rect;
+}
+
+void MainObject::setPos(int x, int y)
+{
+	rect.x = x;
+	rect.y = y;
 }

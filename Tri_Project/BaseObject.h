@@ -27,4 +27,5 @@ private:
 	SDL_Rect rect;
 };
 
+
 #endif // !BASE_OBJECT_H

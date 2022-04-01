@@ -3,6 +3,9 @@
 #include "Map.h"
 #include "MainObject.h"
 #include "Timer.h"
+#include "Fruits.h"
+#include "Stone.h"
+#include <vector>
 using namespace std;
 
 BaseOject background;
@@ -66,6 +69,8 @@ void close()
 	SDL_Quit();
 }
 
+bool checkCollision(SDL_Rect, SDL_Rect);
+
 int main(int argc, char* args[])
 {
 	Time timer;
@@ -89,6 +94,20 @@ int main(int argc, char* args[])
 	character.setClips();
 
 	bool quit = false;
+	Fruits* kiwi = new Fruits[5];
+	kiwi[0].setFruits(renderer, 240, 288, "Fruits/Kiwi.png");
+	kiwi[1].setFruits(renderer, 288, 288, "Fruits/Kiwi.png");
+	kiwi[2].setFruits(renderer, 192, 144, "Fruits/Kiwi.png");
+	kiwi[3].setFruits(renderer, 240, 144, "Fruits/Kiwi.png");
+	kiwi[4].setFruits(renderer, 288, 144, "Fruits/Kiwi.png");
+	for (int i = 0; i < 5; i++)
+	{
+		kiwi[i].set_clips();
+	}
+	Stone stone;
+	stone.set_Stone(renderer, 480, 384, "Stone_Idle.png");
+	//stone.set_clips();
+
 	while (!quit)
 	{
 		timer.start();
@@ -108,9 +127,26 @@ int main(int argc, char* args[])
 		background.Render(renderer, NULL);
 		gm.DrawMap(renderer);
 		Map map_data = gm.getMap();
-			
+
+		stone.stone_move(renderer, map_data);
+
 		character.updatePlayerPosition(map_data);
 		character.showImage(renderer);
+				
+		for (int i = 0; i < 5; i++)
+		{
+			if (checkCollision(kiwi[i].getRect_fruits(), character.getRect()))
+			{
+				kiwi[i].kill();
+				SDL_Rect rest = character.getRect();
+				if (i <= 2)
+				{
+					cout << rest.x << " " << rest.y << '\n';
+				}
+			}
+			kiwi[i].show_frame(renderer, "Fruits/Kiwi_48.png");
+		}
+
 		SDL_RenderPresent(renderer);
 
 		// Xu ly thoi gian va FPS
@@ -128,4 +164,31 @@ int main(int argc, char* args[])
 
 	close();
 	return 0;
+}
+
+bool checkCollision(SDL_Rect a, SDL_Rect b)
+{
+	//The sides of the rectangles
+	int leftA, leftB;
+	int rightA, rightB;
+	int topA, topB;
+	int bottomA, bottomB;
+
+	//Calculate the sides of rect A
+	leftA = a.x;
+	rightA = a.x + a.w;
+	topA = a.y;
+	bottomA = a.y + a.h;
+
+	//Calculate the sides of rect B
+	leftB = b.x;
+	rightB = b.x + b.w;
+	topB = b.y+1;
+	bottomB = b.y + b.h;
+	if (bottomB > topA && rightB > leftA && rightB - 48 < leftA && bottomB - 48 < topA) return true;
+	if (bottomB > topA && rightA > leftB && rightA - 48 < leftB && bottomB - 48 < topA) return true;
+	if (bottomA > topB && rightB > leftA && rightB - 48 < leftA && bottomA - 48 < topB) return true;
+	if (bottomA > topB && rightA > leftB && rightA - 48 < leftB && bottomA - 48 < topB) return true;
+	return false;
+
 }

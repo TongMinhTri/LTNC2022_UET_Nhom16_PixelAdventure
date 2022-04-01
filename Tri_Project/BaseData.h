@@ -10,12 +10,13 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
+
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static SDL_Event event;
 
 // Screen'size
-const int FPS = 30;
+const int FPS = 33;
 const int SCREEN_WIDTH = 960;
 const int SCREEN_HEIGHT = 480;
 

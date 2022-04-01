@@ -29,6 +29,8 @@ public:
 	void setClips();
 	void updatePlayerPosition(Map& map_data);
 	void checkCollisionS(Map& map_data);
+	SDL_Rect getRect();
+	void setPos(int x, int y);
 private:
 	SDL_Texture* object;
 	SDL_Rect rect;
@@ -44,6 +46,7 @@ private:
 	int status;
 	bool on_ground;
 	bool jump;
+	int move_stone = 0;
 };
 
 #endif // !MAIN_OBJECT_H

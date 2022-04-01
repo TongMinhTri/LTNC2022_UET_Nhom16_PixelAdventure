@@ -45,3 +45,4 @@ void BaseOject::Free()
 		rect.w = rect.h = 0;
 	}
 }
+
