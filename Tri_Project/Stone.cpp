@@ -13,6 +13,28 @@ Stone::~Stone()
 {
 }
 
+Stone::Stone(SDL_Renderer* renderer, int a, int b, int limitx, int limity,string path)
+{
+	frame = 0;
+	x = a; 
+	y = b;
+	limit_x = limitx;
+	limit_y = limity;
+	x_val = x;
+	y_val = y;
+	stone.w = w_h;
+	stone.h = w_h;
+	test.x = test.y = 0;
+	test.w = test.h = w_h;
+	setPos(x, y);
+	state = 0;
+	input_type.down = 1;
+	input_type.jump = 0;
+	input_type.left= 0;
+	input_type.right = 0;
+	setImg(renderer,path);
+}
+
 void Stone::set_clips()
 {
 	for (int i = 0; i < 4; i++)
@@ -22,6 +44,74 @@ void Stone::set_clips()
 		frame_clips[i].w = w_h;
 		frame_clips[i].h = w_h;
 	}
+}
+
+void Stone::Stone_Move_Circle(SDL_Renderer* renderer, Map& map_data)
+{
+	
+	if (input_type.left == 1) x -= 4;
+	if (input_type.right == 1) x += 4;
+	if (input_type.jump == 1) y = y - 4;
+	if (input_type.down == 1) y = y + 4;
+	setPos(x, y);
+
+	SDL_RenderCopy(renderer, body, &test, &stone);
+}
+
+void Stone::DoStone_Circle()
+{
+	if (stone.x == x_val && stone.y == y_val)
+	{
+		input_type.down = 1;
+		input_type.jump = 0;
+		input_type.left = 0;
+		input_type.right = 0;
+	}
+	if (stone.x == x_val && stone.y == limit_y)
+	{
+		input_type.down = 0;
+		input_type.jump = 0;
+		input_type.left = 1;
+		input_type.right = 0;
+	}
+	if (stone.x == limit_x && stone.y == limit_y)
+	{
+		input_type.down = 0;
+		input_type.jump = 1;
+		input_type.left = 0;
+		input_type.right = 0;
+	}
+	if (stone.x == limit_x && stone.y == y_val)
+	{
+		input_type.down = 0;
+		input_type.jump = 0;
+		input_type.left = 0;
+		input_type.right = 1;
+	}
+}
+
+void Stone::stone_move_up(SDL_Renderer* renderer, Map& map_data)
+{
+	if (state == 0)
+	{
+		if (y - speed > 48 ) y -= speed;
+		else
+		{
+			y = 48;
+			state = 1;
+		}
+	}
+	else if (state == 1)
+	{
+		if (y + speed < 192) y += speed;
+		else
+		{
+			y = 192;
+			state = 0;
+		}
+	}
+	setPos(x, y);
+	SDL_RenderCopy(renderer, body, &test, &stone);
 }
 
 void Stone::setImg(SDL_Renderer* renderer, string path)
@@ -98,7 +188,7 @@ void Stone::stone_move(SDL_Renderer* renderer, Map& map_data)
 	}
 	setPos(x, y);
 	int x1 = x / TILE_SIZE + 6;
-	int x2 = ( x + frame_w - 1) / TILE_SIZE+6;
+	int x2 = (x + frame_w - 1) / TILE_SIZE + 6;
 	map_data.tile[8][x1] = x1;
 	map_data.tile[8][x2] = x2;
 	for (int i = 4; i <= 10; i++)
