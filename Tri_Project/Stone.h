@@ -4,6 +4,8 @@
 
 #include "BaseObject.h"
 #include "BaseData.h"
+#include "Map.h"
+
 
 #define w_h 48;
 class Stone
@@ -17,12 +19,6 @@ private:
 	int frame_w = w_h;
 	int frame_h = w_h;
 	int speed = 3;
-
-	int x_val;
-	int y_val;
-	int limit_x;
-	int limit_y;
-	Input input_type;
 protected:
 	SDL_Rect stone;
 	SDL_Rect test;
@@ -30,8 +26,7 @@ protected:
 public:
 	Stone();
 	~Stone();
-	Stone(SDL_Renderer* renderer,int x,int y,int limitx,int limity ,string path);
-	void stone_move(SDL_Renderer* renderer, Map& map_data);
+	void stone_move(SDL_Renderer* renderer, Map &map_data);
 	//void show(SDL_Renderer* renderer);
 	void setImg(SDL_Renderer* renderer, string path);
 	void show_frame(SDL_Renderer* renderer, string path);
@@ -39,12 +34,9 @@ public:
 	SDL_Rect getRect_stone();
 	void set_Stone(SDL_Renderer* renderer, int a, int b, string path);
 	void set_clips();
-	void Stone_Move_Circle(SDL_Renderer* renderer,Map& map_data);
-	void DoStone_Circle();
-
-	void stone_move_up(SDL_Renderer* renderer, Map& map_data);
 }
 
 #endif // !STONE
 
 ;
+

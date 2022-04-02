@@ -34,6 +34,7 @@ public:
 private:
 	SDL_Texture* object;
 	SDL_Rect rect;
+	SDL_Rect test;
 
 	int x, y;
 	int x_pos, y_pos;

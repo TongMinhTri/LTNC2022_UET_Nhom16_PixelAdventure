@@ -30,6 +30,7 @@ MainObject::~MainObject()
 {
 }
 
+
 bool MainObject::LoadIMG(string path, SDL_Renderer* renderer)
 {
 	bool res;
@@ -408,11 +409,18 @@ void MainObject::checkCollisionS(Map& map_data)
 
 SDL_Rect MainObject::getRect()
 {
-	return rect;
+	test.x = rect.x;
+	test.y = rect.y;
+	test.w = 32;
+	test.h = 32;
+	return test;
 }
 
 void MainObject::setPos(int x, int y)
 {
 	rect.x = x;
 	rect.y = y;
+	x_pos = x;
+	y_pos = y;
 }
+

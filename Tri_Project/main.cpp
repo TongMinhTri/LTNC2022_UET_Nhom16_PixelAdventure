@@ -6,6 +6,7 @@
 #include "Fruits.h"
 #include "Stone.h"
 #include <vector>
+
 using namespace std;
 
 BaseOject background;
@@ -18,7 +19,7 @@ bool init()
 		success = false;
 	}
 
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+ 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	window = SDL_CreateWindow("Pixel Adventure", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == NULL)
 	{
@@ -84,7 +85,7 @@ int main(int argc, char* args[])
 		return -1;
 	}
 
-	
+
 	GameMap gm;
 	//gm.loadMap("Map_data.txt");
 	gm.loadTiles(renderer);
@@ -106,11 +107,9 @@ int main(int argc, char* args[])
 	}
 	Stone stone;
 	stone.set_Stone(renderer, 480, 384, "Stone_Idle.png");
-	//stone.set_clips();
-	Stone stone1(renderer, 576, 96, 432, 240, "Stone_Idle.png");
-	//stone1.set_clips();
-	Stone stone2;
-	stone2.set_Stone(renderer, 768, 48, "Stone_Idle.png");
+	stone.set_clips();
+	
+
 	while (!quit)
 	{
 		timer.start();
@@ -133,27 +132,25 @@ int main(int argc, char* args[])
 
 		stone.stone_move(renderer, map_data);
 
-		//stone1.show_frame(renderer, "Blink (42x42).png");
-		stone1.DoStone_Circle();
-		stone1.Stone_Move_Circle(renderer,map_data);
-
-		stone2.stone_move_up(renderer,map_data);
-
 		character.updatePlayerPosition(map_data);
 		character.showImage(renderer);
 
 		for (int i = 0; i < 5; i++)
 		{
+			
 			if (checkCollision(kiwi[i].getRect_fruits(), character.getRect()))
 			{
 				kiwi[i].kill();
-				SDL_Rect rest = character.getRect();
-				if (i <= 2)
-				{
-					cout << rest.x << " " << rest.y << '\n';
-				}
+				//SDL_Rect rest = character.getRect();
 			}
 			kiwi[i].show_frame(renderer, "Fruits/Kiwi_48.png");
+		}
+		
+
+		if (checkCollision(stone.getRect_stone(), character.getRect()))
+		{
+			character.setPos(0, 400);
+			SDL_Rect rest = character.getRect();
 		}
 
 		SDL_RenderPresent(renderer);
@@ -192,12 +189,12 @@ bool checkCollision(SDL_Rect a, SDL_Rect b)
 	//Calculate the sides of rect B
 	leftB = b.x;
 	rightB = b.x + b.w;
-	topB = b.y + 1;
+	topB = b.y+1;
 	bottomB = b.y + b.h;
 	if (bottomB > topA && rightB > leftA && rightB - 48 < leftA && bottomB - 48 < topA) return true;
 	if (bottomB > topA && rightA > leftB && rightA - 48 < leftB && bottomB - 48 < topA) return true;
 	if (bottomA > topB && rightB > leftA && rightB - 48 < leftA && bottomA - 48 < topB) return true;
 	if (bottomA > topB && rightA > leftB && rightA - 48 < leftB && bottomA - 48 < topB) return true;
+	
 	return false;
-
 }

@@ -20,7 +20,7 @@ const int FPS = 33;
 const int SCREEN_WIDTH = 960;
 const int SCREEN_HEIGHT = 480;
 
-#define JUMP_VALUE 15
+#define JUMP_VALUE 16
 #define FALL_SPEED 2
 #define PLAYER_SPEED 5
 #define TILE_SIZE 48
