@@ -13,6 +13,28 @@ Stone::~Stone()
 {
 }
 
+Stone::Stone(SDL_Renderer* renderer, int a, int b, int limitx, int limity,string path)
+{
+	frame = 0;
+	x = a; 
+	y = b;
+	limit_x = limitx;
+	limit_y = limity;
+	x_val = x;
+	y_val = y;
+	stone.w = w_h;
+	stone.h = w_h;
+	test.x = test.y = 0;
+	test.w = test.h = w_h;
+	setPos(x, y);
+	state = 0;
+	input_type.down = 1;
+	input_type.jump = 0;
+	input_type.left= 0;
+	input_type.right = 0;
+	setImg(renderer,path);
+}
+
 void Stone::set_clips()
 {
 	for (int i = 0; i < 4; i++)
@@ -22,6 +44,74 @@ void Stone::set_clips()
 		frame_clips[i].w = w_h;
 		frame_clips[i].h = w_h;
 	}
+}
+
+void Stone::Stone_Move_Circle(SDL_Renderer* renderer, Map& map_data)
+{
+	
+	if (input_type.left == 1) x -= 4;
+	if (input_type.right == 1) x += 4;
+	if (input_type.jump == 1) y = y - 4;
+	if (input_type.down == 1) y = y + 4;
+	setPos(x, y);
+
+	SDL_RenderCopy(renderer, body, &test, &stone);
+}
+
+void Stone::DoStone_Circle()
+{
+	if (stone.x == x_val && stone.y == y_val)
+	{
+		input_type.down = 1;
+		input_type.jump = 0;
+		input_type.left = 0;
+		input_type.right = 0;
+	}
+	if (stone.x == x_val && stone.y == limit_y)
+	{
+		input_type.down = 0;
+		input_type.jump = 0;
+		input_type.left = 1;
+		input_type.right = 0;
+	}
+	if (stone.x == limit_x && stone.y == limit_y)
+	{
+		input_type.down = 0;
+		input_type.jump = 1;
+		input_type.left = 0;
+		input_type.right = 0;
+	}
+	if (stone.x == limit_x && stone.y == y_val)
+	{
+		input_type.down = 0;
+		input_type.jump = 0;
+		input_type.left = 0;
+		input_type.right = 1;
+	}
+}
+
+void Stone::stone_move_up(SDL_Renderer* renderer, Map& map_data)
+{
+	if (state == 0)
+	{
+		if (y - 2 > limit_x ) y -= 2;
+		else
+		{
+			y = limit_x;
+			state = 1;
+		}
+	}
+	else if (state == 1)
+	{
+		if (y + 2 < limit_y) y += 2;
+		else
+		{
+			y = limit_y;
+			state = 0;
+		}
+	}
+	setPos(x, y);
+	SDL_RenderCopy(renderer, body, &test, &stone);
 }
 
 void Stone::setImg(SDL_Renderer* renderer, string path)
@@ -54,6 +144,7 @@ void Stone::show_frame(SDL_Renderer* renderer, string path)
 	SDL_RenderCopy(renderer, body, current_clips, &renderquad);
 }
 
+
 void Stone::setPos(int x, int y)
 {
 	stone.x = x;
@@ -76,23 +167,23 @@ void Stone::set_Stone(SDL_Renderer* renderer, int a, int b, string path)
 }
 
 
-void Stone::stone_move(SDL_Renderer* renderer, Map &map_data)
+void Stone::stone_move(SDL_Renderer* renderer, Map& map_data)
 {
 	if (state == 0)
 	{
-		if (x - speed > 192) x -= speed;
+		if (x - speed > limit_x) x -= speed;
 		else
 		{
-			x = 192;
+			x = limit_x;
 			state = 1;
 		}
 	}
 	else if (state == 1)
 	{
-		if (x + speed < 480) x += speed;
+		if (x + speed < limit_y) x += speed;
 		else
 		{
-			x = 480;
+			x = limit_y;
 			state = 0;
 		}
 	}

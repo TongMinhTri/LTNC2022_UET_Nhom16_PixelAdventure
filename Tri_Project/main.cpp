@@ -19,7 +19,7 @@ bool init()
 		success = false;
 	}
 
- 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 	window = SDL_CreateWindow("Pixel Adventure", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == NULL)
 	{
@@ -105,10 +105,14 @@ int main(int argc, char* args[])
 		kiwi[i].set_clips();
 		kiwi[i].setImg(renderer, "Fruits/Kiwi_48.png");
 	}
-	Stone stone;
-	stone.set_Stone(renderer, 480, 384, "Stone_Idle.png");
+	Stone stone(renderer, 480, 384,192,480, "Spike_Idle.png");
 	stone.set_clips();
-	
+	Stone stone1(renderer, 576, 96, 432, 240, "Spike_Idle.png");
+	//stone1.set_clips();
+	Stone stone2(renderer, 768, 48,48,192, "Spike_Idle.png");
+	Stone stone3(renderer,288,144,192,192,"Spike_Idle.png");
+	Stone stone4(renderer, 48, 48,48,864, "Spike_Idle.png");
+	Stone stone5(renderer, 720, 288, 288, 384, "Spike_Idle.png");
 
 	while (!quit)
 	{
@@ -132,12 +136,20 @@ int main(int argc, char* args[])
 
 		stone.stone_move(renderer, map_data);
 
+		stone1.DoStone_Circle();
+		stone1.Stone_Move_Circle(renderer, map_data);
+		stone2.stone_move_up(renderer, map_data);
+		stone3.DoStone_Circle();
+		stone3.Stone_Move_Circle(renderer, map_data);
+		stone4.stone_move(renderer, map_data);
+		stone5.stone_move_up(renderer, map_data);
+		
 		character.updatePlayerPosition(map_data);
 		character.showImage(renderer);
 
 		for (int i = 0; i < 5; i++)
 		{
-			
+
 			if (checkCollision(kiwi[i].getRect_fruits(), character.getRect()))
 			{
 				kiwi[i].kill();
@@ -145,13 +157,39 @@ int main(int argc, char* args[])
 			}
 			kiwi[i].show_frame(renderer);
 		}
-		
+
 
 		if (checkCollision(stone.getRect_stone(), character.getRect()))
 		{
 			character.setPos(0, 400);
 			SDL_Rect rest = character.getRect();
 		}
+		if (checkCollision(stone1.getRect_stone(), character.getRect()))
+		{
+			character.setPos(0, 400);
+			SDL_Rect rest = character.getRect();
+		}
+		if (checkCollision(stone2.getRect_stone(), character.getRect()))
+		{
+			character.setPos(0, 400);
+			SDL_Rect rest = character.getRect();
+		}
+		if (checkCollision(stone3.getRect_stone(), character.getRect()))
+		{
+			character.setPos(0, 400);
+			SDL_Rect rest = character.getRect();
+		}
+		if (checkCollision(stone4.getRect_stone(), character.getRect()))
+		{
+			character.setPos(0, 400);
+			SDL_Rect rest = character.getRect();
+		}
+		if (checkCollision(stone5.getRect_stone(), character.getRect()))
+		{
+			character.setPos(0, 400);
+			SDL_Rect rest = character.getRect();
+		}
+
 
 		SDL_RenderPresent(renderer);
 
@@ -189,12 +227,12 @@ bool checkCollision(SDL_Rect a, SDL_Rect b)
 	//Calculate the sides of rect B
 	leftB = b.x;
 	rightB = b.x + b.w;
-	topB = b.y+1;
+	topB = b.y + 1;
 	bottomB = b.y + b.h;
 	if (bottomB > topA && rightB > leftA && rightB - 48 < leftA && bottomB - 48 < topA) return true;
 	if (bottomB > topA && rightA > leftB && rightA - 48 < leftB && bottomB - 48 < topA) return true;
 	if (bottomA > topB && rightB > leftA && rightB - 48 < leftA && bottomA - 48 < topB) return true;
 	if (bottomA > topB && rightA > leftB && rightA - 48 < leftB && bottomA - 48 < topB) return true;
-	
+
 	return false;
 }
