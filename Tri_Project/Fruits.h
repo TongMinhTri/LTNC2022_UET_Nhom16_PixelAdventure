@@ -23,7 +23,7 @@ public:
 	~Fruits();
 	void kill() { alive = false; }
 	void set_clips();// Khoi tao cac frame_clips
-	void show_frame(SDL_Renderer* renderer, string);// In ra cac frame tuong ung voi su kien
+	void show_frame(SDL_Renderer* renderer);// In ra cac frame tuong ung voi su kien
 	void setImg(SDL_Renderer* renderer, string path);
 	void setPos(int x, int y);//xet kich thuoc anh
 	SDL_Rect getRect_fruits();

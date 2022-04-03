@@ -23,8 +23,9 @@ public:
 		FALL_LEFT = 7,
 	};
 
-	bool LoadIMG(string path, SDL_Renderer* renderer);
+	SDL_Texture* LoadIMG(string path, SDL_Renderer* renderer);
 	void showImage(SDL_Renderer* renderer);
+	void setIMG(SDL_Renderer* renderer);
 	void handleMovement(SDL_Event event, SDL_Renderer* renderer);
 	void setClips();
 	void updatePlayerPosition(Map& map_data);
@@ -32,10 +33,9 @@ public:
 	SDL_Rect getRect();
 	void setPos(int x, int y);
 private:
-	SDL_Texture* object;
+	SDL_Texture *img_run_right, *img_run_left, *img_idle_right, *img_idle_left, *img_jump_right, *img_jump_left, *img_fall_right, *img_fall_left, *object;
 	SDL_Rect rect;
 	SDL_Rect test;
-
 	int x, y;
 	int x_pos, y_pos;
 

@@ -2,9 +2,22 @@
 
 MainObject::MainObject()
 {
+	img_run_left = NULL;
+	img_run_right = NULL;
+
+	img_idle_left = NULL;
+	img_idle_right = NULL;
+
+	img_jump_left = NULL;
+	img_jump_right = NULL;
+
+	img_fall_left = NULL;
+	img_fall_right = NULL;
+
 	object = NULL;
+
 	rect.x = rect.y = 0;
-	rect.w = rect.h = 48;
+	rect.w = rect.h = 32;
 
 	frame = 0;
 	x_pos = 0;
@@ -30,10 +43,25 @@ MainObject::~MainObject()
 {
 }
 
-
-bool MainObject::LoadIMG(string path, SDL_Renderer* renderer)
+void MainObject::setIMG(SDL_Renderer* renderer)
 {
-	bool res;
+	img_run_left = LoadIMG("Character/Run_left.png", renderer);
+	img_run_right = LoadIMG("Character/Run_right.png", renderer);
+
+	img_idle_left = LoadIMG("Character/Idle_left.png", renderer);
+	img_idle_right = LoadIMG("Character/Idle_right.png", renderer);
+
+	img_jump_left = LoadIMG("Character/Jump_left.png", renderer);
+	img_jump_right = LoadIMG("Character/Jump_right.png", renderer);
+
+	img_fall_left = LoadIMG("Character/Fall_left.png", renderer);
+	img_fall_right = LoadIMG("Character/Fall_right.png", renderer);
+
+	object = img_idle_right;
+}
+
+SDL_Texture* MainObject::LoadIMG(string path, SDL_Renderer* renderer)
+{
 	SDL_Texture* newTexture = NULL;
 	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
 
@@ -49,18 +77,10 @@ bool MainObject::LoadIMG(string path, SDL_Renderer* renderer)
 
 		SDL_FreeSurface(loadedSurface);
 	}
-	object = newTexture;
+	frame_w = rect.w / 12;
+	frame_h = rect.h;
 
-	if (object != NULL) res = true;
-	else res = false;
-
-	if (res)
-	{
-		frame_w = rect.w / 12;
-		frame_h = rect.h;
-	}
-
-	return res;
+	return newTexture;
 }
 
 // Ham load hinh anh sau moi thao tac di chuyen
@@ -72,19 +92,23 @@ void MainObject::showImage(SDL_Renderer* renderer)
 	{
 		if (status == FALL_RIGHT)
 		{
-			LoadIMG("Character/Fall_right.png", renderer);
+			//LoadIMG("Character/Fall_right.png", renderer);
+			object = img_fall_right;
 		}
 		else if (status == FALL_LEFT)
 		{
-			LoadIMG("Character/Fall_left.png", renderer);
+			//LoadIMG("Character/Fall_left.png", renderer);
+			object = img_fall_left;
 		}
 		else if (status == JUMP_RIGHT)
 		{
-			LoadIMG("Character/Jump_right.png", renderer);
+			//LoadIMG("Character/Jump_right.png", renderer);
+			object = img_jump_right;
 		}
 		else if (status == JUMP_LEFT)
 		{
-			LoadIMG("Character/Jump_left.png", renderer);
+			//LoadIMG("Character/Jump_left.png", renderer);
+			object = img_jump_left;
 		}
 	}
 	else
@@ -93,23 +117,27 @@ void MainObject::showImage(SDL_Renderer* renderer)
 		
 		if (status == FALL_RIGHT)
 		{
-			LoadIMG("Character/Idle_right.png", renderer);
+			//LoadIMG("Character/Idle_right.png", renderer);
+			object = img_idle_right;
 			status = IDLE_RIGHT;
 		}
 		else if (status == FALL_LEFT)
 		{
-			LoadIMG("Character/Idle_left.png", renderer);
+			//LoadIMG("Character/Idle_left.png", renderer);
+			object = img_idle_left;
 			status = IDLE_LEFT;
 		}
 		else if (status == JUMP_RIGHT)
 		{
-			LoadIMG("Character/Idle_right.png", renderer);
+			//LoadIMG("Character/Idle_right.png", renderer);
+			object = img_idle_right;
 			status = IDLE_RIGHT;
 
 		}
 		else if (status == JUMP_LEFT)
 		{
-			LoadIMG("Character/Idle_left.png", renderer);
+			//LoadIMG("Character/Idle_left.png", renderer);
+			object = img_idle_left;
 			status = IDLE_LEFT;
 		}
 	}
@@ -156,7 +184,8 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 			input_type.idle = 0;
 			if (on_ground)
 			{
-				LoadIMG("Character/Run_right.png", renderer);
+				//LoadIMG("Character/Run_right.png", renderer);
+				object = img_run_right;
 			}
 			else
 			{
@@ -178,7 +207,8 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 			input_type.idle = 0;
 			if (on_ground)
 			{
-				LoadIMG("Character/Run_left.png", renderer);
+				//LoadIMG("Character/Run_left.png", renderer);
+				object = img_run_left;
 			}
 			else
 			{
@@ -223,7 +253,8 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 			{
 				status = IDLE_RIGHT;
 				input_type.idle = 1;
-				LoadIMG("Character/Idle_right.png", renderer);
+				//LoadIMG("Character/Idle_right.png", renderer);
+				object = img_idle_right;
 			}
 			else
 			{
@@ -240,7 +271,8 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 			{
 				status = IDLE_LEFT;
 				input_type.idle = 1;
-				LoadIMG("Character/Idle_left.png", renderer);
+				//LoadIMG("Character/Idle_left.png", renderer);
+				object = img_idle_left;
 			}
 			else
 			{
@@ -254,12 +286,14 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 			if (status == JUMP_RIGHT)
 			{
 				status = FALL_RIGHT;
-				LoadIMG("Character/Fall_right.png", renderer);
+				//LoadIMG("Character/Fall_right.png", renderer);
+				object = img_fall_right;
 			}
 			else if (status == JUMP_LEFT)
 			{
 				status = FALL_LEFT;
-				LoadIMG("Character/Fall_left.png", renderer);
+				//LoadIMG("Character/Fall_left.png", renderer);
+				object = img_fall_left;
 			}
 			input_type.idle = 1;
 		}

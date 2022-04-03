@@ -45,11 +45,10 @@ void Fruits::setImg(SDL_Renderer* renderer, string path)
 	body = newTexture;
 }
 
-void Fruits::show_frame(SDL_Renderer* renderer, string path)
+void Fruits::show_frame(SDL_Renderer* renderer)
 {
 	if (alive)
 	{
-		setImg(renderer, path);
 		frame++;
 		if (frame == 16) frame = 0; // ngan cho frame ko qua 11 
 		SDL_Rect* current_clips = &frame_clips[frame]; // rect nguon de in ra anh

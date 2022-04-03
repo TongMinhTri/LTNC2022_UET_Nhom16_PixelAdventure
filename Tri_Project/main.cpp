@@ -87,11 +87,10 @@ int main(int argc, char* args[])
 
 
 	GameMap gm;
-	//gm.loadMap("Map_data.txt");
 	gm.loadTiles(renderer);
 
 	MainObject character;
-	character.LoadIMG("Character/Idle_right.png", renderer);
+	character.setIMG(renderer);
 	character.setClips();
 
 	bool quit = false;
@@ -104,6 +103,7 @@ int main(int argc, char* args[])
 	for (int i = 0; i < 5; i++)
 	{
 		kiwi[i].set_clips();
+		kiwi[i].setImg(renderer, "Fruits/Kiwi_48.png");
 	}
 	Stone stone;
 	stone.set_Stone(renderer, 480, 384, "Stone_Idle.png");
@@ -141,9 +141,9 @@ int main(int argc, char* args[])
 			if (checkCollision(kiwi[i].getRect_fruits(), character.getRect()))
 			{
 				kiwi[i].kill();
-				//SDL_Rect rest = character.getRect();
+				SDL_Rect rest = character.getRect();
 			}
-			kiwi[i].show_frame(renderer, "Fruits/Kiwi_48.png");
+			kiwi[i].show_frame(renderer);
 		}
 		
 
