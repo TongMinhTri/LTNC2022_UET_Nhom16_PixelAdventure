@@ -33,7 +33,7 @@ protected:
 public:
 	Stone();
 	~Stone();
-	Stone(SDL_Renderer* renderer,int x,int y,int limitx,int limity ,string path);
+	Stone(SDL_Renderer* renderer, int x, int y, int limitx, int limity, string path);
 	void stone_move(SDL_Renderer* renderer, Map& map_data);
 	//void show(SDL_Renderer* renderer);
 	void setImg(SDL_Renderer* renderer, string path);
@@ -42,11 +42,10 @@ public:
 	SDL_Rect getRect_stone();
 	void set_Stone(SDL_Renderer* renderer, int a, int b, string path);
 	void set_clips();
-	void Stone_Move_Circle(SDL_Renderer* renderer,Map& map_data);
+	void Stone_Move_Circle(SDL_Renderer* renderer, Map& map_data);
 	void DoStone_Circle();
-
-
 	void stone_move_up(SDL_Renderer* renderer, Map& map_data);
+	void show_spikes(SDL_Renderer* renderer);
 }
 
 #endif // !STONE_H

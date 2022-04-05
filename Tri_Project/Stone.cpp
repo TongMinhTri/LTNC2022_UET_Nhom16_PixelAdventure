@@ -13,10 +13,10 @@ Stone::~Stone()
 {
 }
 
-Stone::Stone(SDL_Renderer* renderer, int a, int b, int limitx, int limity,string path)
+Stone::Stone(SDL_Renderer* renderer, int a, int b, int limitx, int limity, string path)
 {
 	frame = 0;
-	x = a; 
+	x = a;
 	y = b;
 	limit_x = limitx;
 	limit_y = limity;
@@ -30,9 +30,9 @@ Stone::Stone(SDL_Renderer* renderer, int a, int b, int limitx, int limity,string
 	state = 0;
 	input_type.down = 1;
 	input_type.jump = 0;
-	input_type.left= 0;
+	input_type.left = 0;
 	input_type.right = 0;
-	setImg(renderer,path);
+	setImg(renderer, path);
 }
 
 void Stone::set_clips()
@@ -48,7 +48,7 @@ void Stone::set_clips()
 
 void Stone::Stone_Move_Circle(SDL_Renderer* renderer, Map& map_data)
 {
-	
+
 	if (input_type.left == 1) x -= 4;
 	if (input_type.right == 1) x += 4;
 	if (input_type.jump == 1) y = y - 4;
@@ -114,6 +114,11 @@ void Stone::stone_move_up(SDL_Renderer* renderer, Map& map_data)
 		}
 	}
 	setPos(x, y);
+	SDL_RenderCopy(renderer, body, &test, &stone);
+}
+
+void Stone::show_spikes(SDL_Renderer* renderer)
+{
 	SDL_RenderCopy(renderer, body, &test, &stone);
 }
 
