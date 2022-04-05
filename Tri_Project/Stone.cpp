@@ -92,25 +92,56 @@ void Stone::DoStone_Circle()
 
 void Stone::stone_move_up(SDL_Renderer* renderer, Map& map_data)
 {
+	v_y += speedy;
 	if (state == 0)
 	{
-		if (y - 2 > limit_x ) y -= 2;
+		if (y - int(v_y) > limit_x) y -= int(v_y);
 		else
 		{
 			y = limit_x;
 			state = 1;
+			v_y = 0;
 		}
 	}
 	else if (state == 1)
 	{
-		if (y + 2 < limit_y) y += 2;
+		if (y + int(v_y) < limit_y) y += int(v_y);
 		else
 		{
 			y = limit_y;
 			state = 0;
+			v_y = 0;
 		}
 	}
 	setPos(x, y);
+	SDL_RenderCopy(renderer, body, &test, &stone);
+}
+
+void Stone::stone_move(SDL_Renderer* renderer, Map& map_data)
+{
+	v_x += speedx;
+	if (state == 0)
+	{
+		if (x - int(v_x) > limit_x) x -= int(v_x);
+		else
+		{
+			x = limit_x;
+			state = 1;
+			v_x = 0;
+		}
+	}
+	else if (state == 1)
+	{
+		if (x + int(v_x) < limit_y) x += int(v_x);
+		else
+		{
+			x = limit_y;
+			state = 0;
+			v_x = 0;
+		}
+	}
+	setPos(x, y);
+
 	SDL_RenderCopy(renderer, body, &test, &stone);
 }
 
@@ -164,30 +195,4 @@ void Stone::set_Stone(SDL_Renderer* renderer, int a, int b, string path)
 	stone.h = w_h;
 	setPos(x, y);
 	setImg(renderer, path);
-}
-
-
-void Stone::stone_move(SDL_Renderer* renderer, Map& map_data)
-{
-	if (state == 0)
-	{
-		if (x - speed > limit_x) x -= speed;
-		else
-		{
-			x = limit_x;
-			state = 1;
-		}
-	}
-	else if (state == 1)
-	{
-		if (x + speed < limit_y) x += speed;
-		else
-		{
-			x = limit_y;
-			state = 0;
-		}
-	}
-	setPos(x, y);
-
-	SDL_RenderCopy(renderer, body, &test, &stone);
 }

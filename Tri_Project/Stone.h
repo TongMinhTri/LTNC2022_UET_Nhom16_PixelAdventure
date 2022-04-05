@@ -1,7 +1,6 @@
 #pragma once
-#ifndef STONE
-#define STONE
-
+#ifndef STONE_H
+#define STONE_H
 #include "BaseObject.h"
 #include "BaseData.h"
 
@@ -17,6 +16,10 @@ private:
 	int frame_w = w_h;
 	int frame_h = w_h;
 	int speed = 4;
+	double speedx = 0.5;
+	double speedy = 0.3;
+	double v_x = 0;
+	double v_y = 0;
 
 	int x_val;
 	int y_val;
@@ -46,6 +49,6 @@ public:
 	void stone_move_up(SDL_Renderer* renderer, Map& map_data);
 }
 
-#endif // !STONE
+#endif // !STONE_H
 
 ;
