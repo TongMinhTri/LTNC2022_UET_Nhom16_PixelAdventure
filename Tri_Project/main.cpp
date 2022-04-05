@@ -49,7 +49,7 @@ bool init()
 
 bool loadBackground()
 {
-	bool bg = background.loadImg("Pink.png", renderer);
+	bool bg = background.loadImg("Background/Pink.png", renderer);
 	if (!bg)
 	{
 		return false;
@@ -71,7 +71,6 @@ void close()
 	SDL_Quit();
 }
 
-//bool checkCollision(SDL_Rect, SDL_Rect, int A, int B);
 
 int main(int argc, char* args[])
 {
@@ -96,24 +95,23 @@ int main(int argc, char* args[])
 
 	bool quit = false;
 	Fruits* kiwi = new Fruits[5];
-	kiwi[0].setFruits(renderer, 240, 288, "Fruits/Cherries_48.png");
-	kiwi[1].setFruits(renderer, 288, 288, "Fruits/Cherries_48.png");
-	kiwi[2].setFruits(renderer, 192, 144, "Fruits/Cherries_48.png");
-	kiwi[3].setFruits(renderer, 240, 144, "Fruits/Cherries_48.png");
-	kiwi[4].setFruits(renderer, 288, 144, "Fruits/Cherries_48.png");
+	kiwi[0].setFruits(renderer, 240, 288, "Fruits/Cherries.png");
+	kiwi[1].setFruits(renderer, 288, 288, "Fruits/Cherries.png");
+	kiwi[2].setFruits(renderer, 192, 144, "Fruits/Cherries.png");
+	kiwi[3].setFruits(renderer, 240, 144, "Fruits/Cherries.png");
+	kiwi[4].setFruits(renderer, 288, 144, "Fruits/Cherries.png");
 	for (int i = 0; i < 5; i++)
 	{
 		kiwi[i].set_clips();
-		kiwi[i].setImg(renderer, "Fruits/Cherries_48.png");
+		kiwi[i].setImg(renderer, "Fruits/Cherries.png");
 	}
-	Stone stone(renderer, 480, 384,192,480, "Spike_Idle.png");
+	Stone stone(renderer, 480, 384,192,480, "Stones/Spike_Idle.png");
+	Stone stone1(renderer, 576, 96, 432, 240, "Stones/Spike_Idle.png");
+	Stone stone2(renderer, 768, 48,48,192, "Stones/Spike_Idle.png");
+	Stone stone3(renderer,288,144,192,192,"Stones/Spike_Idle.png");
+	Stone stone4(renderer, 48, 48,48,864, "Stones/Spike_Idle.png");
+	Stone stone5(renderer, 720, 288, 288, 384, "Stones/Spike_Idle.png");
 	stone.set_clips();
-	Stone stone1(renderer, 576, 96, 432, 240, "Spike_Idle.png");
-	//stone1.set_clips();
-	Stone stone2(renderer, 768, 48,48,192, "Spike_Idle.png");
-	Stone stone3(renderer,288,144,192,192,"Spike_Idle.png");
-	Stone stone4(renderer, 48, 48,48,864, "Spike_Idle.png");
-	Stone stone5(renderer, 720, 288, 288, 384, "Spike_Idle.png");
 
 	while (!quit)
 	{
@@ -191,7 +189,6 @@ int main(int argc, char* args[])
 			SDL_Rect rest = character.getRect();
 		}
 
-
 		SDL_RenderPresent(renderer);
 
 		// Xu ly thoi gian va FPS
@@ -210,30 +207,3 @@ int main(int argc, char* args[])
 	close();
 	return 0;
 }
-
-//bool checkCollision(SDL_Rect a, SDL_Rect b, int A, int B)
-//{
-//	//The sides of the rectangles
-//	int leftA, leftB;
-//	int rightA, rightB;
-//	int topA, topB;
-//	int bottomA, bottomB;
-//
-//	//Calculate the sides of rect A
-//	leftA = a.x+A;
-//	rightA = a.x + a.w-A;
-//	topA = a.y+A;
-//	bottomA = a.y + a.h-A;
-//
-//	//Calculate the sides of rect B
-//	leftB = b.x+B;
-//	rightB = b.x + b.w-B;
-//	topB = b.y + B;
-//	bottomB = b.y + b.h;
-//	if (bottomB > topA && rightB > leftA && rightB - b.w < leftA && bottomB - b.w < topA) return true;
-//	if (bottomB > topA && rightA > leftB && rightA - b.w < leftB && bottomB - b.w < topA) return true;
-//	if (bottomA > topB && rightB > leftA && rightB - b.w < leftA && bottomA - b.w < topB) return true;
-//	if (bottomA > topB && rightA > leftB && rightA - b.w < leftB && bottomA - b.w < topB) return true;
-//
-//	return false;
-//}
