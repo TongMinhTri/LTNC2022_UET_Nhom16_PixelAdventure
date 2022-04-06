@@ -7,6 +7,7 @@
 #include "Stone.h"
 #include <vector>
 #include "CheckCollisions.h"
+#include "Spike.h"
 
 using namespace std;
 
@@ -94,32 +95,28 @@ int main(int argc, char* args[])
 	character.setClips();
 
 	bool quit = false;
-	Fruits* kiwi = new Fruits[5];
-	kiwi[0].setFruits(renderer, 240, 288, "Fruits/Cherries.png");
-	kiwi[1].setFruits(renderer, 288, 288, "Fruits/Cherries.png");
-	kiwi[2].setFruits(renderer, 192, 144, "Fruits/Cherries.png");
-	kiwi[3].setFruits(renderer, 240, 144, "Fruits/Cherries.png");
-	kiwi[4].setFruits(renderer, 288, 144, "Fruits/Cherries.png");
-	for (int i = 0; i < 5; i++)
+	Fruits* fruits = new Fruits[7];
+	fruits[0].setFruits(renderer, 240, 288, "Fruits/Cherries.png");
+	fruits[1].setFruits(renderer, 288, 288, "Fruits/Melon.png");
+	fruits[2].setFruits(renderer, 192, 144, "Fruits/Apple.png");
+	fruits[3].setFruits(renderer, 240, 144, "Fruits/Orange.png");
+	fruits[4].setFruits(renderer, 288, 144, "Fruits/Kiwi.png");
+	fruits[5].setFruits(renderer, 864,  48, "Fruits/Melon.png");
+	fruits[6].setFruits(renderer, 864,  96, "Fruits/Cherries.png");
+	for (int i = 0; i < 7; i++)
 	{
-		kiwi[i].set_clips();
-		kiwi[i].setImg(renderer, "Fruits/Cherries.png");
+		fruits[i].set_clips();
 	}
-	Stone stone(renderer, 480, 384, 192, 480, "Stones/Spike_Idle.png");
-	Stone stone1(renderer, 576, 96, 432, 240, "Stones/Spike_Idle.png");
-	Stone stone2(renderer, 768, 0, 0, 192, "Stones/Spike_Idle.png");
+	Stone stone (renderer, 480, 384, 192, 480, "Stones/Spike_Idle.png");
+	Stone stone1(renderer, 576,  96, 432, 240, "Stones/Spike_Idle.png");
+	Stone stone2(renderer, 768,   0, 0, 192, "Stones/Spike_Idle.png");
 	Stone stone3(renderer, 288, 144, 192, 192, "Stones/Spike_Idle.png");
-	Stone stone4(renderer, 48, 48, 48, 864, "Stones/Spike_Idle.png");
+	Stone stone4(renderer,  48,  48,  48, 864, "Stones/Spike_Idle.png");
 	Stone stone5(renderer, 720, 288, 288, 384, "Stones/Spike_Idle.png");
-	Stone stone6(renderer,816,0,0,144, "Stones/Spike_Idle.png");
-	Stone stone7(renderer, 160, 128, 0, 0, "Spikes/spike_bottom.png");
-	Stone stone8(renderer, 896, 48, 0, 0, "Spikes/spike_right.png");
-	Stone stone9(renderer, 896, 80, 0, 0, "Spikes/spike_right.png");
-	Stone stone10(renderer, 896, 112, 0, 0, "Spikes/spike_right.png");
-	Stone stone11(renderer, 896, 288, 0, 0, "Spikes/spike_right.png");
-	Stone stone12(renderer, 896, 320, 0, 0, "Spikes/spike_right.png");
-	Stone stone13(renderer, 384, 272, 0, 0, "Spikes/spike_bottom.png");
-	Stone stone14(renderer, 512, 128, 0, 0, "Spikes/spike_bottom.png");
+	Stone stone6(renderer, 816,   0, 0, 144, "Stones/Spike_Idle.png");
+	Spike spike1(renderer, 196, 416, 0, "Spikes/spike_bottom.png");
+	Spike spike2(renderer, 176,  96, 1,"Spikes/spike_left.png");
+	Spike spike3(renderer, 436, 272, 0,"Spikes/spike_bottom.png");
 	stone.set_clips();
 
 	while (!quit)
@@ -152,104 +149,66 @@ int main(int argc, char* args[])
 		stone4.stone_move(renderer, map_data);
 		stone5.stone_move_up(renderer, map_data);
 		stone6.stone_move_up(renderer, map_data);
-		stone7.show_spikes(renderer);
-		stone8.show_spikes(renderer);
-		stone9.show_spikes(renderer);
-		stone10.show_spikes(renderer);
-		stone11.show_spikes(renderer);
-		stone12.show_spikes(renderer);
-		stone13.show_spikes(renderer);
-		stone14.show_spikes(renderer);
+		
+		spike1.showImg(renderer);
+		spike2.showImg(renderer);
+		spike3.showImg(renderer);
+
 		character.updatePlayerPosition(map_data);
 		character.showImage(renderer);
 
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 7; i++)
 		{
 
-			if (checkCollision(kiwi[i].getRect_fruits(), character.getRect(), 13, 4))
+			if (checkCollision(fruits[i].getRect_fruits(), character.getRect(), 13, 4))
 			{
-				kiwi[i].kill();
-				SDL_Rect rest = character.getRect();
+				fruits[i].kill();
 			}
-			kiwi[i].show_frame(renderer);
+			fruits[i].show_frame(renderer);
 		}
 
 
 		if (checkCollision(stone.getRect_stone(), character.getRect(), 4, 4))
 		{
 			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
 		}
 		if (checkCollision(stone1.getRect_stone(), character.getRect(), 4, 4))
 		{
 			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
 		}
 		if (checkCollision(stone2.getRect_stone(), character.getRect(), 4, 4))
 		{
-			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
+			character.setPos(720, 144);
 		}
 		if (checkCollision(stone3.getRect_stone(), character.getRect(), 4, 4))
 		{
 			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
 		}
 		if (checkCollision(stone4.getRect_stone(), character.getRect(), 4, 4))
 		{
 			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
 		}
 		if (checkCollision(stone5.getRect_stone(), character.getRect(), 4, 4))
 		{
 			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
 		}
 		if (checkCollision(stone6.getRect_stone(), character.getRect(), 4, 4))
 		{
-			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
+			character.setPos(720, 144);
 		}
-		if (checkCollision(stone7.getRect_stone(), character.getRect(), 4, 4))
+		if (checkCollision_spike(spike1.getRect_spike(), character.getRect(), 0, 4))
 		{
 			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
 		}
-		if (checkCollision(stone8.getRect_stone(), character.getRect(), 4, 4))
+		if (checkCollision_spike(spike2.getRect_spike(), character.getRect(), 1, 4))
 		{
 			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
 		}
-		if (checkCollision(stone9.getRect_stone(), character.getRect(), 4, 4))
+		if (checkCollision_spike(spike3.getRect_spike(), character.getRect(), 0, 4))
 		{
 			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
 		}
-		if (checkCollision(stone10.getRect_stone(), character.getRect(), 4, 4))
-		{
-			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
-		}
-		if (checkCollision(stone11.getRect_stone(), character.getRect(), 4, 4))
-		{
-			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
-		}
-		if (checkCollision(stone12.getRect_stone(), character.getRect(), 4, 4))
-		{
-			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
-		}
-		if (checkCollision(stone13.getRect_stone(), character.getRect(), 4, 4))
-		{
-			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
-		}
-		if (checkCollision(stone14.getRect_stone(), character.getRect(), 4, 4))
-		{
-			character.setPos(0, 400);
-			SDL_Rect rest = character.getRect();
-		}
+		
 
 
 		SDL_RenderPresent(renderer);

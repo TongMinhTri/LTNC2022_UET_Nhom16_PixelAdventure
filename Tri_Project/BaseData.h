@@ -22,7 +22,7 @@ const int SCREEN_HEIGHT = 480;
 
 #define JUMP_VALUE 16
 #define FALL_SPEED 2
-#define PLAYER_SPEED 5
+#define PLAYER_SPEED 6
 #define TILE_SIZE 48
 #define TILEMAP_NUM_X 20
 #define TILEMAP_NUM_Y 10
