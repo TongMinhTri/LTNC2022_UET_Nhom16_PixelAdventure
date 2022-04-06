@@ -33,7 +33,7 @@ protected:
 public:
 	Stone();
 	~Stone();
-	Stone(SDL_Renderer* renderer, int x, int y, int limitx, int limity, string path);
+	void init_stone(SDL_Renderer* renderer, int x, int y, int limitx, int limity, string path);
 	void stone_move(SDL_Renderer* renderer, Map& map_data);
 	//void show(SDL_Renderer* renderer);
 	void setImg(SDL_Renderer* renderer, string path);

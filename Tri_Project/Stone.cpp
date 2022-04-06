@@ -13,7 +13,7 @@ Stone::~Stone()
 {
 }
 
-Stone::Stone(SDL_Renderer* renderer, int a, int b, int limitx, int limity, string path)
+void Stone::init_stone(SDL_Renderer* renderer, int a, int b, int limitx, int limity, string path)
 {
 	frame = 0;
 	x = a;

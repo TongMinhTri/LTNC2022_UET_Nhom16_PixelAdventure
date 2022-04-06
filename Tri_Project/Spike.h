@@ -14,8 +14,9 @@ protected:
 	SDL_Rect spike;
 	SDL_Texture* body;
 public:
-	Spike(SDL_Renderer* renderer, int a, int b, int c, string path);
+	Spike();
 	~Spike();
+	void set_spike(SDL_Renderer* renderer, int a, int b, int c, string path);
 	void setImg(SDL_Renderer* renderer, string path);
 	void setPos(int x, int y);//xet kich thuoc anh
 	void showImg(SDL_Renderer* renderer);

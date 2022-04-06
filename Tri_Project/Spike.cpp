@@ -1,6 +1,20 @@
 #include "Spike.h"
 
-Spike::Spike(SDL_Renderer* renderer, int a, int b, int c, string path)
+
+
+Spike::Spike()
+{
+	x = 0;
+	y = 0;
+	tes.x = tes.y = tes.w = tes.h = 0;
+
+}
+
+Spike::~Spike()
+{
+}
+
+void Spike::set_spike(SDL_Renderer* renderer, int a, int b, int c, string path)
 {
 	x = a;
 	y = b;
@@ -19,11 +33,6 @@ Spike::Spike(SDL_Renderer* renderer, int a, int b, int c, string path)
 	setImg(renderer, path);
 	setPos(a, b);
 }
-
-Spike::~Spike()
-{
-}
-
 void Spike::setImg(SDL_Renderer* renderer, string path)
 {
 	SDL_Texture* newTexture = NULL;
