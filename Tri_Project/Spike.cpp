@@ -8,7 +8,7 @@ Spike::Spike()
 	y = 0;
 	tes.x = tes.y = tes.w = tes.h = 0;
 	spike.x = spike.y = spike.w = spike.h = 0;
-
+	body = NULL;
 }
 
 Spike::~Spike()

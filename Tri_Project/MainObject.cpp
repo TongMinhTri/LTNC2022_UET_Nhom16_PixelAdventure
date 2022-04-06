@@ -456,5 +456,14 @@ void MainObject::setPos(int x, int y)
 	rect.y = y;
 	x_pos = x;
 	y_pos = y;
+
+	object = img_idle_right;
+	status = IDLE_RIGHT;
+	input_type.left = input_type.right = 0;
+	input_type.jump = 0;
+	input_type.down = 0;
+	input_type.idle = 1;
+	on_ground = false;
+	jump = false;
 }
 

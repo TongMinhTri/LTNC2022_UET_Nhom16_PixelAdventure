@@ -45,7 +45,7 @@ void Fruits::setImg(SDL_Renderer* renderer, string path)
 	body = newTexture;
 }
 
-void Fruits::show_frame(SDL_Renderer* renderer)
+void Fruits::showImg(SDL_Renderer* renderer)
 {
 	if (alive)
 	{

@@ -174,7 +174,7 @@ void Stone::show_frame(SDL_Renderer* renderer, string path)
 {
 	setImg(renderer, path);
 	frame++;
-	if (frame == 3) frame = 0; // ngan cho frame ko qua 11 
+	if (frame == 3) frame = 0; // ngan cho frame ko qua 3
 	SDL_Rect* current_clips = &frame_clips[frame]; // rect nguon de in ra anh
 	SDL_Rect renderquad = { x, y, frame_w, frame_h };
 	SDL_RenderCopy(renderer, body, current_clips, &renderquad);

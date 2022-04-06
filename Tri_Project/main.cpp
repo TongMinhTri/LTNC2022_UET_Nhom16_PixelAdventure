@@ -172,7 +172,7 @@ int main(int argc, char* args[])
 			{
 				fruits[i].kill();
 			}
-			fruits[i].show_frame(renderer);
+			fruits[i].showImg(renderer);
 		}
 
 
@@ -180,7 +180,7 @@ int main(int argc, char* args[])
 		{
 			if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
 			{
-				character.setPos(720, 112);
+				character.setPos(0, 400);
 			}
 		}
 
