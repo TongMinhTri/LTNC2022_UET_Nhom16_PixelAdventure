@@ -95,7 +95,7 @@ int main(int argc, char* args[])
 	character.setClips();
 
 	bool quit = false;
-	Fruits* fruits = new Fruits[7];
+	Fruits* fruits = new Fruits[9];
 	fruits[0].setFruits(renderer, 240, 288, "Fruits/Cherries.png");
 	fruits[1].setFruits(renderer, 288, 288, "Fruits/Melon.png");
 	fruits[2].setFruits(renderer, 192, 144, "Fruits/Apple.png");
@@ -103,7 +103,9 @@ int main(int argc, char* args[])
 	fruits[4].setFruits(renderer, 288, 144, "Fruits/Kiwi.png");
 	fruits[5].setFruits(renderer, 864,  48, "Fruits/Melon.png");
 	fruits[6].setFruits(renderer, 864,  96, "Fruits/Cherries.png");
-	for (int i = 0; i < 7; i++)
+	fruits[7].setFruits(renderer, 576, 144, "Fruits/Apple.png");
+	fruits[8].setFruits(renderer, 432, 144, "Fruits/Melon.png");
+	for (int i = 0; i < 9; i++)
 	{
 		fruits[i].set_clips();
 	}
@@ -117,10 +119,12 @@ int main(int argc, char* args[])
 	stone[6].init_stone(renderer, 816,   0, 0, 144, "Stones/Spike_Idle.png");
 	stone[0].set_clips();
 
-	Spike spike[3];
+	Spike spike[5];
 	spike[0].set_spike(renderer, 196, 416, 0, "Spikes/spike_bottom.png");
-	spike[1].set_spike(renderer, 176, 96, 1, "Spikes/spike_left.png");
-	spike[2].set_spike(renderer, 436, 272, 0, "Spikes/spike_bottom.png");
+	spike[1].set_spike(renderer, 48, 144, 1, "Spikes/spike_right.png");
+	spike[2].set_spike(renderer, 176,  96, 2, "Spikes/spike_left.png");
+	spike[3].set_spike(renderer, 436, 272, 0, "Spikes/spike_bottom.png");
+	spike[4].set_spike(renderer, 672, 336, 1, "Spikes/spike_right.png");
 
 	while (!quit)
 	{
@@ -153,7 +157,7 @@ int main(int argc, char* args[])
 		stone[5].stone_move_up(renderer, map_data);
 		stone[6].stone_move_up(renderer, map_data);
 		
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			spike[i].showImg(renderer);
 		}
@@ -161,7 +165,7 @@ int main(int argc, char* args[])
 		character.updatePlayerPosition(map_data);
 		character.showImage(renderer);
 
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 9; i++)
 		{
 
 			if (checkCollision(fruits[i].getRect_fruits(), character.getRect(), 13, 4))
@@ -176,13 +180,13 @@ int main(int argc, char* args[])
 		{
 			if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
 			{
-				character.setPos(720, 144);
+				character.setPos(720, 112);
 			}
 		}
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 5; i++)
 		{
-			if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), 0, 4))
+			if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), i%3, 4))
 			{
 				character.setPos(0, 400);
 			}

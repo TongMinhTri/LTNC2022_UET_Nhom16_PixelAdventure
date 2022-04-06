@@ -7,11 +7,32 @@ Spike::Spike()
 	x = 0;
 	y = 0;
 	tes.x = tes.y = tes.w = tes.h = 0;
+	spike.x = spike.y = spike.w = spike.h = 0;
 
 }
 
 Spike::~Spike()
 {
+}
+
+void Spike::setImg(SDL_Renderer* renderer, string path)
+{
+	SDL_Texture* newTexture = NULL;
+	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+
+	if (loadedSurface != NULL)
+	{
+		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
+		newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+		if (newTexture != NULL)
+		{
+			spike.w = loadedSurface->w;
+			spike.h = loadedSurface->h;
+		}
+
+		SDL_FreeSurface(loadedSurface);
+	}
+	body = newTexture;
 }
 
 void Spike::set_spike(SDL_Renderer* renderer, int a, int b, int c, string path)
@@ -33,25 +54,7 @@ void Spike::set_spike(SDL_Renderer* renderer, int a, int b, int c, string path)
 	setImg(renderer, path);
 	setPos(a, b);
 }
-void Spike::setImg(SDL_Renderer* renderer, string path)
-{
-	SDL_Texture* newTexture = NULL;
-	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
 
-	if (loadedSurface != NULL)
-	{
-		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
-		newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-		if (newTexture != NULL)
-		{
-			spike.w = loadedSurface->w;
-			spike.h = loadedSurface->h;
-		}
-
-		SDL_FreeSurface(loadedSurface);
-	}
-	body = newTexture;
-}
 
 void Spike::setPos(int x, int y)
 {

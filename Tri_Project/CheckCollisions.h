@@ -48,10 +48,17 @@ bool checkCollision_spike(SDL_Rect a, SDL_Rect b, int A, int B)
 
 		//Calculate the sides of rect B
 	}
-	else
+	else if( A == 2)
 	{
 		leftA = a.x+9;
 		rightA = a.x + a.w;
+		topA = a.y;
+		bottomA = a.y + a.h;
+	}
+	else
+	{
+		leftA = a.x;
+		rightA = a.x + a.w-9;
 		topA = a.y;
 		bottomA = a.y + a.h;
 	}
