@@ -8,6 +8,7 @@
 #include <vector>
 #include "CheckCollisions.h"
 #include "Spike.h"
+#include "Checkpoints.h"
 
 using namespace std;
 
@@ -90,6 +91,13 @@ int main(int argc, char* args[])
 	GameMap gm;
 	gm.loadTiles(renderer);
 
+	Checkpoints point[3];
+	point[0].set_checkpoints(renderer, 912, 384, 8,48, "Checkpoints/End/End(48x48).png");
+	point[1].set_checkpoints(renderer, 0, 368, 17,64, "Checkpoints/Start/Start (Moving) (64x64).png");
+	point[2].set_checkpoints(renderer, 624, 96, 26,48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
+	for(int i=0;i<=2;i++)
+		point[i].set_clips();
+
 	MainObject character;
 	character.setIMG(renderer);
 	character.setClips();
@@ -101,8 +109,8 @@ int main(int argc, char* args[])
 	fruits[2].setFruits(renderer, 192, 144, "Fruits/Apple.png");
 	fruits[3].setFruits(renderer, 240, 144, "Fruits/Orange.png");
 	fruits[4].setFruits(renderer, 288, 144, "Fruits/Kiwi.png");
-	fruits[5].setFruits(renderer, 864,  48, "Fruits/Melon.png");
-	fruits[6].setFruits(renderer, 864,  96, "Fruits/Cherries.png");
+	fruits[5].setFruits(renderer, 864, 48, "Fruits/Melon.png");
+	fruits[6].setFruits(renderer, 864, 96, "Fruits/Cherries.png");
 	fruits[7].setFruits(renderer, 576, 144, "Fruits/Apple.png");
 	fruits[8].setFruits(renderer, 432, 144, "Fruits/Melon.png");
 	for (int i = 0; i < 9; i++)
@@ -114,15 +122,15 @@ int main(int argc, char* args[])
 	stone[1].init_stone(renderer, 576, 96, 432, 240, "Stones/Spike_Idle.png");
 	stone[2].init_stone(renderer, 768, 0, 0, 192, "Stones/Spike_Idle.png");
 	stone[3].init_stone(renderer, 288, 144, 192, 192, "Stones/Spike_Idle.png");
-	stone[4].init_stone(renderer,  48,  48,  48, 864, "Stones/Spike_Idle.png");
+	stone[4].init_stone(renderer, 48, 48, 48, 864, "Stones/Spike_Idle.png");
 	stone[5].init_stone(renderer, 720, 288, 288, 384, "Stones/Spike_Idle.png");
-	stone[6].init_stone(renderer, 816,   0, 0, 144, "Stones/Spike_Idle.png");
+	stone[6].init_stone(renderer, 816, 0, 0, 144, "Stones/Spike_Idle.png");
 	stone[0].set_clips();
 
 	Spike spike[5];
 	spike[0].set_spike(renderer, 196, 416, 0, "Spikes/spike_bottom.png");
 	spike[1].set_spike(renderer, 48, 144, 1, "Spikes/spike_right.png");
-	spike[2].set_spike(renderer, 176,  96, 2, "Spikes/spike_left.png");
+	spike[2].set_spike(renderer, 176, 96, 2, "Spikes/spike_left.png");
 	spike[3].set_spike(renderer, 436, 272, 0, "Spikes/spike_bottom.png");
 	spike[4].set_spike(renderer, 672, 336, 1, "Spikes/spike_right.png");
 
@@ -146,8 +154,11 @@ int main(int argc, char* args[])
 		gm.DrawMap(renderer);
 		Map map_data = gm.getMap();
 
+		point[0].showImg(renderer);
+		point[1].showImg(renderer);
+		point[2].showImg(renderer);
+		
 		stone[0].stone_move(renderer, map_data);
-
 		stone[1].DoStone_Circle();
 		stone[1].Stone_Move_Circle(renderer, map_data);
 		stone[2].stone_move_up(renderer, map_data);
@@ -156,7 +167,7 @@ int main(int argc, char* args[])
 		stone[4].stone_move(renderer, map_data);
 		stone[5].stone_move_up(renderer, map_data);
 		stone[6].stone_move_up(renderer, map_data);
-		
+
 		for (int i = 0; i < 5; i++)
 		{
 			spike[i].showImg(renderer);
@@ -186,12 +197,12 @@ int main(int argc, char* args[])
 
 		for (int i = 0; i < 5; i++)
 		{
-			if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), i%3, 4))
+			if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), i % 3, 4))
 			{
 				character.setPos(0, 400);
 			}
 		}
-		
+
 
 
 		SDL_RenderPresent(renderer);
