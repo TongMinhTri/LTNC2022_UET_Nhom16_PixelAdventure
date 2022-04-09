@@ -7,6 +7,7 @@
 #include "Stone.h"
 #include "CheckCollisions.h"
 #include "Spike.h"
+#include "Checkpoints.h"
 
 using namespace std;
 
@@ -134,6 +135,13 @@ int main(int argc, char* args[])
 	GameMap gm;
 	gm.loadTiles(renderer);
 
+	Checkpoints point[3];
+	point[0].set_checkpoints(renderer, 912, 384, 8,48, "Checkpoints/End/End(48x48).png");
+	point[1].set_checkpoints(renderer, 0, 368, 17,64, "Checkpoints/Start/Start (Moving) (64x64).png");
+	point[2].set_checkpoints(renderer, 624, 96, 26,48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
+	for(int i=0;i<=2;i++)
+		point[i].set_clips();
+
 	MainObject character;
 	character.setIMG(renderer);
 	character.setClips();
@@ -190,6 +198,10 @@ int main(int argc, char* args[])
 		gm.DrawMap(renderer);
 		Map map_data = gm.getMap();
 
+		point[0].showImg(renderer);
+		point[1].showImg(renderer);
+		point[2].showImg(renderer);
+		
 		stone[0].stone_move(renderer, map_data);
 		stone[1].DoStone_Circle();
 		stone[1].Stone_Move_Circle(renderer, map_data);
