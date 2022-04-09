@@ -15,6 +15,18 @@ static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static SDL_Event event;
 
+enum Sound
+{
+	jump_sound,
+	collect_sound,
+	hitSpike_sound,
+	hitRock_sound,
+	sound_total
+};
+
+static Mix_Chunk* soundEffect[sound_total];
+static Mix_Music* game_music = NULL;
+
 // Screen'size
 const int FPS = 33;
 const int SCREEN_WIDTH = 960;

@@ -29,7 +29,7 @@ MainObject::MainObject()
 	input_type.jump = 0;
 	input_type.down = 0;
 	input_type.idle = 1;
-	on_ground = false;
+	on_ground = true;
 	jump = false;
 	setPos(x_pos, y_pos);
 	for (int i = 0; i < 12; i++)
@@ -92,22 +92,18 @@ void MainObject::showImage(SDL_Renderer* renderer)
 	{
 		if (status == FALL_RIGHT)
 		{
-			//LoadIMG("Characters/Fall_right.png", renderer);
 			object = img_fall_right;
 		}
 		else if (status == FALL_LEFT)
 		{
-			//LoadIMG("Characters/Fall_left.png", renderer);
 			object = img_fall_left;
 		}
 		else if (status == JUMP_RIGHT)
 		{
-			//LoadIMG("Characters/Jump_right.png", renderer);
 			object = img_jump_right;
 		}
 		else if (status == JUMP_LEFT)
 		{
-			//LoadIMG("Characters/Jump_left.png", renderer);
 			object = img_jump_left;
 		}
 	}
@@ -117,26 +113,22 @@ void MainObject::showImage(SDL_Renderer* renderer)
 		
 		if (status == FALL_RIGHT)
 		{
-			//LoadIMG("Characters/Idle_right.png", renderer);
 			object = img_idle_right;
 			status = IDLE_RIGHT;
 		}
 		else if (status == FALL_LEFT)
 		{
-			//LoadIMG("Characters/Idle_left.png", renderer);
 			object = img_idle_left;
 			status = IDLE_LEFT;
 		}
 		else if (status == JUMP_RIGHT)
 		{
-			//LoadIMG("Characters/Idle_right.png", renderer);
 			object = img_idle_right;
 			status = IDLE_RIGHT;
 
 		}
 		else if (status == JUMP_LEFT)
 		{
-			//LoadIMG("Characters/Idle_left.png", renderer);
 			object = img_idle_left;
 			status = IDLE_LEFT;
 		}
@@ -168,7 +160,7 @@ void MainObject::showImage(SDL_Renderer* renderer)
 
 }
 
-void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
+void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer, Mix_Chunk* soundEffect[])
 {
 	if (event.type == SDL_KEYDOWN)
 	{
@@ -184,7 +176,6 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 			input_type.idle = 0;
 			if (on_ground)
 			{
-				//LoadIMG("Characters/Run_right.png", renderer);
 				object = img_run_right;
 			}
 			else
@@ -207,7 +198,6 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 			input_type.idle = 0;
 			if (on_ground)
 			{
-				//LoadIMG("Characters/Run_left.png", renderer);
 				object = img_run_left;
 			}
 			else
@@ -223,13 +213,24 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 		case SDLK_UP:
 		{
 			input_type.jump = 1;
-			jump = true;
 			if (status == IDLE_RIGHT)
 			{
+				Mix_PlayChannel(-1, soundEffect[jump_sound], 0);
 				status = JUMP_RIGHT;
 			}
 			else if (status == IDLE_LEFT)
 			{
+				Mix_PlayChannel(-1, soundEffect[jump_sound], 0);
+				status = JUMP_LEFT;
+			}
+			else if (status == FALL_RIGHT && jump == false)
+			{
+				Mix_PlayChannel(-1, soundEffect[jump_sound], 0);        
+				status = JUMP_RIGHT;
+			}
+			else if (status == FALL_LEFT && jump == false)
+			{
+				Mix_PlayChannel(-1, soundEffect[jump_sound], 0);
 				status = JUMP_LEFT;
 			}
 			input_type.down = 0;
@@ -253,7 +254,6 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 			{
 				status = IDLE_RIGHT;
 				input_type.idle = 1;
-				//LoadIMG("Characters/Idle_right.png", renderer);
 				object = img_idle_right;
 			}
 			else
@@ -271,7 +271,6 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 			{
 				status = IDLE_LEFT;
 				input_type.idle = 1;
-				//LoadIMG("Characters/Idle_left.png", renderer);
 				object = img_idle_left;
 			}
 			else
@@ -286,13 +285,11 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer)
 			if (status == JUMP_RIGHT)
 			{
 				status = FALL_RIGHT;
-				//LoadIMG("Characters/Fall_right.png", renderer);
 				object = img_fall_right;
 			}
 			else if (status == JUMP_LEFT)
 			{
 				status = FALL_LEFT;
-				//LoadIMG("Characters/Fall_left.png", renderer);
 				object = img_fall_left;
 			}
 			input_type.idle = 1;
@@ -345,12 +342,12 @@ void MainObject::updatePlayerPosition(Map& map_data)
 	}
 	if (input_type.jump == 1)
 	{
-		if (on_ground)
+		if (!jump)
 		{
 			y = -JUMP_VALUE;
 		}
+		jump = true;
 		on_ground = false;
-		input_type.jump = 0;
 	}
 	checkCollisionS(map_data);
 }
@@ -437,6 +434,7 @@ void MainObject::checkCollisionS(Map& map_data)
 	{
 		y_pos = 0;
 	}
+	if (y > 0) on_ground = false;
 	y_pos += y;
 
 }
@@ -463,7 +461,7 @@ void MainObject::setPos(int x, int y)
 	input_type.jump = 0;
 	input_type.down = 0;
 	input_type.idle = 1;
-	on_ground = false;
+	on_ground = true;
 	jump = false;
 }
 

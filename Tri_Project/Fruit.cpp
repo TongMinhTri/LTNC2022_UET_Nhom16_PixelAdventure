@@ -2,6 +2,7 @@
 
 Fruits::Fruits()
 {
+	fill_n(check_collect, 9, true);
 	fruits.x = 0;
 	fruits.y = 0;
 	x = 0;
