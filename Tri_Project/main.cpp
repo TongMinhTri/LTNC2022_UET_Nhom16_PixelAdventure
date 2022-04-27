@@ -66,7 +66,7 @@ bool loadBackground()
 bool loadSound()
 {
 	bool success = true;
-	game_music = Mix_LoadMUS("Adv-music/level/Level-01.wav");
+	game_music = Mix_LoadMUS("Adv-music/level/Level-04.wav");
 	soundEffect[jump_sound] = Mix_LoadWAV("Adv-SFX/Jump 4.wav");
 	soundEffect[collect_sound] = Mix_LoadWAV("Adv-SFX/Collect 5.wav");
 	soundEffect[hitSpike_sound] = Mix_LoadWAV("Adv-SFX/Hit 1.wav");
@@ -136,12 +136,14 @@ int main(int argc, char* args[])
 	gm.loadTiles(renderer);
 
 	Checkpoints point[3];
-	point[0].set_checkpoints(renderer, 912, 384, 8,48, "Checkpoints/End/End(48x48).png");
-	point[1].set_checkpoints(renderer, 0, 368, 17,64, "Checkpoints/Start/Start (Moving) (64x64).png");
-	point[2].set_checkpoints(renderer, 624, 96, 26,48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
-	for(int i=0;i<=2;i++)
+	point[0].set_checkpoints(renderer, 912, 384, 8, 48, "Checkpoints/End/End(48x48).png");
+	point[1].set_checkpoints(renderer, 0, 368, 17, 64, "Checkpoints/Start/Start (Moving) (64x64).png");
+	point[2].set_checkpoints(renderer, 624, 96, 26, 48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
+	for(int i = 0; i <= 2; i++)
+	{
 		point[i].set_clips();
-
+	}
+		
 	MainObject character;
 	character.setIMG(renderer);
 	character.setClips();
@@ -201,7 +203,7 @@ int main(int argc, char* args[])
 		point[0].showImg(renderer);
 		point[1].showImg(renderer);
 		point[2].showImg(renderer);
-		
+
 		stone[0].stone_move(renderer, map_data);
 		stone[1].DoStone_Circle();
 		stone[1].Stone_Move_Circle(renderer, map_data);
@@ -237,7 +239,12 @@ int main(int argc, char* args[])
 			if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
 			{
 				Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
-				character.setPos(0, 400);
+				if (i == 5 || i == 6 || i == 2)
+				{
+					character.setPos(624, 144);
+				}
+				else 
+					character.setPos(0, 400);
 			}
 		}
 
