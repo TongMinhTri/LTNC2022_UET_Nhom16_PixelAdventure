@@ -21,7 +21,7 @@ MainObject::MainObject()
 
 	frame = 0;
 	x_pos = 0;
-	y_pos = 384;
+	y_pos = 432;
 	x = y = 0;
 	frame_w = frame_h = 0;
 	status = IDLE_RIGHT;

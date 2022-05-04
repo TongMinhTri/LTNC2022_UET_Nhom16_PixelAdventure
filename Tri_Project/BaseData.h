@@ -9,6 +9,7 @@
 #include <iostream>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
+#include <string>
 
 
 static SDL_Window* window = NULL;
@@ -30,24 +31,32 @@ static Mix_Music* game_music = NULL;
 // Screen'size
 const int FPS = 33;
 const int SCREEN_WIDTH = 960;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_HEIGHT = 528;
 
 #define JUMP_VALUE 16
 #define FALL_SPEED 2
 #define PLAYER_SPEED 6
 #define TILE_SIZE 48
 #define TILEMAP_NUM_X 20
-#define TILEMAP_NUM_Y 10
+#define TILEMAP_NUM_Y 11
 
 struct Input
 {
 	int left, right, down, jump, idle;
 };
 
+enum Game_status {
+	NAME,
+	INTRO,
+	PLAY,
+	END,
+};
+
 struct Map
 {
 	int tile[TILEMAP_NUM_Y][TILEMAP_NUM_X] = {
-		{5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,0,0,0,0,5},
+		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+		{5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5},
 		{5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5},
 		{5,0,0,0,8,8,8,0,0,0,0,0,0,0,0,0,0,0,0,5},
 		{5,0,0,8,0,0,0,8,8,0,5,5,0,5,5,5,0,0,8,5},
