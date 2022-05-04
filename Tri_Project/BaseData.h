@@ -9,13 +9,13 @@
 #include <iostream>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-#include <string>
 
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static SDL_Event event;
 
+static TTF_Font* fontText = NULL;
 enum Sound
 {
 	jump_sound,

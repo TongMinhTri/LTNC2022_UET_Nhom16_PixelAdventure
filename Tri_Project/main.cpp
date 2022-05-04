@@ -9,6 +9,7 @@
 #include "Spike.h"
 #include "Checkpoints.h"
 #include "Text.h"
+#include "TextScore.h"
 
 using namespace std;
 
@@ -247,7 +248,7 @@ int main(int argc, char* args[])
 				//The current input text.
 				std::string inputText = "";
 				gFontN = TTF_OpenFont("SHOWG.ttf", 30);
-				gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor,gFontN, renderer);
+				gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
 
 				//Enable text input
 				SDL_StartTextInput();
@@ -312,13 +313,13 @@ int main(int argc, char* args[])
 						if (inputText != "")
 						{
 							//Render new text
-							gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor,gFontN, renderer);
+							gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
 						}
 						//Text is empty
 						else
 						{
 							//Render space texture
-							gInputTextTexture.loadFromRenderedText(" ", textColor,gFontN, renderer);
+							gInputTextTexture.loadFromRenderedText(" ", textColor, gFontN, renderer);
 						}
 					}
 
@@ -345,7 +346,7 @@ int main(int argc, char* args[])
 	}
 	if (Game_Status == PLAY)
 	{
-		Play:
+	Play:
 		gPromptTextTexture.free();
 		gInputTextTexture.free();
 
@@ -384,11 +385,12 @@ int main(int argc, char* args[])
 		GameMap gm;
 		gm.loadTiles(renderer);
 
+
 		Checkpoints point[3];
-		point[0].set_checkpoints(renderer, 912, 432, 8,48, "Checkpoints/End/End(48x48).png");
-		point[1].set_checkpoints(renderer, 0, 416, 17,64, "Checkpoints/Start/Start (Moving) (64x64).png");
-		point[2].set_checkpoints(renderer, 624, 144, 26,48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
-		for(int i=0;i<=2;i++)
+		point[0].set_checkpoints(renderer, 912, 432, 8, 48, "Checkpoints/End/End(48x48).png");
+		point[1].set_checkpoints(renderer, 0, 416, 17, 64, "Checkpoints/Start/Start (Moving) (64x64).png");
+		point[2].set_checkpoints(renderer, 624, 144, 26, 48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
+		for (int i = 0; i <= 2; i++)
 			point[i].set_clips();
 
 		MainObject character;
@@ -426,6 +428,11 @@ int main(int argc, char* args[])
 		spike[2].set_spike(renderer, 176, 144, 2, "Spikes/spike_left.png");
 		spike[3].set_spike(renderer, 436, 320, 0, "Spikes/spike_bottom.png");
 		spike[4].set_spike(renderer, 672, 384, 1, "Spikes/spike_right.png");
+
+		TextScore score;
+		score.initText(fontText);
+
+		int sco = 0;
 		while (!quit)
 		{
 			timer.start();
@@ -477,6 +484,7 @@ int main(int argc, char* args[])
 					if (checkCollision(fruits[i].getRect_fruits(), character.getRect(), 13, 4) && fruits[i].alive == true)
 					{
 						fruits[i].kill();
+						sco += 100;
 						Mix_PlayChannel(-1, soundEffect[collect_sound], 0);
 					}
 					fruits[i].showImg(renderer);
@@ -500,6 +508,10 @@ int main(int argc, char* args[])
 						character.setPos(0, 400);
 					}
 				}
+
+				score.setText("Score: " + to_string(sco));
+				score.createText(fontText, renderer);
+
 
 				SDL_RenderPresent(renderer);
 
