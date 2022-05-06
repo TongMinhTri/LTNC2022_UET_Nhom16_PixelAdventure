@@ -10,6 +10,7 @@
 #include "Checkpoints.h"
 #include "Text.h"
 #include "TextScore.h"
+#include "Heart.h"
 
 using namespace std;
 
@@ -221,6 +222,7 @@ bool loadMedia()
 
 int main(int argc, char* args[])
 {
+	string inputText = "";
 	if (Game_Status == NAME)
 	{
 		if (!init_text())
@@ -246,7 +248,6 @@ int main(int argc, char* args[])
 				SDL_Color textColor = { 0, 128, 128 };
 
 				//The current input text.
-				std::string inputText = "";
 				gFontN = TTF_OpenFont("SHOWG.ttf", 30);
 				gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
 
@@ -428,11 +429,40 @@ int main(int argc, char* args[])
 		spike[2].set_spike(renderer, 176, 144, 2, "Spikes/spike_left.png");
 		spike[3].set_spike(renderer, 436, 320, 0, "Spikes/spike_bottom.png");
 		spike[4].set_spike(renderer, 672, 384, 1, "Spikes/spike_right.png");
-
-		TextScore score;
+		
+		bool name_check = true;
+		TextScore score(400 , 10 , 65);
 		score.initText(fontText);
+		score.setText("Score: ");
+		score.createText(fontText, renderer, name_check);
+
+		TextScore mark(465 , 10 , 32) ;
+		mark.initText(fontText);
+		
+		TextScore player(50, 10 , 80);
+		player.initText(fontText);
+		player.setText("Player: ");
+		player.createText(fontText, renderer, name_check);
+		
+		TextScore name(130, 10 , 90);
+		name.initText(fontText);
+		name.setText(inputText);
+		name.createText(fontText, renderer, name_check);
 
 		int sco = 0;
+		int new_sco = -1;
+		int score_save = 0;
+		bool check_score = false;
+
+		Heart* live = new Heart[10];
+		for (int i = 0; i < 9; i++)
+		{
+			live[i].setHeart(renderer, 620 + 40 * i, 8);
+			if (i >= 5)
+				live[i].kill();
+		}
+		int number_dead = 0;
+
 		while (!quit)
 		{
 			timer.start();
@@ -485,6 +515,7 @@ int main(int argc, char* args[])
 					{
 						fruits[i].kill();
 						sco += 100;
+						score_save += 100;
 						Mix_PlayChannel(-1, soundEffect[collect_sound], 0);
 					}
 					fruits[i].showImg(renderer);
@@ -497,6 +528,8 @@ int main(int argc, char* args[])
 					{
 						Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
 						character.setPos(0, 448);
+						live[4 - number_dead].kill();
+						number_dead++;
 					}
 				}
 
@@ -506,12 +539,48 @@ int main(int argc, char* args[])
 					{
 						Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
 						character.setPos(0, 400);
+						live[4 - number_dead].kill();
+						number_dead++;
 					}
 				}
 
-				score.setText("Score: " + to_string(sco));
-				score.createText(fontText, renderer);
+				if (sco == 0)
+				{
+					check_score = true;
+					new_sco = sco;
+					mark.setText("000");
+				}
+				else 
+				if (sco != new_sco)
+				{
+					check_score = true;
+					new_sco = sco;
+					mark.setText(to_string(new_sco));
+				}
+				else 
+				{
+					check_score = false;
+				}
+				mark.createText(fontText, renderer,check_score);
+				score.show(renderer);
+				mark.show(renderer);
+				player.show(renderer);
+				name.show(renderer);
 
+				for (int i = 0; i < 9; i++)
+				{
+					live[i].show(renderer);
+				}
+				if (score_save == 300)
+				{
+					score_save = 0;
+					number_dead--;
+					live[4 - number_dead].live();
+				}
+				if (live[0].isKill() == true)
+				{
+					close();
+				}
 
 				SDL_RenderPresent(renderer);
 

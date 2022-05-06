@@ -13,13 +13,21 @@ TextScore::~TextScore()
 {
 }
 
+TextScore::TextScore(int x, int y,int k)
+{
+	setPos(x, y);
+	rect.w = k;
+	rect.h = 30;
+	setColor(2);
+}
+
 void TextScore::initText(TTF_Font*& fontText)
 {
 	if (TTF_Init() == -10)
 		cout << -1;
 	fontText = TTF_OpenFont("SHOWG.ttf", 20);
 	if (fontText == NULL)
-		cout << " Loi font" << endl;
+		cout << "Font Error!" << endl;
 
 }
 
@@ -40,10 +48,22 @@ void TextScore::setColor(const int& type)
 	}
 }
 
-void TextScore::createText(TTF_Font* font, SDL_Renderer* renderer)
+void TextScore::createText(TTF_Font* font, SDL_Renderer* renderer, bool check_score)
 {
-	textSurface = TTF_RenderText_Blended(font, str.c_str(), text_color);
-	body = SDL_CreateTextureFromSurface(renderer, textSurface);
-	SDL_RenderCopy(renderer, body, NULL, &rect);
+	if (check_score)
+	{
+		textSurface = TTF_RenderText_Blended(font, str.c_str(), text_color);
+		body = SDL_CreateTextureFromSurface(renderer, textSurface);
+		SDL_FreeSurface(textSurface);
+	}
+}
 
+void TextScore::setPos(int x, int y)
+{
+	rect.x = x;
+	rect.y = y;
+}
+void TextScore::show(SDL_Renderer* renderer)
+{
+	SDL_RenderCopy(renderer, body, NULL, &rect);
 }

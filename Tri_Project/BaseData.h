@@ -9,7 +9,7 @@
 #include <iostream>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-
+#include <vector>
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
