@@ -50,8 +50,8 @@ void Checkpoints::setImg(SDL_Renderer* renderer, string path)
 void Checkpoints::showImg(SDL_Renderer* renderer)
 {
 	frame++;
-	if (frame >=k) frame = 0; // ngan cho frame ko qua k
-	SDL_Rect* current_clips = &frame_clips[frame]; // rect nguon de in ra anh
+	if (2 * frame / 3 >= k) frame = 0; // ngan cho frame ko qua k
+	SDL_Rect* current_clips = &frame_clips[2 * frame / 3]; // rect nguon de in ra anh
 	SDL_Rect renderquad = { x, y, frame_w, frame_h };
 	SDL_RenderCopy(renderer, body, current_clips, &renderquad);
 }

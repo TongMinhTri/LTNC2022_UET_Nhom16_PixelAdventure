@@ -187,7 +187,7 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer, Mix_Chu
 				}
 			}
 		}
-			break;
+		break;
 		case SDLK_LEFT:
 		{
 			status = WALK_LEFT;
@@ -209,16 +209,16 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer, Mix_Chu
 				}
 			}
 		}
-			break;
+		break;
 		case SDLK_UP:
 		{
 			input_type.jump = 1;
-			if (status == IDLE_RIGHT)
+			if (status == IDLE_RIGHT || status == WALK_RIGHT)
 			{
 				Mix_PlayChannel(-1, soundEffect[jump_sound], 0);
 				status = JUMP_RIGHT;
 			}
-			else if (status == IDLE_LEFT)
+			else if (status == IDLE_LEFT || status == WALK_LEFT)
 			{
 				Mix_PlayChannel(-1, soundEffect[jump_sound], 0);
 				status = JUMP_LEFT;

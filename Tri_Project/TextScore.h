@@ -21,14 +21,16 @@ public:
 	};
 	TextScore();
 	~TextScore();
+	TextScore(int x, int y, int k);
+	void setPos(int x, int y);
 	void initText(TTF_Font*& fontText);
 	void setText(string text)
 	{
 		str = text;
 	}
 	void setColor(const int& type);
-	void createText(TTF_Font* font, SDL_Renderer* renderer);
-
+	void createText(TTF_Font* font, SDL_Renderer* renderer, bool check_score);
+	void show(SDL_Renderer* renderer);
 };
 
 #endif // !TEXTSCORE_H

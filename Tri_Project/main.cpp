@@ -10,11 +10,18 @@
 #include "Checkpoints.h"
 #include "Text.h"
 #include "TextScore.h"
+#include "Heart.h"
 
 using namespace std;
 
 BaseOject background;
-int Game_Status = NAME;
+BaseOject instruction;
+BaseOject game_over;
+
+LTexture gPromptTextTexture;
+LTexture gInputTextTexture;
+
+int Game_Status = ENTER_NAME;
 
 bool init()
 {
@@ -50,6 +57,11 @@ bool init()
 			{
 				success = false;
 			}
+
+			if (TTF_Init() == -1)
+			{
+				success = false;
+			}
 		}
 	}
 	return success;
@@ -65,14 +77,36 @@ bool loadBackground()
 	return true;
 }
 
+bool loadInstruction()
+{
+	bool ins = instruction.loadImg("Instruction/instruction.png", renderer);
+	if (!ins)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool loadGameOver()
+{
+	bool end = game_over.loadImg("Game over/game_over.png", renderer);
+	if (!end)
+	{
+		return false;
+	}
+	return true;
+}
+
 bool loadSound()
 {
 	bool success = true;
-	game_music = Mix_LoadMUS("Adv-music/level/Level-01.wav");
+	game_music = Mix_LoadMUS("Adv-music/level/Level-04.wav");
 	soundEffect[jump_sound] = Mix_LoadWAV("Adv-SFX/Jump 4.wav");
 	soundEffect[collect_sound] = Mix_LoadWAV("Adv-SFX/Collect 5.wav");
 	soundEffect[hitSpike_sound] = Mix_LoadWAV("Adv-SFX/Hit 1.wav");
 	soundEffect[hitRock_sound] = Mix_LoadWAV("Adv-SFX/Hit 5.wav");
+	soundEffect[extra_life] = Mix_LoadWAV("Adv-SFX/Extra Life.wav");
+	soundEffect[lose_sound] = Mix_LoadWAV("Adv-music/lose/game_over.wav");
 
 	for (int i = 0; i < sound_total; i++)
 	{
@@ -93,6 +127,8 @@ bool loadSound()
 
 void close()
 {
+	gPromptTextTexture.free();
+	gInputTextTexture.free();
 	for (int i = 0; i < sound_total; i++)
 	{
 		Mix_FreeChunk(soundEffect[i]);
@@ -109,92 +145,17 @@ void close()
 	SDL_DestroyWindow(window);
 	window = NULL;
 
+	TTF_CloseFont(gFont);
+	gFont = NULL;
+
 	Mix_Quit();
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
 
-
-
-//Loads media
-bool loadMedia();
-
-
-//Globally used font
-TTF_Font* gFont = NULL;
-TTF_Font* gFontN = NULL;
-
-
-//Scene textures
-LTexture gPromptTextTexture;
-LTexture gInputTextTexture;
-
-
-
-bool init_text()
-{
-	//Initialization flag
-	bool success = true;
-
-	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-		success = false;
-	}
-	else
-	{
-		//Set texture filtering to linear
-		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-		{
-			printf("Warning: Linear texture filtering not enabled!");
-		}
-
-		//Create window
-		window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if (window == NULL)
-		{
-			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
-			success = false;
-		}
-		else
-		{
-			//Create vsynced renderer for window
-			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-			if (renderer == NULL)
-			{
-				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
-				success = false;
-			}
-			else
-			{
-				//Initialize renderer color
-				SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-				//Initialize PNG loading
-				int imgFlags = IMG_INIT_PNG;
-				if (!(IMG_Init(imgFlags) & imgFlags))
-				{
-					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-					success = false;
-				}
-
-				//Initialize SDL_ttf
-				if (TTF_Init() == -1)
-				{
-					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
-					success = false;
-				}
-			}
-		}
-	}
-
-	return success;
-}
-
 bool loadMedia()
 {
-	//Loading success flag
 	bool success = true;
 
 	//Open the font
@@ -202,16 +163,16 @@ bool loadMedia()
 	gFont = TTF_OpenFont("SHOWG.ttf", 40);
 	if (gFont == NULL)
 	{
-		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+		cout << "Failed to load lazy font! SDL_ttf Error:" << TTF_GetError() << endl;
 		success = false;
 	}
 	else
 	{
 		//Render the prompt
 		SDL_Color textColor = { 250, 128, 114 };
-		if (!gPromptTextTexture.loadFromRenderedText("Your Name:", textColor, gFont, renderer))
+		if (!gPromptTextTexture.loadFromRenderedText("Enter your Name:", textColor, gFont, renderer))
 		{
-			printf("Failed to render prompt text!\n");
+			cout << "Failed to render prompt text!" << endl;
 			success = false;
 		}
 	}
@@ -221,164 +182,176 @@ bool loadMedia()
 
 int main(int argc, char* args[])
 {
-	if (Game_Status == NAME)
+	if (!init())
 	{
-		if (!init_text())
+		return -1;
+	}
+	if (!loadBackground())
+	{
+		return -1;
+	}
+	if (!loadSound())
+	{
+		return -1;
+	}
+
+	string inputText = " ";
+
+	if (Game_Status == ENTER_NAME)
+	{
+		if (!loadMedia())
 		{
-			printf("Failed to initialize!\n");
+			return -1;
 		}
 		else
 		{
-			//Load media
-			if (!loadMedia())
+			bool quit = false;
+			SDL_Color textColor = { 0, 128, 128 };
+			gFontN = TTF_OpenFont("SHOWG.ttf", 30);
+			gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
+
+			//Enable text input
+			SDL_StartTextInput();
+
+			while (!quit)
 			{
-				printf("Failed to load media!\n");
-			}
-			else
-			{
-				//Main loop flag
-				bool quit = false;
+				bool renderText = false;
 
-				//Event handler
-				SDL_Event e;
-
-				//Set text color 
-				SDL_Color textColor = { 0, 128, 128 };
-
-				//The current input text.
-				std::string inputText = "";
-				gFontN = TTF_OpenFont("SHOWG.ttf", 30);
-				gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
-
-				//Enable text input
-				SDL_StartTextInput();
-
-				//While application is running
-				while (!quit)
+				while (SDL_PollEvent(&e_name) != 0)
 				{
-					//The rerender text flag
-					bool renderText = false;
-
-					//Handle events on queue
-					while (SDL_PollEvent(&e) != 0)
+					//User requests quit
+					if (e_name.type == SDL_QUIT)
 					{
-						//User requests quit
-						if (e.type == SDL_QUIT)
+						quit = true;
+					}
+					//Special key input
+					else if (e_name.type == SDL_KEYDOWN)
+					{
+						//Handle backspace
+						if (e_name.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0)
 						{
-							quit = true;
+							//lop off character
+							inputText.pop_back();
+							renderText = true;
 						}
-						//Special key input
-						else if (e.type == SDL_KEYDOWN)
+						//Handle copy
+						else if (e_name.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL)
 						{
-							//Handle backspace
-							if (e.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0)
-							{
-								//lop off character
-								inputText.pop_back();
-								renderText = true;
-							}
-							//Handle copy
-							else if (e.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL)
-							{
-								SDL_SetClipboardText(inputText.c_str());
-							}
-							//Handle paste
-							else if (e.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL)
-							{
-								inputText = SDL_GetClipboardText();
-								renderText = true;
-							}
-							else if (e.key.keysym.sym == SDLK_RETURN)
-							{
-								Game_Status = PLAY;
-							}
+							SDL_SetClipboardText(inputText.c_str());
 						}
-						//Special text input event
-						else if (e.type == SDL_TEXTINPUT)
+						//Handle paste
+						else if (e_name.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL)
 						{
-							//Not copy or pasting
-							if (!(SDL_GetModState() & KMOD_CTRL && (e.text.text[0] == 'c' || e.text.text[0] == 'C' || e.text.text[0] == 'v' || e.text.text[0] == 'V')))
-							{
-								//Append character
-								inputText += e.text.text;
-								renderText = true;
-							}
+							inputText = SDL_GetClipboardText();
+							renderText = true;
+						}
+						else if (e_name.key.keysym.sym == SDLK_RETURN)
+						{
+							Game_Status = INSTRUCTION;
 						}
 					}
-
-					//Rerender text if needed
-					if (renderText)
+					//Special text input event
+					else if (e_name.type == SDL_TEXTINPUT)
 					{
-						//Text is not empty
-						if (inputText != "")
+						//Not copy or pasting
+						if (!(SDL_GetModState() & KMOD_CTRL && (e_name.text.text[0] == 'c' || e_name.text.text[0] == 'C' || e_name.text.text[0] == 'v' || e_name.text.text[0] == 'V')))
 						{
-							//Render new text
-							gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
+							//Append character
+							inputText += e_name.text.text;
+							renderText = true;
 						}
-						//Text is empty
-						else
-						{
-							//Render space texture
-							gInputTextTexture.loadFromRenderedText(" ", textColor, gFontN, renderer);
-						}
-					}
-
-					//Clear screen
-					SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
-					SDL_RenderClear(renderer);
-
-					//Render text textures
-					gPromptTextTexture.render((SCREEN_WIDTH - gPromptTextTexture.getWidth()) / 2, 204, renderer);
-					gInputTextTexture.render((SCREEN_WIDTH - gInputTextTexture.getWidth()) / 2, 254, renderer);
-
-					//Update screen
-					SDL_RenderPresent(renderer);
-					if (Game_Status == PLAY)
-					{
-						goto Play;
 					}
 				}
 
-				//Disable text input
-				SDL_StopTextInput();
+				//Rerender text if needed
+				if (renderText)
+				{
+					//Text is not empty
+					if (inputText != "")
+					{
+						//Render new text
+						gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
+					}
+					//Text is empty
+					else
+					{
+						//Render space texture
+						gInputTextTexture.loadFromRenderedText(" ", textColor, gFontN, renderer);
+					}
+				}
+
+				//Clear screen
+				SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
+				SDL_RenderClear(renderer);
+
+				//Render text textures
+				gPromptTextTexture.render((SCREEN_WIDTH - gPromptTextTexture.getWidth()) / 2, 204, renderer);
+				gInputTextTexture.render((SCREEN_WIDTH - gInputTextTexture.getWidth()) / 2, 254, renderer);
+
+				//Update screen
+				SDL_RenderPresent(renderer);
+				if (Game_Status == INSTRUCTION)
+				{
+					goto Instruction;
+				}
+			}
+
+			//Disable text input
+			SDL_StopTextInput();
+		}
+	}
+	if (Game_Status == INSTRUCTION)
+	{
+	Instruction:
+		if (!loadInstruction())
+		{
+			return -1;
+		}
+		bool quit = false;
+		while (!quit)
+		{
+			while (SDL_PollEvent(&e_ins) != 0)
+			{
+				if (e_ins.type == SDL_QUIT)
+				{
+					quit = true;
+				}
+				else if (e_ins.type == SDL_KEYDOWN || e_ins.type == SDL_MOUSEBUTTONDOWN)
+				{
+					Game_Status = PLAY;
+				}
+			}
+			instruction.Render(renderer, NULL);
+			SDL_RenderPresent(renderer);
+			if (Game_Status == PLAY)
+			{
+				instruction.Free();
+				goto Play;
 			}
 		}
 	}
-	if (Game_Status == PLAY)
+	if (Game_Status == PLAY || Game_Status == GAME_OVER)
 	{
 	Play:
-		gPromptTextTexture.free();
-		gInputTextTexture.free();
-
-		//Free global font
-		TTF_CloseFont(gFont);
-		gFont = NULL;
-
-		//Destroy window	
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(window);
-		window = NULL;
-		renderer = NULL;
-
-		//Quit SDL subsystems
-		TTF_Quit();
-		IMG_Quit();
-		SDL_Quit();
-
+		if (Game_Status == GAME_OVER)
+		{
+			game_music = Mix_LoadMUS("Adv-music/level/Level-04.wav");
+			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+			if (renderer == NULL)
+			{
+				return -1;
+			}
+			else
+			{
+				SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+			}
+			if (!loadBackground())
+			{
+				return -1;
+			}
+			Game_Status = PLAY;
+		}
 		Time timer;
-
-		if (!init())
-		{
-			return -1;
-		}
-		if (!loadBackground())
-		{
-			return -1;
-		}
-		if (!loadSound())
-		{
-			return -1;
-		}
 
 		Mix_PlayMusic(game_music, -1);
 
@@ -386,7 +359,7 @@ int main(int argc, char* args[])
 		gm.loadTiles(renderer);
 
 
-		Checkpoints point[3];
+		Checkpoints* point = new Checkpoints[3];
 		point[0].set_checkpoints(renderer, 912, 432, 8, 48, "Checkpoints/End/End(48x48).png");
 		point[1].set_checkpoints(renderer, 0, 416, 17, 64, "Checkpoints/Start/Start (Moving) (64x64).png");
 		point[2].set_checkpoints(renderer, 624, 144, 26, 48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
@@ -396,8 +369,8 @@ int main(int argc, char* args[])
 		MainObject character;
 		character.setIMG(renderer);
 		character.setClips();
-
 		bool quit = false;
+
 		Fruits* fruits = new Fruits[9];
 		fruits[0].setFruits(renderer, 240, 336, "Fruits/Cherries.png");
 		fruits[1].setFruits(renderer, 288, 336, "Fruits/Melon.png");
@@ -412,7 +385,8 @@ int main(int argc, char* args[])
 		{
 			fruits[i].set_clips();
 		}
-		Stone stone[7];
+
+		Stone* stone = new Stone[7];
 		stone[0].init_stone(renderer, 480, 432, 192, 480, "Stones/Spike_Idle.png");
 		stone[1].init_stone(renderer, 576, 144, 432, 288, "Stones/Spike_Idle.png");
 		stone[2].init_stone(renderer, 768, 48, 96, 240, "Stones/Spike_Idle.png");
@@ -422,111 +396,222 @@ int main(int argc, char* args[])
 		stone[6].init_stone(renderer, 816, 48, 96, 192, "Stones/Spike_Idle.png");
 		stone[0].set_clips();
 
-		Spike spike[5];
+		Spike* spike = new Spike[5];
 		spike[0].set_spike(renderer, 196, 464, 0, "Spikes/spike_bottom.png");
 		spike[1].set_spike(renderer, 48, 192, 1, "Spikes/spike_right.png");
 		spike[2].set_spike(renderer, 176, 144, 2, "Spikes/spike_left.png");
 		spike[3].set_spike(renderer, 436, 320, 0, "Spikes/spike_bottom.png");
 		spike[4].set_spike(renderer, 672, 384, 1, "Spikes/spike_right.png");
 
-		TextScore score;
+		bool name_check = true;
+		TextScore score(400, 10, 65);
 		score.initText(fontText);
+		score.setText("Score: ");
+		score.createText(fontText, renderer, name_check);
+
+		TextScore mark(465, 10, 32);
+		mark.initText(fontText);
+
+		TextScore player(50, 10, 80);
+		player.initText(fontText);
+		player.setText("Player: ");
+		player.createText(fontText, renderer, name_check);
+
+		TextScore name(130, 10, 90);
+		name.initText(fontText);
+		name.setText(inputText);
+		name.createText(fontText, renderer, name_check);
 
 		int sco = 0;
+		int new_sco = -1;
+		int score_save = 0;
+		bool check_score = false;
+
+		Heart* live = new Heart[10];
+		for (int i = 0; i < 9; i++)
+		{
+			live[i].setHeart(renderer, 620 + 40 * i, 8);
+			if (i >= 5)
+				live[i].kill();
+		}
+		int number_dead = 0;
+	
 		while (!quit)
 		{
 			timer.start();
 
+			while (SDL_PollEvent(&event) != 0)
 			{
-				while (SDL_PollEvent(&event) != 0)
+				if (event.type == SDL_QUIT)
 				{
-					if (event.type == SDL_QUIT)
-					{
-						quit = true;
-					}
-
-					character.handleMovement(event, renderer, soundEffect);
+					quit = true;
 				}
+				character.handleMovement(event, renderer, soundEffect);
+			}
 
 
-				SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-				SDL_RenderClear(renderer);
+			SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+			SDL_RenderClear(renderer);
 
-				background.Render(renderer, NULL);
-				gm.DrawMap(renderer);
-				Map map_data = gm.getMap();
+			background.Render(renderer, NULL);
+			gm.DrawMap(renderer);
+			Map map_data = gm.getMap();
 
-				point[0].showImg(renderer);
-				point[1].showImg(renderer);
-				point[2].showImg(renderer);
+			point[0].showImg(renderer);
+			point[1].showImg(renderer);
+			point[2].showImg(renderer);
 
-				stone[0].stone_move(renderer, map_data);
-				stone[1].DoStone_Circle();
-				stone[1].Stone_Move_Circle(renderer, map_data);
-				stone[2].stone_move_up(renderer, map_data);
-				stone[3].DoStone_Circle();
-				stone[3].Stone_Move_Circle(renderer, map_data);
-				stone[4].stone_move(renderer, map_data);
-				stone[5].stone_move_up(renderer, map_data);
-				stone[6].stone_move_up(renderer, map_data);
+			stone[0].stone_move(renderer, map_data);
+			stone[1].DoStone_Circle();
+			stone[1].Stone_Move_Circle(renderer, map_data);
+			stone[2].stone_move_up(renderer, map_data);
+			stone[3].DoStone_Circle();
+			stone[3].Stone_Move_Circle(renderer, map_data);
+			stone[4].stone_move(renderer, map_data);
+			stone[5].stone_move_up(renderer, map_data);
+			stone[6].stone_move_up(renderer, map_data);
 
-				for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 5; i++)
+			{
+				spike[i].showImg(renderer);
+			}
+
+			character.updatePlayerPosition(map_data);
+			character.showImage(renderer);
+
+			for (int i = 0; i < 9; i++)
+			{
+
+				if (checkCollision(fruits[i].getRect_fruits(), character.getRect(), 13, 4) && fruits[i].alive == true)
 				{
-					spike[i].showImg(renderer);
+					fruits[i].kill();
+					sco += 100;
+					score_save += 100;
+					Mix_PlayChannel(-1, soundEffect[collect_sound], 0);
 				}
+				fruits[i].showImg(renderer);
+			}
 
-				character.updatePlayerPosition(map_data);
-				character.showImage(renderer);
 
-				for (int i = 0; i < 9; i++)
+			for (int i = 0; i < 7; i++)
+			{
+				if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
 				{
-
-					if (checkCollision(fruits[i].getRect_fruits(), character.getRect(), 13, 4) && fruits[i].alive == true)
-					{
-						fruits[i].kill();
-						sco += 100;
-						Mix_PlayChannel(-1, soundEffect[collect_sound], 0);
-					}
-					fruits[i].showImg(renderer);
-				}
-
-
-				for (int i = 0; i < 7; i++)
-				{
-					if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
-					{
-						Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
-						character.setPos(0, 448);
-					}
-				}
-
-				for (int i = 0; i < 5; i++)
-				{
-					if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), i % 3, 4))
-					{
-						Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
-						character.setPos(0, 400);
-					}
-				}
-
-				score.setText("Score: " + to_string(sco));
-				score.createText(fontText, renderer);
-
-
-				SDL_RenderPresent(renderer);
-
-				// Xu ly thoi gian va FPS
-
-				int real_time = timer.get_ticks();
-				int time_one_frame = 1000 / FPS;
-
-				if (real_time < time_one_frame)
-				{
-					int delay_time = time_one_frame - real_time;
-					if (delay_time >= 0)
-						SDL_Delay(delay_time);
+					Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
+					character.setPos(0, 448);
+					live[4 - number_dead].kill();
+					number_dead++;
 				}
 			}
+
+			for (int i = 0; i < 5; i++)
+			{
+				if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), i % 3, 4))
+				{
+					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
+					character.setPos(0, 448);
+					live[4 - number_dead].kill();
+					number_dead++;
+				}
+			}
+
+			if (sco == 0)
+			{
+				check_score = true;
+				new_sco = sco;
+				mark.setText("000");
+			}
+			else if (sco != new_sco)
+			{
+				check_score = true;
+				new_sco = sco;
+				mark.setText(to_string(new_sco));
+			}
+			else
+			{
+				check_score = false;
+			}
+			mark.createText(fontText, renderer, check_score);
+			score.show(renderer);
+			mark.show(renderer);
+			player.show(renderer);
+			name.show(renderer);
+
+			for (int i = 0; i < 9; i++)
+			{
+				live[i].show(renderer);
+			}
+			if (score_save == 300)
+			{
+				Mix_PlayChannel(-1, soundEffect[extra_life], 0);
+				score_save = 0;
+				number_dead--;
+				live[4 - number_dead].live();
+			}
+			if (live[0].isKill() == true)
+			{
+				Game_Status = GAME_OVER;
+				Mix_FreeMusic(game_music);
+				game_music = NULL;
+				SDL_DestroyRenderer(renderer);
+				renderer = NULL;
+				goto Game_over;
+			}
+
+			SDL_RenderPresent(renderer);
+
+			// Xu ly thoi gian va FPS
+
+			int real_time = timer.get_ticks();
+			int time_one_frame = 1000 / FPS;
+
+			if (real_time < time_one_frame)
+			{
+				int delay_time = time_one_frame - real_time;
+				if (delay_time >= 0)
+					SDL_Delay(delay_time);
+			}
+		}
+	}
+	if (Game_Status == GAME_OVER)
+	{
+	Game_over:
+		Mix_PlayChannel(-1, soundEffect[lose_sound], 0);
+		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+		if (renderer == NULL)
+		{
+			return -1;
+		}
+		else
+		{
+			SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+		}
+		if (!loadGameOver())
+		{
+			return -1;
+		}
+		bool quit = false;
+		while (!quit)
+		{
+			while (SDL_PollEvent(&e_end) != 0)
+			{
+				if (e_end.type == SDL_QUIT)
+				{
+					quit = true;
+				}
+				else if (e_end.type == SDL_MOUSEBUTTONDOWN)
+				{
+					if (e_end.motion.x >= 500 && e_end.motion.x <= 575 && e_end.motion.y >= 390 && e_end.motion.y <= 460)
+					{
+
+						SDL_DestroyRenderer(renderer);
+						renderer = NULL;
+						goto Play;
+					}
+				}
+			}
+			game_over.Render(renderer, NULL);
+			SDL_RenderPresent(renderer);
 		}
 	}
 	close();

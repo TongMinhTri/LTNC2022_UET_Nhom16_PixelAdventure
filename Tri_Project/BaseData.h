@@ -9,11 +9,15 @@
 #include <iostream>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
+#include <vector>
 
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static SDL_Event event;
+static SDL_Event e_name;
+static SDL_Event e_ins;
+static SDL_Event e_end;
 
 static TTF_Font* fontText = NULL;
 enum Sound
@@ -22,11 +26,17 @@ enum Sound
 	collect_sound,
 	hitSpike_sound,
 	hitRock_sound,
+	extra_life,
+	lose_sound,
 	sound_total
 };
 
 static Mix_Chunk* soundEffect[sound_total];
 static Mix_Music* game_music = NULL;
+
+//Globally used font
+static TTF_Font* gFont = NULL;
+static TTF_Font* gFontN = NULL;
 
 // Screen'size
 const int FPS = 33;
@@ -46,10 +56,10 @@ struct Input
 };
 
 enum Game_status {
-	NAME,
-	INTRO,
+	ENTER_NAME,
+	INSTRUCTION,
 	PLAY,
-	END,
+	GAME_OVER
 };
 
 struct Map
