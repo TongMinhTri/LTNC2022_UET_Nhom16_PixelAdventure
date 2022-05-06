@@ -10,7 +10,10 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include <vector>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;

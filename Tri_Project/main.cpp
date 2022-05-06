@@ -182,7 +182,12 @@ bool loadMedia()
 
 int main(int argc, char* args[])
 {
+<<<<<<< HEAD
 	if (!init())
+=======
+	string inputText = "";
+	if (Game_Status == NAME)
+>>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 	{
 		return -1;
 	}
@@ -217,7 +222,25 @@ int main(int argc, char* args[])
 			{
 				bool renderText = false;
 
+<<<<<<< HEAD
 				while (SDL_PollEvent(&e_name) != 0)
+=======
+				//Event handler
+				SDL_Event e;
+
+				//Set text color 
+				SDL_Color textColor = { 0, 128, 128 };
+
+				//The current input text.
+				gFontN = TTF_OpenFont("SHOWG.ttf", 30);
+				gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
+
+				//Enable text input
+				SDL_StartTextInput();
+
+				//While application is running
+				while (!quit)
+>>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 				{
 					//User requests quit
 					if (e_name.type == SDL_QUIT)
@@ -402,13 +425,20 @@ int main(int argc, char* args[])
 		spike[2].set_spike(renderer, 176, 144, 2, "Spikes/spike_left.png");
 		spike[3].set_spike(renderer, 436, 320, 0, "Spikes/spike_bottom.png");
 		spike[4].set_spike(renderer, 672, 384, 1, "Spikes/spike_right.png");
+<<<<<<< HEAD
 
 		bool name_check = true;
 		TextScore score(400, 10, 65);
+=======
+		
+		bool name_check = true;
+		TextScore score(400 , 10 , 65);
+>>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 		score.initText(fontText);
 		score.setText("Score: ");
 		score.createText(fontText, renderer, name_check);
 
+<<<<<<< HEAD
 		TextScore mark(465, 10, 32);
 		mark.initText(fontText);
 
@@ -418,6 +448,17 @@ int main(int argc, char* args[])
 		player.createText(fontText, renderer, name_check);
 
 		TextScore name(130, 10, 90);
+=======
+		TextScore mark(465 , 10 , 32) ;
+		mark.initText(fontText);
+		
+		TextScore player(50, 10 , 80);
+		player.initText(fontText);
+		player.setText("Player: ");
+		player.createText(fontText, renderer, name_check);
+		
+		TextScore name(130, 10 , 90);
+>>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 		name.initText(fontText);
 		name.setText(inputText);
 		name.createText(fontText, renderer, name_check);
@@ -435,7 +476,11 @@ int main(int argc, char* args[])
 				live[i].kill();
 		}
 		int number_dead = 0;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 		while (!quit)
 		{
 			timer.start();
@@ -497,10 +542,97 @@ int main(int argc, char* args[])
 			{
 				if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
 				{
+<<<<<<< HEAD
 					Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
 					character.setPos(0, 448);
 					live[4 - number_dead].kill();
 					number_dead++;
+=======
+
+					if (checkCollision(fruits[i].getRect_fruits(), character.getRect(), 13, 4) && fruits[i].alive == true)
+					{
+						fruits[i].kill();
+						sco += 100;
+						score_save += 100;
+						Mix_PlayChannel(-1, soundEffect[collect_sound], 0);
+					}
+					fruits[i].showImg(renderer);
+				}
+
+
+				for (int i = 0; i < 7; i++)
+				{
+					if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
+					{
+						Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
+						character.setPos(0, 448);
+						live[4 - number_dead].kill();
+						number_dead++;
+					}
+				}
+
+				for (int i = 0; i < 5; i++)
+				{
+					if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), i % 3, 4))
+					{
+						Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
+						character.setPos(0, 400);
+						live[4 - number_dead].kill();
+						number_dead++;
+					}
+				}
+
+				if (sco == 0)
+				{
+					check_score = true;
+					new_sco = sco;
+					mark.setText("000");
+				}
+				else 
+				if (sco != new_sco)
+				{
+					check_score = true;
+					new_sco = sco;
+					mark.setText(to_string(new_sco));
+				}
+				else 
+				{
+					check_score = false;
+				}
+				mark.createText(fontText, renderer,check_score);
+				score.show(renderer);
+				mark.show(renderer);
+				player.show(renderer);
+				name.show(renderer);
+
+				for (int i = 0; i < 9; i++)
+				{
+					live[i].show(renderer);
+				}
+				if (score_save == 300)
+				{
+					score_save = 0;
+					number_dead--;
+					live[4 - number_dead].live();
+				}
+				if (live[0].isKill() == true)
+				{
+					close();
+				}
+
+				SDL_RenderPresent(renderer);
+
+				// Xu ly thoi gian va FPS
+
+				int real_time = timer.get_ticks();
+				int time_one_frame = 1000 / FPS;
+
+				if (real_time < time_one_frame)
+				{
+					int delay_time = time_one_frame - real_time;
+					if (delay_time >= 0)
+						SDL_Delay(delay_time);
+>>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 				}
 			}
 

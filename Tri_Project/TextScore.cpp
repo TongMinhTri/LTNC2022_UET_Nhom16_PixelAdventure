@@ -13,7 +13,11 @@ TextScore::~TextScore()
 {
 }
 
+<<<<<<< HEAD
 TextScore::TextScore(int x, int y, int k)
+=======
+TextScore::TextScore(int x, int y,int k)
+>>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 {
 	setPos(x, y);
 	rect.w = k;
