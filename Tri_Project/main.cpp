@@ -11,6 +11,7 @@
 #include "Text.h"
 #include "TextScore.h"
 #include "Heart.h"
+#include "File_History.h"
 
 using namespace std;
 
@@ -182,12 +183,7 @@ bool loadMedia()
 
 int main(int argc, char* args[])
 {
-<<<<<<< HEAD
 	if (!init())
-=======
-	string inputText = "";
-	if (Game_Status == NAME)
->>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 	{
 		return -1;
 	}
@@ -201,6 +197,8 @@ int main(int argc, char* args[])
 	}
 
 	string inputText = " ";
+	int sco = 0;
+	int heart_game = 0;
 
 	if (Game_Status == ENTER_NAME)
 	{
@@ -222,25 +220,7 @@ int main(int argc, char* args[])
 			{
 				bool renderText = false;
 
-<<<<<<< HEAD
 				while (SDL_PollEvent(&e_name) != 0)
-=======
-				//Event handler
-				SDL_Event e;
-
-				//Set text color 
-				SDL_Color textColor = { 0, 128, 128 };
-
-				//The current input text.
-				gFontN = TTF_OpenFont("SHOWG.ttf", 30);
-				gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
-
-				//Enable text input
-				SDL_StartTextInput();
-
-				//While application is running
-				while (!quit)
->>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 				{
 					//User requests quit
 					if (e_name.type == SDL_QUIT)
@@ -285,7 +265,7 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-
+				if( inputText.length() >=20 ) inputText.resize(20);
 				//Rerender text if needed
 				if (renderText)
 				{
@@ -425,20 +405,13 @@ int main(int argc, char* args[])
 		spike[2].set_spike(renderer, 176, 144, 2, "Spikes/spike_left.png");
 		spike[3].set_spike(renderer, 436, 320, 0, "Spikes/spike_bottom.png");
 		spike[4].set_spike(renderer, 672, 384, 1, "Spikes/spike_right.png");
-<<<<<<< HEAD
 
 		bool name_check = true;
 		TextScore score(400, 10, 65);
-=======
-		
-		bool name_check = true;
-		TextScore score(400 , 10 , 65);
->>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 		score.initText(fontText);
 		score.setText("Score: ");
 		score.createText(fontText, renderer, name_check);
 
-<<<<<<< HEAD
 		TextScore mark(465, 10, 32);
 		mark.initText(fontText);
 
@@ -448,22 +421,10 @@ int main(int argc, char* args[])
 		player.createText(fontText, renderer, name_check);
 
 		TextScore name(130, 10, 90);
-=======
-		TextScore mark(465 , 10 , 32) ;
-		mark.initText(fontText);
-		
-		TextScore player(50, 10 , 80);
-		player.initText(fontText);
-		player.setText("Player: ");
-		player.createText(fontText, renderer, name_check);
-		
-		TextScore name(130, 10 , 90);
->>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 		name.initText(fontText);
 		name.setText(inputText);
 		name.createText(fontText, renderer, name_check);
 
-		int sco = 0;
 		int new_sco = -1;
 		int score_save = 0;
 		bool check_score = false;
@@ -476,11 +437,7 @@ int main(int argc, char* args[])
 				live[i].kill();
 		}
 		int number_dead = 0;
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 		while (!quit)
 		{
 			timer.start();
@@ -542,97 +499,10 @@ int main(int argc, char* args[])
 			{
 				if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
 				{
-<<<<<<< HEAD
 					Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
 					character.setPos(0, 448);
 					live[4 - number_dead].kill();
 					number_dead++;
-=======
-
-					if (checkCollision(fruits[i].getRect_fruits(), character.getRect(), 13, 4) && fruits[i].alive == true)
-					{
-						fruits[i].kill();
-						sco += 100;
-						score_save += 100;
-						Mix_PlayChannel(-1, soundEffect[collect_sound], 0);
-					}
-					fruits[i].showImg(renderer);
-				}
-
-
-				for (int i = 0; i < 7; i++)
-				{
-					if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
-					{
-						Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
-						character.setPos(0, 448);
-						live[4 - number_dead].kill();
-						number_dead++;
-					}
-				}
-
-				for (int i = 0; i < 5; i++)
-				{
-					if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), i % 3, 4))
-					{
-						Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
-						character.setPos(0, 400);
-						live[4 - number_dead].kill();
-						number_dead++;
-					}
-				}
-
-				if (sco == 0)
-				{
-					check_score = true;
-					new_sco = sco;
-					mark.setText("000");
-				}
-				else 
-				if (sco != new_sco)
-				{
-					check_score = true;
-					new_sco = sco;
-					mark.setText(to_string(new_sco));
-				}
-				else 
-				{
-					check_score = false;
-				}
-				mark.createText(fontText, renderer,check_score);
-				score.show(renderer);
-				mark.show(renderer);
-				player.show(renderer);
-				name.show(renderer);
-
-				for (int i = 0; i < 9; i++)
-				{
-					live[i].show(renderer);
-				}
-				if (score_save == 300)
-				{
-					score_save = 0;
-					number_dead--;
-					live[4 - number_dead].live();
-				}
-				if (live[0].isKill() == true)
-				{
-					close();
-				}
-
-				SDL_RenderPresent(renderer);
-
-				// Xu ly thoi gian va FPS
-
-				int real_time = timer.get_ticks();
-				int time_one_frame = 1000 / FPS;
-
-				if (real_time < time_one_frame)
-				{
-					int delay_time = time_one_frame - real_time;
-					if (delay_time >= 0)
-						SDL_Delay(delay_time);
->>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 				}
 			}
 
@@ -704,6 +574,10 @@ int main(int argc, char* args[])
 					SDL_Delay(delay_time);
 			}
 		}
+		for (int i = 0; i < 9; i++)
+		{
+			heart_game += live[i].get_heard();
+		}
 	}
 	if (Game_Status == GAME_OVER)
 	{
@@ -746,6 +620,70 @@ int main(int argc, char* args[])
 			SDL_RenderPresent(renderer);
 		}
 	}
+
+	char c;
+	int lines = 1;
+	ifstream f1("Data.txt");
+	f1.get(c);
+	while (f1)
+	{
+		while (f1 && c != '\n')
+		{
+			f1.get(c);
+		}
+		lines++;
+		f1.get(c);
+	}
+	f1.close();
+	//cout << lines << " ";
+	ifstream f2("Data.txt");
+	Player *players = new Player[lines];
+	int p = 0;
+	while (!f2.eof())
+	{
+		char s[50];
+		int diem = 0;
+		if (f2.getline(s, 50))
+		{
+			string s2 = "";
+			int pos1, pos2;
+			for (int i = 3; i < strlen(s); i++)
+			{
+				if (s[i] >= '0' && s[i] <= '9')
+				{
+					pos1 = i;
+					break;
+				}
+				s2 += s[i];
+			}
+			s2.pop_back();
+			players[p].init_name(s2);
+			diem = (int(char(s[pos1]) - '0')) * 100;
+			players[p].init_score(diem);
+			pos2 = pos1 + 4;
+			if (s[pos1 + 1] == ' ') pos2 = pos1 + 2;
+			players[p].init_heart(int(char(s[pos2]) - '0'));
+			if (s[pos2 + 2] == 't') players[p].init_win("true");
+			else players[p].init_win("false");
+			p++;
+		}
+	}
+	f2.close();
+	players[p].init_name(inputText);
+	players[p].init_score(sco);
+	players[p].init_heart(heart_game);
+	players[p].init_win("false");
+	sort(players, players + lines, sapxep);
+	for (int i = 0; i < lines; i++)
+	{
+		players[i].print();
+	}
+	ofstream f4("Data.txt", ios::out | ios::trunc);
+	for (int i = 0; i < lines; i++)
+	{
+		f4 << i + 1 << ". " << players[i].get_name() << " " << players[i].get_score() << " " << players[i].get_heart() << " " << players[i].get_win() << '\n';
+	}
+	f4.close();
 	close();
 	return 0;
 }
