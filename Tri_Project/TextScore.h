@@ -21,11 +21,7 @@ public:
 	};
 	TextScore();
 	~TextScore();
-<<<<<<< HEAD
 	TextScore(int x, int y, int k);
-=======
-	TextScore(int x,int y,int k);
->>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 	void setPos(int x, int y);
 	void initText(TTF_Font*& fontText);
 	void setText(string text)
