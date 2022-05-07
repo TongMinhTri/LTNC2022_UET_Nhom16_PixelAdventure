@@ -19,13 +19,8 @@ Heart::~Heart()
 
 void Heart::show(SDL_Renderer* renderer)
 {
-<<<<<<< HEAD
 	if (dead == false)
 		SDL_RenderCopy(renderer, body, NULL, &heart);
-=======
-	if(dead == false)
-	SDL_RenderCopy(renderer, body, NULL, &heart);
->>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 }
 
 void Heart::setImg(SDL_Renderer* renderer, string path)
@@ -48,11 +43,7 @@ void Heart::setImg(SDL_Renderer* renderer, string path)
 	body = newTexture;
 }
 
-<<<<<<< HEAD
 void Heart::setPos(int x, int y)
-=======
-void Heart::setPos( int x, int y)
->>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
 {
 	heart.x = x;
 	heart.y = y;
@@ -66,12 +57,6 @@ void Heart::setHeart(SDL_Renderer* renderer, int a, int b)
 	heart.w = 32;
 	heart.h = 32;
 	setPos(x, y);
-<<<<<<< HEAD
 	setImg(renderer, "Heart/heart.png");
 	test.x = test.y = test.w = test.h = 0;
 }
-=======
-	setImg(renderer, "heart.png");
-	test.x = test.y = test.w = test.h = 0;
-}
->>>>>>> 55a6b9e3ed8d1c1badec5ebe0a2a64ed73fab2f7
