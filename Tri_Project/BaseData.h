@@ -10,7 +10,8 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include <vector>
-
+#include <fstream>
+#include <algorithm>
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;

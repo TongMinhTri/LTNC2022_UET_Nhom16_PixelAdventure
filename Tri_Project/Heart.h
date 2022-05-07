@@ -27,6 +27,7 @@ public:
 	void setImg(SDL_Renderer* renderer, string path);
 	void setPos(int x, int y);
 	void setHeart(SDL_Renderer* renderer, int a, int b);
+	int get_heard();
 
 };
 

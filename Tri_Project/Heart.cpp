@@ -60,3 +60,9 @@ void Heart::setHeart(SDL_Renderer* renderer, int a, int b)
 	setImg(renderer, "Heart/heart.png");
 	test.x = test.y = test.w = test.h = 0;
 }
+
+int Heart::get_heard()
+{
+	if (dead == false) return 1;
+	return 0;
+}
