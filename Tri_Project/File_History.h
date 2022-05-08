@@ -64,14 +64,14 @@ public:
     {
         score = x;
     }
-    friend bool sapxep(Player a, Player b);
+    friend bool sort_data(Player a, Player b);
     void print()
     {
         cout << name << " " << score << " " << heart << " " << win << '\n';
     }
 };
 
-bool sapxep(Player a, Player b)
+bool sort_data(Player a, Player b)
 {
     return((a.win > b.win) || (a.win == b.win && a.heart > b.heart)
         || (a.win == b.win && a.heart == b.heart && a.score > b.score)

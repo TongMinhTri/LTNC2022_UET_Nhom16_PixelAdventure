@@ -70,7 +70,7 @@ bool init()
 
 bool loadBackground()
 {
-	bool bg = background.loadImg("Background/Pink.png", renderer);
+	bool bg = background.loadImg("Background/Blue.png", renderer);
 	if (!bg)
 	{
 		return false;
@@ -102,6 +102,8 @@ bool loadSound()
 {
 	bool success = true;
 	game_music = Mix_LoadMUS("Adv-music/level/Level-04.wav");
+	menu_music = Mix_LoadMUS("Adv-music/menu.wav");
+
 	soundEffect[jump_sound] = Mix_LoadWAV("Adv-SFX/Jump 4.wav");
 	soundEffect[collect_sound] = Mix_LoadWAV("Adv-SFX/Collect 5.wav");
 	soundEffect[hitSpike_sound] = Mix_LoadWAV("Adv-SFX/Hit 1.wav");
@@ -119,6 +121,11 @@ bool loadSound()
 	}
 
 	if (game_music == NULL)
+	{
+		success = false;
+	}
+
+	if (menu_music == NULL)
 	{
 		success = false;
 	}
@@ -199,6 +206,11 @@ int main(int argc, char* args[])
 	string inputText = " ";
 	int sco = 0;
 	int heart_game = 0;
+
+	if (Game_Status == ENTER_NAME || Game_Status == INSTRUCTION)
+	{
+		Mix_PlayMusic(menu_music, -1);
+	}
 
 	if (Game_Status == ENTER_NAME)
 	{
@@ -328,6 +340,8 @@ int main(int argc, char* args[])
 			SDL_RenderPresent(renderer);
 			if (Game_Status == PLAY)
 			{
+				Mix_FreeMusic(menu_music);
+				menu_music = NULL;
 				instruction.Free();
 				goto Play;
 			}
@@ -356,6 +370,7 @@ int main(int argc, char* args[])
 		}
 		Time timer;
 
+		soundEffect[lose_sound] = Mix_LoadWAV("Adv-music/lose/game_over.wav");
 		Mix_PlayMusic(game_music, -1);
 
 		GameMap gm;
@@ -428,6 +443,7 @@ int main(int argc, char* args[])
 		int new_sco = -1;
 		int score_save = 0;
 		bool check_score = false;
+		sco = 0;
 
 		Heart* live = new Heart[10];
 		for (int i = 0; i < 9; i++)
@@ -500,7 +516,11 @@ int main(int argc, char* args[])
 				if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
 				{
 					Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
-					character.setPos(0, 448);
+					if (i == 2 || i == 5 || i == 6)
+					{
+						character.setPos(624, 192);
+					}
+					else character.setPos(0, 448);
 					live[4 - number_dead].kill();
 					number_dead++;
 				}
@@ -511,7 +531,11 @@ int main(int argc, char* args[])
 				if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), i % 3, 4))
 				{
 					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
-					character.setPos(0, 448);
+					if (i == 4)
+					{
+						character.setPos(624, 192);
+					}
+					else character.setPos(0, 448);
 					live[4 - number_dead].kill();
 					number_dead++;
 				}
@@ -523,7 +547,7 @@ int main(int argc, char* args[])
 				new_sco = sco;
 				mark.setText("000");
 			}
-			else if (sco != new_sco)
+			if (sco != new_sco)
 			{
 				check_score = true;
 				new_sco = sco;
@@ -609,7 +633,7 @@ int main(int argc, char* args[])
 				{
 					if (e_end.motion.x >= 500 && e_end.motion.x <= 575 && e_end.motion.y >= 390 && e_end.motion.y <= 460)
 					{
-
+						Mix_FreeChunk(soundEffect[lose_sound]);
 						SDL_DestroyRenderer(renderer);
 						renderer = NULL;
 						goto Play;
@@ -635,7 +659,6 @@ int main(int argc, char* args[])
 		f1.get(c);
 	}
 	f1.close();
-	//cout << lines << " ";
 	ifstream f2("Data.txt");
 	Player *players = new Player[lines];
 	int p = 0;
@@ -673,7 +696,7 @@ int main(int argc, char* args[])
 	players[p].init_score(sco);
 	players[p].init_heart(heart_game);
 	players[p].init_win("false");
-	sort(players, players + lines, sapxep);
+	sort(players, players + lines, sort_data);
 	for (int i = 0; i < lines; i++)
 	{
 		players[i].print();
@@ -684,6 +707,7 @@ int main(int argc, char* args[])
 		f4 << i + 1 << ". " << players[i].get_name() << " " << players[i].get_score() << " " << players[i].get_heart() << " " << players[i].get_win() << '\n';
 	}
 	f4.close();
+
 	close();
 	return 0;
 }
