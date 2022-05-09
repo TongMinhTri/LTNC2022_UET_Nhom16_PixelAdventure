@@ -11,7 +11,7 @@
 #include "Text.h"
 #include "TextScore.h"
 #include "Heart.h"
-#include "File_History.h"
+#include "Update_dataplayers.h"
 
 using namespace std;
 
@@ -181,6 +181,7 @@ bool loadMedia()
 	return success;
 }
 
+
 int main(int argc, char* args[])
 {
 	if (!init())
@@ -196,9 +197,10 @@ int main(int argc, char* args[])
 		return -1;
 	}
 
-	string inputText = " ";
+	string inputText = "";
 	int sco = 0;
 	int heart_game = 0;
+	bool put_data = false;
 
 	if (Game_Status == ENTER_NAME)
 	{
@@ -265,7 +267,7 @@ int main(int argc, char* args[])
 						}
 					}
 				}
-				if( inputText.length() >=20 ) inputText.resize(20);
+				if (inputText.length() >= 20) inputText.resize(20);
 				//Rerender text if needed
 				if (renderText)
 				{
@@ -354,6 +356,9 @@ int main(int argc, char* args[])
 			}
 			Game_Status = PLAY;
 		}
+
+		put_data = false;
+
 		Time timer;
 
 		Mix_PlayMusic(game_music, -1);
@@ -523,7 +528,7 @@ int main(int argc, char* args[])
 				new_sco = sco;
 				mark.setText("000");
 			}
-			else if (sco != new_sco)
+			if (sco != new_sco)
 			{
 				check_score = true;
 				new_sco = sco;
@@ -582,6 +587,11 @@ int main(int argc, char* args[])
 	if (Game_Status == GAME_OVER)
 	{
 	Game_over:
+		if (!put_data)
+		{
+			put_data = true;
+			update_data(sco, heart_game, inputText);
+		}
 		Mix_PlayChannel(-1, soundEffect[lose_sound], 0);
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 		if (renderer == NULL)
@@ -609,7 +619,6 @@ int main(int argc, char* args[])
 				{
 					if (e_end.motion.x >= 500 && e_end.motion.x <= 575 && e_end.motion.y >= 390 && e_end.motion.y <= 460)
 					{
-
 						SDL_DestroyRenderer(renderer);
 						renderer = NULL;
 						goto Play;
@@ -621,69 +630,7 @@ int main(int argc, char* args[])
 		}
 	}
 
-	char c;
-	int lines = 1;
-	ifstream f1("Data.txt");
-	f1.get(c);
-	while (f1)
-	{
-		while (f1 && c != '\n')
-		{
-			f1.get(c);
-		}
-		lines++;
-		f1.get(c);
-	}
-	f1.close();
-	//cout << lines << " ";
-	ifstream f2("Data.txt");
-	Player *players = new Player[lines];
-	int p = 0;
-	while (!f2.eof())
-	{
-		char s[50];
-		int diem = 0;
-		if (f2.getline(s, 50))
-		{
-			string s2 = "";
-			int pos1, pos2;
-			for (int i = 3; i < strlen(s); i++)
-			{
-				if (s[i] >= '0' && s[i] <= '9')
-				{
-					pos1 = i;
-					break;
-				}
-				s2 += s[i];
-			}
-			s2.pop_back();
-			players[p].init_name(s2);
-			diem = (int(char(s[pos1]) - '0')) * 100;
-			players[p].init_score(diem);
-			pos2 = pos1 + 4;
-			if (s[pos1 + 1] == ' ') pos2 = pos1 + 2;
-			players[p].init_heart(int(char(s[pos2]) - '0'));
-			if (s[pos2 + 2] == 't') players[p].init_win("true");
-			else players[p].init_win("false");
-			p++;
-		}
-	}
-	f2.close();
-	players[p].init_name(inputText);
-	players[p].init_score(sco);
-	players[p].init_heart(heart_game);
-	players[p].init_win("false");
-	sort(players, players + lines, sapxep);
-	for (int i = 0; i < lines; i++)
-	{
-		players[i].print();
-	}
-	ofstream f4("Data.txt", ios::out | ios::trunc);
-	for (int i = 0; i < lines; i++)
-	{
-		f4 << i + 1 << ". " << players[i].get_name() << " " << players[i].get_score() << " " << players[i].get_heart() << " " << players[i].get_win() << '\n';
-	}
-	f4.close();
+	if( !put_data ) update_data(sco, heart_game, inputText);
 	close();
 	return 0;
 }
