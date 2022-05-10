@@ -15,14 +15,14 @@
 
 using namespace std;
 
+int Game_Status = ENTER_NAME;
+
 BaseOject background;
 BaseOject instruction;
 BaseOject game_over;
 
 LTexture gPromptTextTexture;
 LTexture gInputTextTexture;
-
-int Game_Status = ENTER_NAME;
 
 bool init()
 {
@@ -102,6 +102,7 @@ bool loadSound()
 {
 	bool success = true;
 	game_music = Mix_LoadMUS("Adv-music/level/Level-04.wav");
+	menu_music = Mix_LoadMUS("Adv-music/menu.wav");
 	soundEffect[jump_sound] = Mix_LoadWAV("Adv-SFX/Jump 4.wav");
 	soundEffect[collect_sound] = Mix_LoadWAV("Adv-SFX/Collect 5.wav");
 	soundEffect[hitSpike_sound] = Mix_LoadWAV("Adv-SFX/Hit 1.wav");
@@ -123,6 +124,10 @@ bool loadSound()
 		success = false;
 	}
 
+	if (menu_music == NULL)
+	{
+		success = false;
+	}
 	return success;
 }
 
@@ -159,7 +164,6 @@ bool loadMedia()
 {
 	bool success = true;
 
-	//Open the font
 	// load front chu
 	gFont = TTF_OpenFont("SHOWG.ttf", 40);
 	if (gFont == NULL)
@@ -200,6 +204,10 @@ int main(int argc, char* args[])
 	int sco = 0;
 	int heart_game = 0;
 
+	if (Game_Status == ENTER_NAME || Game_Status == INSTRUCTION)
+	{
+		Mix_PlayMusic(menu_music, -1);
+	}
 	if (Game_Status == ENTER_NAME)
 	{
 		if (!loadMedia())
@@ -328,6 +336,8 @@ int main(int argc, char* args[])
 			SDL_RenderPresent(renderer);
 			if (Game_Status == PLAY)
 			{
+				Mix_FreeMusic(menu_music);
+				menu_music = NULL;
 				instruction.Free();
 				goto Play;
 			}
@@ -338,6 +348,7 @@ int main(int argc, char* args[])
 	Play:
 		if (Game_Status == GAME_OVER)
 		{
+			soundEffect[lose_sound] = Mix_LoadWAV("Adv-music/lose/game_over.wav");
 			game_music = Mix_LoadMUS("Adv-music/level/Level-04.wav");
 			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 			if (renderer == NULL)
@@ -500,7 +511,11 @@ int main(int argc, char* args[])
 				if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
 				{
 					Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
-					character.setPos(0, 448);
+					if (i == 2 || i == 5 || i == 6)
+					{
+						character.setPos(624, 192);
+					}
+					else character.setPos(0, 448);
 					live[4 - number_dead].kill();
 					number_dead++;
 				}
@@ -511,7 +526,11 @@ int main(int argc, char* args[])
 				if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), i % 3, 4))
 				{
 					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
-					character.setPos(0, 448);
+					if (i == 4)
+					{
+						character.setPos(624, 192);
+					}
+					else character.setPos(0, 448);
 					live[4 - number_dead].kill();
 					number_dead++;
 				}
@@ -523,7 +542,7 @@ int main(int argc, char* args[])
 				new_sco = sco;
 				mark.setText("000");
 			}
-			else if (sco != new_sco)
+			if (sco != new_sco)
 			{
 				check_score = true;
 				new_sco = sco;
@@ -609,7 +628,8 @@ int main(int argc, char* args[])
 				{
 					if (e_end.motion.x >= 500 && e_end.motion.x <= 575 && e_end.motion.y >= 390 && e_end.motion.y <= 460)
 					{
-
+						Mix_FreeChunk(soundEffect[lose_sound]);
+						soundEffect[lose_sound] = NULL;
 						SDL_DestroyRenderer(renderer);
 						renderer = NULL;
 						goto Play;
@@ -673,7 +693,7 @@ int main(int argc, char* args[])
 	players[p].init_score(sco);
 	players[p].init_heart(heart_game);
 	players[p].init_win("false");
-	sort(players, players + lines, sapxep);
+	sort(players, players + lines, sort_data);
 	for (int i = 0; i < lines; i++)
 	{
 		players[i].print();
