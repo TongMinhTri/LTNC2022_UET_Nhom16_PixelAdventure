@@ -74,7 +74,7 @@ public:
 bool sort_data(Player a, Player b)
 {
     return((a.win > b.win) || (a.win == b.win && a.score > b.score)
-        || (a.win == b.win && a.score == b.score && a.heart > b.heart)
+        || (a.win == b.win && a.score == b.score && a.heart > b.heart )
         || (a.win == b.win && a.heart == b.heart && a.score == b.score && a.name < b.name));
 }
 

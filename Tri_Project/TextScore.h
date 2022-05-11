@@ -23,7 +23,7 @@ public:
 	~TextScore();
 	TextScore(int x, int y, int k);
 	void setPos(int x, int y);
-	void initText(TTF_Font*& fontText);
+	void initText(TTF_Font*& fontText, int k);
 	void setText(string text)
 	{
 		str = text;

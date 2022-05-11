@@ -21,11 +21,12 @@ TextScore::TextScore(int x, int y, int k)
 	setColor(2);
 }
 
-void TextScore::initText(TTF_Font*& fontText)
+void TextScore::initText(TTF_Font*& fontText, int k)
 {
+	rect.h = k * 3 / 4;
 	if (TTF_Init() == -10)
 		cout << -1;
-	fontText = TTF_OpenFont("SHOWG.ttf", 20);
+	fontText = TTF_OpenFont("SHOWG.ttf", k);
 	if (fontText == NULL)
 		cout << "Font Error!" << endl;
 
