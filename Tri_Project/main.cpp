@@ -383,8 +383,8 @@ int main(int argc, char* args[])
 
 
 		Checkpoints* point = new Checkpoints[3];
-		point[0].set_checkpoints(renderer, 912, 432,  8, 48, "Checkpoints/End/End(48x48).png");
-		point[1].set_checkpoints(renderer,   0, 416, 17, 64, "Checkpoints/Start/Start (Moving) (64x64).png");
+		point[0].set_checkpoints(renderer, 912, 432, 8, 48, "Checkpoints/End/End(48x48).png");
+		point[1].set_checkpoints(renderer, 0, 416, 17, 64, "Checkpoints/Start/Start (Moving) (64x64).png");
 		point[2].set_checkpoints(renderer, 624, 144, 26, 48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
 		for (int i = 0; i <= 2; i++)
 			point[i].set_clips();
@@ -400,7 +400,7 @@ int main(int argc, char* args[])
 		fruits[2].setFruits(renderer, 192, 192, "Fruits/Apple.png");
 		fruits[3].setFruits(renderer, 240, 192, "Fruits/Orange.png");
 		fruits[4].setFruits(renderer, 288, 192, "Fruits/Kiwi.png");
-		fruits[5].setFruits(renderer, 864,  96, "Fruits/Melon.png");
+		fruits[5].setFruits(renderer, 864, 96, "Fruits/Melon.png");
 		fruits[6].setFruits(renderer, 864, 144, "Fruits/Cherries.png");
 		fruits[7].setFruits(renderer, 576, 192, "Fruits/Apple.png");
 		fruits[8].setFruits(renderer, 432, 192, "Fruits/Melon.png");
@@ -412,16 +412,16 @@ int main(int argc, char* args[])
 		Stone* stone = new Stone[7];
 		stone[0].init_stone(renderer, 480, 432, 192, 480, "Stones/Spike_Idle.png");
 		stone[1].init_stone(renderer, 576, 144, 432, 288, "Stones/Spike_Idle.png");
-		stone[2].init_stone(renderer, 768,  48,  48, 240, "Stones/Spike_Idle.png");
+		stone[2].init_stone(renderer, 768, 48, 48, 240, "Stones/Spike_Idle.png");
 		stone[3].init_stone(renderer, 288, 192, 192, 240, "Stones/Spike_Idle.png");
-		stone[4].init_stone(renderer,  48,  96,  48, 864, "Stones/Spike_Idle.png");
+		stone[4].init_stone(renderer, 48, 96, 48, 864, "Stones/Spike_Idle.png");
 		stone[5].init_stone(renderer, 720, 336, 336, 432, "Stones/Spike_Idle.png");
-		stone[6].init_stone(renderer, 816,  48,  48, 192, "Stones/Spike_Idle.png");
+		stone[6].init_stone(renderer, 816, 48, 48, 192, "Stones/Spike_Idle.png");
 		stone[0].set_clips();
 
 		Spike* spike = new Spike[5];
 		spike[0].set_spike(renderer, 196, 464, 0, "Spikes/spike_bottom.png");
-		spike[1].set_spike(renderer,  48, 192, 1, "Spikes/spike_right.png");
+		spike[1].set_spike(renderer, 48, 192, 1, "Spikes/spike_right.png");
 		spike[2].set_spike(renderer, 176, 144, 2, "Spikes/spike_left.png");
 		spike[3].set_spike(renderer, 436, 320, 0, "Spikes/spike_bottom.png");
 		spike[4].set_spike(renderer, 672, 384, 1, "Spikes/spike_right.png");
@@ -522,7 +522,7 @@ int main(int argc, char* args[])
 				if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
 				{
 					Mix_PlayChannel(-1, soundEffect[hitRock_sound], 0);
-					
+
 					if (i == 2 || i == 5 || i == 6)
 					{
 						character.setPos(624, 192);
