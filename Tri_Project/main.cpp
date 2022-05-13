@@ -662,7 +662,7 @@ int main(int argc, char* args[])
 		Checkpoints* point = new Checkpoints[3];
 		point[0].set_checkpoints(renderer, 912, 432,  8, 48, "Checkpoints/End/End(48x48).png");
 		point[1].set_checkpoints(renderer,   0,  80, 17, 64, "Checkpoints/Start/Start (Moving) (64x64).png");
-		point[2].set_checkpoints(renderer, 912, 240, 26, 48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
+		point[2].set_checkpoints(renderer, 672, 240, 26, 48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
 
 		for (int i = 0; i <= 2; i++)
 			point[i].set_clips();
@@ -686,17 +686,21 @@ int main(int argc, char* args[])
 		stand_saw[4].set_Stand(renderer, 837,  72, "Stand/stand_192.png");
 		stand_saw[5].set_Stand(renderer, 933,  72, "Stand/stand_192.png");
 
-		Spike* spike = new Spike[6];
+		Spike* spike = new Spike[10];
 		spike[0].set_spike(renderer, 144,  96, 1, "Spikes/spike_right.png");
 		spike[1].set_spike(renderer, 720, 144, 1, "Spikes/spike_right.png");
 		spike[2].set_spike(renderer, 580, 320, 0, "Spikes/spike_bottom.png");
 		spike[3].set_spike(renderer, 388, 320, 0, "Spikes/spike_bottom.png");
 		spike[4].set_spike(renderer, 532, 128, 0, "Spikes/spike_bottom.png");
 		spike[5].set_spike(renderer, 340, 128, 0, "Spikes/spike_bottom.png");
+		spike[6].set_spike(renderer, 196, 464, 0, "Spikes/spike_bottom.png");
+		spike[7].set_spike(renderer, 388, 464, 0, "Spikes/spike_bottom.png");
+		spike[8].set_spike(renderer, 580, 464, 0, "Spikes/spike_bottom.png");
+		spike[9].set_spike(renderer, 772, 464, 0, "Spikes/spike_bottom.png");
 
 		Fruits* fruits = new Fruits[11];
-		fruits[0].setFruits(renderer, 912, 160, "Fruits/Cherries.png");
-		fruits[1].setFruits(renderer, 912, 208, "Fruits/Melon.png");
+		fruits[0].setFruits(renderer, 816, 240, "Fruits/Cherries.png");
+		fruits[1].setFruits(renderer, 912, 242, "Fruits/Melon.png");
 		fruits[2].setFruits(renderer,   0, 272, "Fruits/Apple.png");
 		fruits[3].setFruits(renderer,   0, 320, "Fruits/Orange.png");
 		fruits[4].setFruits(renderer, 336, 192, "Fruits/Kiwi.png");
@@ -710,18 +714,26 @@ int main(int argc, char* args[])
 			fruits[i].set_clips();
 		}
 
-		Other_Enemy* enemies = new Other_Enemy[3];
+		Other_Enemy* enemies = new Other_Enemy[6];
 		enemies[0].inita_enemy(renderer, 288, 300, 288, 930, 28, 0, 44, 30);
-		enemies[0].set_speedx(0.5);
+		enemies[0].set_speedx(0.7);
 		enemies[0].setIMG(renderer,"Ghost");
 		enemies[1].inita_enemy(renderer, 153, 110, 153, 690, 14, 0, 32, 34);
-		enemies[1].set_speedx(0.2);
+		enemies[1].set_speedx(0.4);
 		enemies[1].setIMG(renderer, "Chicken");
 		enemies[2].inita_enemy(renderer, 686, 114, 153, 686, 12, 1, 36, 30);
-		enemies[2].set_speedx(0.2);
+		enemies[2].set_speedx(0.4);
 		enemies[2].setIMG(renderer, "Pig");
-		enemies[2].inita_enemy(renderer, 686, 114, 153, 686, 12, 1, 36, 30);
-		for (int i = 0; i < 3; i++)
+		enemies[3].inita_enemy(renderer,   0, 192,   0, 928,  9, 1, 32, 32);
+		enemies[3].set_speedx(0.85);
+		enemies[3].setIMG(renderer, "Bird");
+		enemies[4].inita_enemy(renderer, 868, 450, 336, 868, 10, 0, 44, 30);
+		enemies[4].set_speedx(0.6);
+		enemies[4].setIMG(renderer, "Slime");
+		enemies[5].inita_enemy(renderer, 288, 392, 288, 928, 9,  1, 32, 32);
+		enemies[5].set_speedx(0.7);
+		enemies[5].setIMG(renderer, "Bird");
+		for (int i = 0; i < 6; i++)
 		{
 			enemies[i].set_clips();
 		}
@@ -787,7 +799,7 @@ int main(int argc, char* args[])
 			character.updatePlayerPosition2(map_data2);
 			character.showImage(renderer);
 
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 6; i++)
 			{
 				enemies[i].enemy_move(renderer);
 			}
@@ -804,12 +816,13 @@ int main(int argc, char* args[])
 				if (checkCollision(saw[i].getRect_stone(), character.getRect(), 4, 4))
 				{
 					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
-					character.setPos(0, 96);
+					if( i == 3 ) character.setPos(0, 96);
+					else character.setPos(672, 240);
 					live[4 - number_dead].kill();
 					number_dead++;
 				}
 			}
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				spike[i].showImg(renderer);
 			}
@@ -827,26 +840,28 @@ int main(int argc, char* args[])
 			}
 
 			int d = 1;
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				if (i > 1) d = 0;
 				if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), d, 4))
 				{
 					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
-					character.setPos(0, 96);
+					if( i <= 1 || i == 4 || i == 5 ) character.setPos(0, 96);
+					else character.setPos(672, 240);
 					live[4 - number_dead].kill();
 					number_dead++;
 				}
 			}
 
 			int kc = 10;
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 6; i++)
 			{
 				if (i > 0) kc = 3;
 				if (checkCollision_ghost(enemies[i].getRect_enemy(), character.getRect(), kc, 4) )
 				{
 					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
-					character.setPos(0, 96);
+					if( i == 1 || i == 2 ) character.setPos(0, 96);
+					else character.setPos(672, 240);
 					live[4 - number_dead].kill();
 					number_dead++;
 				}
