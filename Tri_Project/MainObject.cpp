@@ -1,6 +1,6 @@
 #include "MainObject.h"
 
-MainObject::MainObject()
+MainObject::MainObject( int a, int b)
 {
 	img_run_left = NULL;
 	img_run_right = NULL;
@@ -20,8 +20,8 @@ MainObject::MainObject()
 	rect.w = rect.h = 32;
 
 	frame = 0;
-	x_pos = 0;
-	y_pos = 432;
+	x_pos = a;
+	y_pos = b;
 	x = y = 0;
 	frame_w = frame_h = 0;
 	status = IDLE_RIGHT;
@@ -352,6 +352,36 @@ void MainObject::updatePlayerPosition(Map& map_data)
 	checkCollisionS(map_data);
 }
 
+void MainObject::updatePlayerPosition2(Map2& map_data)
+{
+	x = 0;
+	y += FALL_SPEED;
+
+	if (y >= 10)
+	{
+		y = 10;
+	}
+
+	if (input_type.left == 1)
+	{
+		x -= PLAYER_SPEED;
+	}
+	else if (input_type.right == 1)
+	{
+		x += PLAYER_SPEED;
+	}
+	if (input_type.jump == 1)
+	{
+		if (!jump)
+		{
+			y = -JUMP_VALUE;
+		}
+		jump = true;
+		on_ground = false;
+	}
+	checkCollisionS2(map_data);
+}
+
 
 // Ham xu ly va cham 
 // Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
@@ -438,6 +468,90 @@ void MainObject::checkCollisionS(Map& map_data)
 	y_pos += y;
 
 }
+
+void MainObject::checkCollisionS2(Map2& map_data)
+{
+	int x1 = 0;
+	int x2 = 0;
+	int y1 = 0;
+	int y2 = 0;
+
+	//Check horizontal
+	int height_min = frame_h < TILE_SIZE ? frame_h : TILE_SIZE;
+	x1 = (x_pos + x) / TILE_SIZE;
+	x2 = (x_pos + x + frame_w - 1) / TILE_SIZE;
+
+	y1 = (y_pos) / TILE_SIZE;
+	y2 = (y_pos + height_min - 1) / TILE_SIZE;
+
+	if (x1 >= 0 && x2 < TILEMAP_NUM_X && y1 >= 0 && y2 < TILEMAP_NUM_Y)
+	{
+		if (x > 0) //Nhan vat di chuyen sang phai
+		{
+			if (map_data.tile[y1][x2] != 0 || map_data.tile[y2][x2] != 0)
+			{
+				x_pos = x2 * TILE_SIZE;
+				x_pos -= frame_w + 1;
+				x = 0;
+			}
+		}
+		else if (x < 0) //Nhan vat di chuyen sang trai
+		{
+			if (map_data.tile[y1][x1] != 0 || map_data.tile[y2][x1] != 0)
+			{
+				x_pos = (x1 + 1) * TILE_SIZE;
+				x = 0;
+			}
+		}
+	}
+
+	//Check vertical
+	int width_min = frame_w < TILE_SIZE ? frame_w : TILE_SIZE;
+	x1 = (x_pos) / TILE_SIZE;
+	x2 = (x_pos + width_min) / TILE_SIZE;
+	y1 = (y_pos + y) / TILE_SIZE;
+	y2 = (y_pos + y + frame_h - 1) / TILE_SIZE;
+
+	if (x1 >= 0 && x2 < TILEMAP_NUM_X && y1 >= 0 && y2 < TILEMAP_NUM_Y)
+	{
+		if (y > 0)
+		{
+			if (map_data.tile[y2][x1] != 0 || map_data.tile[y2][x2] != 0)
+			{
+				y_pos = y2 * TILE_SIZE;
+				y_pos -= (frame_h + 1);
+				y = 0;
+				on_ground = true;
+			}
+		}
+		else if (y < 0)
+		{
+			if (map_data.tile[y1][x1] != 0 || map_data.tile[y1][x2] != 0)
+			{
+				y_pos = (y1 + 1) * TILE_SIZE;
+				y = 0;
+			}
+		}
+	}
+
+	x_pos += x;
+	if (x_pos < 0)
+	{
+		x_pos = 0;
+	}
+	else if (x_pos + frame_w > SCREEN_WIDTH)
+	{
+		x_pos = SCREEN_WIDTH - frame_w - 1;
+	}
+	if (y_pos < 0)
+	{
+		y_pos = 0;
+	}
+	if (y > 0) on_ground = false;
+	y_pos += y;
+
+}
+
 
 SDL_Rect MainObject::getRect()
 {

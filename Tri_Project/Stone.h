@@ -33,11 +33,11 @@ protected:
 public:
 	Stone();
 	~Stone();
-	void init_stone(SDL_Renderer* renderer, int x, int y, int limitx, int limity, string path,int k);
+	void init_stone(SDL_Renderer* renderer, int x, int y, int limitx, int limity, string path, int k);
 	void stone_move(SDL_Renderer* renderer);
 	//void show(SDL_Renderer* renderer);
 	void setImg(SDL_Renderer* renderer, string path);
-	void show_frame_up(SDL_Renderer* renderer ,double speed_run);
+	void show_frame_up(SDL_Renderer* renderer, double speed_run);
 	void setPos(int x, int y);//xet kich thuoc anh
 	SDL_Rect getRect_stone();
 	void set_Stand(SDL_Renderer* renderer, int a, int b, string path);

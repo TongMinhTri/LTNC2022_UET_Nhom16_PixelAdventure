@@ -171,7 +171,7 @@ void Stone::setImg(SDL_Renderer* renderer, string path)
 	body = newTexture;
 }
 
-void Stone::show_frame_up(SDL_Renderer* renderer,double speed_run)
+void Stone::show_frame_up(SDL_Renderer* renderer, double speed_run)
 {
 	v_y += speed_run;
 	if (state == 0)

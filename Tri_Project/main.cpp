@@ -12,6 +12,7 @@
 #include "TextScore.h"
 #include "Heart.h"
 #include "Update_dataplayers.h"
+#include "Other_Enemy.h"
 
 using namespace std;
 
@@ -70,7 +71,7 @@ bool init()
 
 bool loadBackground()
 {
-	bool bg = background.loadImg("Background/Blue.png", renderer);
+	bool bg = background.loadImg("Background/Pink.png", renderer);
 	if (!bg)
 	{
 		return false;
@@ -190,6 +191,7 @@ bool loadMedia()
 
 int main(int argc, char* args[])
 {
+	int MAP[3]= { 0, 0, 0};
 	if (!init())
 	{
 		return -1;
@@ -207,6 +209,7 @@ int main(int argc, char* args[])
 	int sco = 0;
 	int heart_game = 0;
 	bool put_data = false;
+	bool victory = false;
 
 	if (Game_Status == ENTER_NAME || Game_Status == INSTRUCTION)
 	{
@@ -261,7 +264,7 @@ int main(int argc, char* args[])
 							inputText = SDL_GetClipboardText();
 							renderText = true;
 						}
-						else if (e_name.key.keysym.sym == SDLK_RETURN)
+						else if (e_name.key.keysym.sym == SDLK_RETURN && inputText.length() > 0 )
 						{
 							Game_Status = INSTRUCTION;
 						}
@@ -334,23 +337,26 @@ int main(int argc, char* args[])
 				}
 				else if (e_ins.type == SDL_KEYDOWN || e_ins.type == SDL_MOUSEBUTTONDOWN)
 				{
-					Game_Status = PLAY;
+					Game_Status = PLAY2;
 				}
 			}
 			instruction.Render(renderer, NULL);
 			SDL_RenderPresent(renderer);
-			if (Game_Status == PLAY)
+			if (Game_Status == PLAY2)
 			{
 				Mix_FreeMusic(menu_music);
 				menu_music = NULL;
 				instruction.Free();
-				goto Play;
+				goto Play2;
 			}
 		}
 	}
 	if (Game_Status == PLAY || Game_Status == GAME_OVER)
 	{
 	Play:
+		//cout << "map1" << '\n';
+		if( MAP[2] == 0 && MAP[1] == 0 ) MAP[1] = 1;
+		else if( MAP[2] == 1 && MAP[1] == 0 ) MAP[1] = 2;
 		if (Game_Status == GAME_OVER)
 		{
 			game_music = Mix_LoadMUS("Adv-music/level/Level-04.wav");
@@ -367,7 +373,7 @@ int main(int argc, char* args[])
 			{
 				return -1;
 			}
-			Game_Status = PLAY2;
+			Game_Status = PLAY;
 		}
 
 		put_data = false;
@@ -380,14 +386,14 @@ int main(int argc, char* args[])
 
 		GameMap gm;
 		gm.loadTiles(renderer);
-		MainObject character;
+		MainObject character(0,432);
 		character.setIMG(renderer);
 		character.setClips();
 		bool quit = false;
 
 		Checkpoints* point = new Checkpoints[3];
-		point[0].set_checkpoints(renderer, 912, 432, 8, 48, "Checkpoints/End/End(48x48).png");
-		point[1].set_checkpoints(renderer, 0, 416, 17, 64, "Checkpoints/Start/Start (Moving) (64x64).png");
+		point[0].set_checkpoints(renderer, 912, 432,  8, 48, "Checkpoints/End/End(48x48).png");
+		point[1].set_checkpoints(renderer,   0, 416, 17, 64, "Checkpoints/Start/Start (Moving) (64x64).png");
 		point[2].set_checkpoints(renderer, 624, 144, 26, 48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
 		for (int i = 0; i <= 2; i++)
 			point[i].set_clips();
@@ -409,18 +415,17 @@ int main(int argc, char* args[])
 		}
 
 		Stone* stone = new Stone[7];
-		stone[0].init_stone(renderer, 480, 432, 192, 480, "Stones/Spike_Idle.png",0);
-		stone[1].init_stone(renderer, 576, 144, 432, 288, "Stones/Spike_Idle.png",0);
-		stone[2].init_stone(renderer, 768, 48, 48, 240, "Stones/Spike_Idle.png",0);
-		stone[3].init_stone(renderer, 288, 192, 192, 240, "Stones/Spike_Idle.png",0);
-		stone[4].init_stone(renderer, 48, 96, 48, 864, "Stones/Spike_Idle.png",0);
-		stone[5].init_stone(renderer, 720, 336, 336, 432, "Stones/Spike_Idle.png",0);
-		stone[6].init_stone(renderer, 816, 48, 48, 192, "Stones/Spike_Idle.png",0);
-		stone[0].set_clips();
+		stone[0].init_stone(renderer, 480, 432, 192, 480, "Stones/Spike_Idle.png", 1);
+		stone[1].init_stone(renderer, 576, 144, 432, 288, "Stones/Spike_Idle.png", 1);
+		stone[2].init_stone(renderer, 768, 48, 48, 240, "Stones/Spike_Idle.png", 1);
+		stone[3].init_stone(renderer, 288, 192, 192, 240, "Stones/Spike_Idle.png", 1);
+		stone[4].init_stone(renderer, 48, 96, 48, 864, "Stones/Spike_Idle.png", 1);
+		stone[5].init_stone(renderer, 720, 336, 336, 432, "Stones/Spike_Idle.png", 1);
+		stone[6].init_stone(renderer, 816, 48, 48, 192, "Stones/Spike_Idle.png", 1);
 
 		Spike* spike = new Spike[5];
 		spike[0].set_spike(renderer, 196, 464, 0, "Spikes/spike_bottom.png");
-		spike[1].set_spike(renderer, 48, 192, 1, "Spikes/spike_right.png");
+		spike[1].set_spike(renderer,  48, 192, 1, "Spikes/spike_right.png");
 		spike[2].set_spike(renderer, 176, 144, 2, "Spikes/spike_left.png");
 		spike[3].set_spike(renderer, 436, 320, 0, "Spikes/spike_bottom.png");
 		spike[4].set_spike(renderer, 672, 384, 1, "Spikes/spike_right.png");
@@ -590,6 +595,7 @@ int main(int argc, char* args[])
 				delete[]stone;
 				delete[]fruits;
 				delete[]spike;
+				delete[]point;
 				goto Game_over;
 			}
 
@@ -612,9 +618,12 @@ int main(int argc, char* args[])
 			heart_game += live[i].get_heard();
 		}
 	}
-	/*if (Game_Status == PLAY2 || Game_Status == GAME_OVER)
+
+	if (Game_Status == PLAY2 || Game_Status == GAME_OVER)
 	{
 	Play2:
+		if (MAP[1] == 0 && MAP[2] == 0) MAP[2] = 1;
+		else if (MAP[1] == 1 && MAP[2] == 0) MAP[2] = 2;
 		if (Game_Status == GAME_OVER)
 		{
 			game_music = Mix_LoadMUS("Adv-music/level/Level-04.wav");
@@ -642,72 +651,83 @@ int main(int argc, char* args[])
 
 		Mix_PlayMusic(game_music, -1);
 
-		GameMap gm;
-		gm.loadTiles(renderer);
-		
-		MainObject character;
+		GameMap2 gm2;
+		gm2.loadTiles(renderer);
+
+		MainObject character(0,96);
 		character.setIMG(renderer);
 		character.setClips();
-		character.setPos(0, 48);
 		bool quit = false;
 
 		Checkpoints* point = new Checkpoints[3];
-		point[0].set_checkpoints(renderer, 912, 432, 8, 48, "Checkpoints/End/End(48x48).png");
-		point[1].set_checkpoints(renderer, 0, 80, 17, 64, "Checkpoints/Start/Start (Moving) (64x64).png");
+		point[0].set_checkpoints(renderer, 912, 432,  8, 48, "Checkpoints/End/End(48x48).png");
+		point[1].set_checkpoints(renderer,   0,  80, 17, 64, "Checkpoints/Start/Start (Moving) (64x64).png");
 		point[2].set_checkpoints(renderer, 912, 240, 26, 48, "Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
+
 		for (int i = 0; i <= 2; i++)
 			point[i].set_clips();
 
 		Stone* saw = new Stone[6];
-		saw[0].init_stone(renderer, 48, 192, 192, 384, "Saw/On (48x48).png",8);
-		saw[1].init_stone(renderer, 144, 432, 192, 432, "Saw/On (48x48).png",8);
-		saw[2].init_stone(renderer, 240, 192, 192, 432, "Saw/On (48x48).png",8);
-		saw[3].init_stone(renderer, 720, 48, 48, 240, "Saw/On (48x48).png", 8);
-		saw[4].init_stone(renderer, 816, 240, 48, 240, "Saw/On (48x48).png", 8);
-		saw[5].init_stone(renderer, 912, 48, 48, 240, "Saw/On (48x48).png", 8);
+		saw[0].init_stone(renderer,  48, 192, 192, 384, "Saw/On (48x48).png", 8);
+		saw[1].init_stone(renderer, 144, 432, 192, 432, "Saw/On (48x48).png", 8);
+		saw[2].init_stone(renderer, 240, 192, 192, 432, "Saw/On (48x48).png", 8);
+		saw[3].init_stone(renderer, 720,  48,  48, 240, "Saw/On (48x48).png", 8);
+		saw[4].init_stone(renderer, 816, 240,  48, 240, "Saw/On (48x48).png", 8);
+		saw[5].init_stone(renderer, 912,  48,  48, 240, "Saw/On (48x48).png", 8);
 		for (int i = 0; i <= 5; i++)
 		{
 			saw[i].set_clips();
 		}
-
 		Stone* stand_saw = new Stone[9];
-		stand_saw[0].set_Stand(renderer, 69, 216, "Stand/stand_192.png");
+		stand_saw[0].set_Stand(renderer,  69, 216, "Stand/stand_192.png");
 		stand_saw[1].set_Stand(renderer, 165, 216, "Stand/stand_240.png");
 		stand_saw[2].set_Stand(renderer, 261, 216, "Stand/stand_240.png");
-		stand_saw[3].set_Stand(renderer, 741, 72, "Stand/stand_192.png");
-		stand_saw[4].set_Stand(renderer, 837, 72, "Stand/stand_192.png");
-		stand_saw[5].set_Stand(renderer, 933, 72, "Stand/stand_192.png");
-
-
-
+		stand_saw[3].set_Stand(renderer, 741,  72, "Stand/stand_192.png");
+		stand_saw[4].set_Stand(renderer, 837,  72, "Stand/stand_192.png");
+		stand_saw[5].set_Stand(renderer, 933,  72, "Stand/stand_192.png");
 
 		Spike* spike = new Spike[6];
-		spike[0].set_spike(renderer, 144, 96, 1, "Spikes/spike_right.png");
+		spike[0].set_spike(renderer, 144,  96, 1, "Spikes/spike_right.png");
 		spike[1].set_spike(renderer, 720, 144, 1, "Spikes/spike_right.png");
 		spike[2].set_spike(renderer, 580, 320, 0, "Spikes/spike_bottom.png");
 		spike[3].set_spike(renderer, 388, 320, 0, "Spikes/spike_bottom.png");
-		spike[4].set_spike(renderer, 580, 128, 0, "Spikes/spike_bottom.png");
-		spike[5].set_spike(renderer, 388, 128, 0, "Spikes/spike_bottom.png");
-
+		spike[4].set_spike(renderer, 532, 128, 0, "Spikes/spike_bottom.png");
+		spike[5].set_spike(renderer, 340, 128, 0, "Spikes/spike_bottom.png");
 
 		Fruits* fruits = new Fruits[11];
 		fruits[0].setFruits(renderer, 912, 160, "Fruits/Cherries.png");
 		fruits[1].setFruits(renderer, 912, 208, "Fruits/Melon.png");
-		fruits[2].setFruits(renderer, 0, 272, "Fruits/Apple.png");
-		fruits[3].setFruits(renderer, 0, 320, "Fruits/Orange.png");
+		fruits[2].setFruits(renderer,   0, 272, "Fruits/Apple.png");
+		fruits[3].setFruits(renderer,   0, 320, "Fruits/Orange.png");
 		fruits[4].setFruits(renderer, 336, 192, "Fruits/Kiwi.png");
 		fruits[5].setFruits(renderer, 432, 192, "Fruits/Melon.png");
-		fruits[6].setFruits(renderer, 576, 48, "Fruits/Cherries.png");
+		fruits[6].setFruits(renderer, 576,  48, "Fruits/Cherries.png");
 		fruits[7].setFruits(renderer, 624, 192, "Fruits/Apple.png");
 		fruits[8].setFruits(renderer, 528, 192, "Fruits/Melon.png");
-		fruits[9].setFruits(renderer, 384, 48, "Fruits/Melon.png");
-
+		fruits[9].setFruits(renderer, 384,  48, "Fruits/Melon.png");
 		for (int i = 0; i < 10; i++)
 		{
 			fruits[i].set_clips();
 		}
 
+		Other_Enemy* enemies = new Other_Enemy[3];
+		enemies[0].inita_enemy(renderer, 288, 300, 288, 930, 28, 0, 44, 30);
+		enemies[0].set_speedx(0.5);
+		enemies[0].setIMG(renderer,"Ghost");
+		enemies[1].inita_enemy(renderer, 153, 110, 153, 690, 14, 0, 32, 34);
+		enemies[1].set_speedx(0.2);
+		enemies[1].setIMG(renderer, "Chicken");
+		enemies[2].inita_enemy(renderer, 686, 114, 153, 686, 12, 1, 36, 30);
+		enemies[2].set_speedx(0.2);
+		enemies[2].setIMG(renderer, "Pig");
+		enemies[2].inita_enemy(renderer, 686, 114, 153, 686, 12, 1, 36, 30);
+		for (int i = 0; i < 3; i++)
+		{
+			enemies[i].set_clips();
+		}
+
 		bool name_check = true;
+
 
 		TextScore score(450, 20, 105);
 		score.initText(fontText, 20);
@@ -743,7 +763,6 @@ int main(int argc, char* args[])
 		while (!quit)
 		{
 			timer.start();
-
 			while (SDL_PollEvent(&event) != 0)
 			{
 				if (event.type == SDL_QUIT)
@@ -758,15 +777,20 @@ int main(int argc, char* args[])
 			SDL_RenderClear(renderer);
 
 			background.Render(renderer, NULL);
-			gm.DrawMap(renderer);
-			Map map_data = gm.getMap();
+			gm2.DrawMap(renderer);
+			Map2 map_data2 = gm2.getMap();
 
 			point[0].showImg(renderer);
 			point[1].showImg(renderer);
 			point[2].showImg(renderer);
 
-			character.updatePlayerPosition(map_data);
+			character.updatePlayerPosition2(map_data2);
 			character.showImage(renderer);
+
+			for (int i = 0; i < 3; i++)
+			{
+				enemies[i].enemy_move(renderer);
+			}
 
 			for (int i = 0; i < 6; i++)
 			{
@@ -780,7 +804,7 @@ int main(int argc, char* args[])
 				if (checkCollision(saw[i].getRect_stone(), character.getRect(), 4, 4))
 				{
 					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
-					character.setPos(0, 48);
+					character.setPos(0, 96);
 					live[4 - number_dead].kill();
 					number_dead++;
 				}
@@ -789,11 +813,9 @@ int main(int argc, char* args[])
 			{
 				spike[i].showImg(renderer);
 			}
-			
 
 			for (int i = 0; i < 10; i++)
 			{
-
 				if (checkCollision(fruits[i].getRect_fruits(), character.getRect(), 13, 4) && fruits[i].alive == true)
 				{
 					fruits[i].kill();
@@ -803,18 +825,34 @@ int main(int argc, char* args[])
 				}
 				fruits[i].showImg(renderer);
 			}
+
+			int d = 1;
 			for (int i = 0; i < 6; i++)
 			{
-				if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), i % 3, 4))
+				if (i > 1) d = 0;
+				if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), d, 4))
 				{
 					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
-					character.setPos(0, 48);
+					character.setPos(0, 96);
 					live[4 - number_dead].kill();
 					number_dead++;
 				}
 			}
 
-			//
+			int kc = 10;
+			for (int i = 0; i < 3; i++)
+			{
+				if (i > 0) kc = 3;
+				if (checkCollision_ghost(enemies[i].getRect_enemy(), character.getRect(), kc, 4) )
+				{
+					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
+					character.setPos(0, 96);
+					live[4 - number_dead].kill();
+					number_dead++;
+				}
+			}
+
+
 			if (sco == 0)
 			{
 				check_score = true;
@@ -855,9 +893,12 @@ int main(int argc, char* args[])
 				game_music = NULL;
 				SDL_DestroyRenderer(renderer);
 				renderer = NULL;
-				delete[]saw;
+				delete[]stand_saw;
 				delete[]fruits;
 				delete[]spike;
+				delete[]enemies;
+				delete[]point;
+				delete[]saw;
 				goto Game_over;
 			}
 
@@ -879,14 +920,40 @@ int main(int argc, char* args[])
 		{
 			heart_game += live[i].get_heard();
 		}
-	}*/
+		/*if (checkCollision_point(point[0].getRect_points(), character.getRect(), 7, 4))
+		{
+			cout << "yes" << '\n';
+			Mix_FreeMusic(game_music);
+			game_music = NULL;
+			SDL_DestroyRenderer(renderer);
+			if (MAP[1] == 0 || MAP[1] != 0 )
+			{
+				renderer = NULL;
+				delete[]stand_saw;
+				delete[]fruits;
+				delete[]spike;
+				delete[]enemies;
+				delete[]point;
+				delete[]saw;
+				Game_Status = PLAY;
+				goto Play;
+			}
+			else
+			{
+
+			}
+		}*/
+	}
+
 	if (Game_Status == GAME_OVER)
 	{
 	Game_over:
 		if (!put_data)
 		{
 			put_data = true;
-			update_data(sco, heart_game, inputText);
+			if( MAP[1] == 1 && MAP[2] == 0 ) update_data1(sco, heart_game, inputText);
+			else if(MAP[2] == 1 && MAP[1] == 0 ) update_data2(sco, heart_game, inputText);
+			else update_big_data(sco, heart_game, inputText, "false");
 		}
 		Mix_PlayChannel(-1, soundEffect[lose_sound], 0);
 		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -918,7 +985,7 @@ int main(int argc, char* args[])
 						Mix_FreeChunk(soundEffect[lose_sound]);
 						SDL_DestroyRenderer(renderer);
 						renderer = NULL;
-						goto Play;
+						goto Play2;
 					}
 				}
 			}
@@ -927,7 +994,13 @@ int main(int argc, char* args[])
 		}
 	}
 
-	if (!put_data) update_data(sco, heart_game, inputText);
+	if (!put_data)
+	{
+		put_data = true;
+		if (MAP[1] == 1 && MAP[2] == 0) update_data1(sco, heart_game, inputText);
+		else if (MAP[2] == 1 && MAP[1] == 0) update_data2(sco, heart_game, inputText);
+		else update_big_data(sco, heart_game, inputText, "false");
+	}
 
 	close();
 	return 0;

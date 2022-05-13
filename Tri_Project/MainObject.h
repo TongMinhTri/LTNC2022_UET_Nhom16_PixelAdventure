@@ -8,7 +8,7 @@
 class MainObject
 {
 public:
-	MainObject();
+	MainObject( int a, int b);
 	~MainObject();
 
 	enum WalkType
@@ -29,7 +29,9 @@ public:
 	void handleMovement(SDL_Event event, SDL_Renderer* renderer, Mix_Chunk* soundEffect[]);
 	void setClips();
 	void updatePlayerPosition(Map& map_data);
+	void updatePlayerPosition2(Map2& map_data);
 	void checkCollisionS(Map& map_data);
+	void checkCollisionS2(Map2& map_data);
 	SDL_Rect getRect();
 	void setPos(int x, int y);
 private:

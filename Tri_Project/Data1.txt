@@ -1,0 +1,77 @@
+1. master yi 900 8 false
+2. Le van bao hihi 900 5 false
+3. google 900 2 false
+4. jame 900 2 false
+5. yi dan 700 4 false
+6. le 700 3 false
+7. ahihi 700 2 false
+8. yi dan 400 1 false
+9. yi dan 200 5 false
+10. hacker 200 4 false
+11. le 200 4 false
+12. lll 200 4 false
+13. yi quan 200 4 false
+14. ll 200 3 false
+15. le 200 2 false
+16. ll 200 0 false
+17. ll 200 0 false
+18. ll 200 0 false
+19. lll 200 0 false
+20. yi quan 200 0 false
+21. ahihi do ngoc 100 4 false
+22. ahii 100 4 false
+23. levi 100 4 false
+24. ll 100 4 false
+25. yi dan 100 0 false
+26. Le 0 5 false
+27. hihihihi 0 5 false
+28. kk 0 5 false
+29. kk 0 5 false
+30. kk 0 5 false
+31. kk 0 5 false
+32. le 0 5 false
+33. le 0 5 false
+34. le 0 5 false
+35. le 0 5 false
+36. le 0 5 false
+37. le 0 5 false
+38. lell 0 5 false
+39. ll 0 5 false
+40. ll 0 5 false
+41. ll 0 5 false
+42. ll 0 5 false
+43. ll 0 5 false
+44. ll 0 5 false
+45. ll 0 5 false
+46. ll 0 5 false
+47. ll 0 5 false
+48. ll 0 5 false
+49. ll 0 5 false
+50. ll 0 5 false
+51. ll 0 5 false
+52. ll 0 5 false
+53. ll 0 5 false
+54. ll 0 5 false
+55. ll 0 5 false
+56. ll 0 5 false
+57. ll 0 5 false
+58. ll 0 5 false
+59. ll 0 5 false
+60. ll 0 5 false
+61. ll 0 5 false
+62. ll 0 5 false
+63. ll 0 5 false
+64. ll 0 5 false
+65. ll 0 5 false
+66. ll 0 5 false
+67. ll 0 5 false
+68. ll 0 5 false
+69. ll 0 5 false
+70. lll 0 5 false
+71. lll 0 5 false
+72. lll 0 5 false
+73. lll 0 5 false
+74. le 0 4 false
+75. ll 0 4 false
+76. ll 0 4 false
+77. lll 0 4 false
