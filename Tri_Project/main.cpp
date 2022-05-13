@@ -671,7 +671,7 @@ int main(int argc, char* args[])
 		saw[0].init_stone(renderer,  48, 192, 192, 384, "Saw/On (48x48).png", 8);
 		saw[1].init_stone(renderer, 144, 432, 192, 432, "Saw/On (48x48).png", 8);
 		saw[2].init_stone(renderer, 240, 192, 192, 432, "Saw/On (48x48).png", 8);
-		saw[3].init_stone(renderer, 720,  48,  48, 240, "Saw/On (48x48).png", 8);
+		saw[3].init_stone(renderer, 720,  48,  48, 220, "Saw/On (48x48).png", 8);
 		saw[4].init_stone(renderer, 816, 240,  48, 240, "Saw/On (48x48).png", 8);
 		saw[5].init_stone(renderer, 912,  48,  48, 240, "Saw/On (48x48).png", 8);
 		for (int i = 0; i <= 5; i++)
@@ -686,17 +686,17 @@ int main(int argc, char* args[])
 		stand_saw[4].set_Stand(renderer, 837,  72, "Stand/stand_192.png");
 		stand_saw[5].set_Stand(renderer, 933,  72, "Stand/stand_192.png");
 
-		Spike* spike = new Spike[10];
+		Spike* spike = new Spike[9];
 		spike[0].set_spike(renderer, 144,  96, 1, "Spikes/spike_right.png");
 		spike[1].set_spike(renderer, 720, 144, 1, "Spikes/spike_right.png");
 		spike[2].set_spike(renderer, 580, 320, 0, "Spikes/spike_bottom.png");
 		spike[3].set_spike(renderer, 388, 320, 0, "Spikes/spike_bottom.png");
 		spike[4].set_spike(renderer, 532, 128, 0, "Spikes/spike_bottom.png");
 		spike[5].set_spike(renderer, 340, 128, 0, "Spikes/spike_bottom.png");
-		spike[6].set_spike(renderer, 196, 464, 0, "Spikes/spike_bottom.png");
+		spike[6].set_spike(renderer, 244, 464, 0, "Spikes/spike_bottom.png");
 		spike[7].set_spike(renderer, 388, 464, 0, "Spikes/spike_bottom.png");
-		spike[8].set_spike(renderer, 580, 464, 0, "Spikes/spike_bottom.png");
-		spike[9].set_spike(renderer, 772, 464, 0, "Spikes/spike_bottom.png");
+		//spike[8].set_spike(renderer, 580, 464, 0, "Spikes/spike_bottom.png");
+		spike[8].set_spike(renderer, 772, 464, 0, "Spikes/spike_bottom.png");
 
 		Fruits* fruits = new Fruits[11];
 		fruits[0].setFruits(renderer, 816, 240, "Fruits/Cherries.png");
@@ -728,10 +728,10 @@ int main(int argc, char* args[])
 		enemies[3].set_speedx(0.85);
 		enemies[3].setIMG(renderer, "Bird");
 		enemies[4].inita_enemy(renderer, 868, 450, 336, 868, 10, 0, 44, 30);
-		enemies[4].set_speedx(0.6);
+		enemies[4].set_speedx(0.4);
 		enemies[4].setIMG(renderer, "Slime");
-		enemies[5].inita_enemy(renderer, 288, 392, 288, 928, 9,  1, 32, 32);
-		enemies[5].set_speedx(0.7);
+		enemies[5].inita_enemy(renderer, 336, 392, 336, 928, 9,  1, 32, 32);
+		enemies[5].set_speedx(0.4);
 		enemies[5].setIMG(renderer, "Bird");
 		for (int i = 0; i < 6; i++)
 		{
@@ -822,7 +822,7 @@ int main(int argc, char* args[])
 					number_dead++;
 				}
 			}
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 9; i++)
 			{
 				spike[i].showImg(renderer);
 			}
@@ -840,7 +840,7 @@ int main(int argc, char* args[])
 			}
 
 			int d = 1;
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 9; i++)
 			{
 				if (i > 1) d = 0;
 				if (checkCollision_spike(spike[i].getRect_spike(), character.getRect(), d, 4))
