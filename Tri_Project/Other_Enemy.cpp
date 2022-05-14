@@ -88,6 +88,11 @@ void Other_Enemy::setIMG(SDL_Renderer* renderer, string k)
 		img_left = LoadIMG("Enemies/BlueBird/Flying_left.png", renderer);
 		img_right = LoadIMG("Enemies/BlueBird/Flying_right.png", renderer);
 	}
+	else if (k == "Slime")
+	{
+		img_left = LoadIMG("Enemies/Slime/Run_left.png", renderer);
+		img_right = LoadIMG("Enemies/Slime/Run_right.png", renderer);
+	}
 	object = img_right;
 }
 

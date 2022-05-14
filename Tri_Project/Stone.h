@@ -16,7 +16,7 @@ private:
 	int frame_w = w_h;
 	int frame_h = w_h;
 	int speed = 4;
-	double speedx = 0.6;
+	double speedx = 1;
 	double speedy = 0.4;
 	double v_x = 0;
 	double v_y = 0;

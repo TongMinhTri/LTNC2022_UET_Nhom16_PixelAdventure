@@ -64,6 +64,10 @@ public:
     {
         score = x;
     }
+    int get_length()
+    {
+        return name.length();
+    }
     friend bool sort_data(Player a, Player b);
     void print()
     {

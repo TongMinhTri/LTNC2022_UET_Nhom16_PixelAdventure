@@ -337,17 +337,17 @@ int main(int argc, char* args[])
 				}
 				else if (e_ins.type == SDL_KEYDOWN || e_ins.type == SDL_MOUSEBUTTONDOWN)
 				{
-					Game_Status = PLAY2;
+					Game_Status = PLAY;
 				}
 			}
 			instruction.Render(renderer, NULL);
 			SDL_RenderPresent(renderer);
-			if (Game_Status == PLAY2)
+			if (Game_Status == PLAY)
 			{
 				Mix_FreeMusic(menu_music);
 				menu_music = NULL;
 				instruction.Free();
-				goto Play2;
+				goto Play;
 			}
 		}
 	}
@@ -1000,7 +1000,7 @@ int main(int argc, char* args[])
 						Mix_FreeChunk(soundEffect[lose_sound]);
 						SDL_DestroyRenderer(renderer);
 						renderer = NULL;
-						goto Play2;
+						goto Play;
 					}
 				}
 			}
