@@ -28,7 +28,6 @@ private:
 	int limit_x;
 	int limit_y;
 	int status;
-protected:
 	SDL_Rect enemy;
 	SDL_Rect test;
 	SDL_Texture* img_right, * img_left, *object;
@@ -49,6 +48,7 @@ public:
 	void set_clips();
 	void enemy_move(SDL_Renderer* renderer);
 	void set_speedx(double a) { speedx = a;  }
+	void Free();
 };
 
 #endif // OTHER_ENEMY_H

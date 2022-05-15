@@ -2,6 +2,7 @@
 
 Fruits::Fruits()
 {
+	body = NULL;
 	fill_n(check_collect, 9, true);
 	fruits.x = 0;
 	fruits.y = 0;
@@ -69,6 +70,12 @@ void Fruits::setFruits(SDL_Renderer* renderer, int a, int b, string path)
 	frame = 0;
 	setImg(renderer, path);
 	tes.x = tes.y = tes.w = tes.h = 0;
+}
+
+void Fruits::Free()
+{
+	SDL_DestroyTexture(body);
+	body = NULL;
 }
 
 void Fruits::setPos(int x, int y)

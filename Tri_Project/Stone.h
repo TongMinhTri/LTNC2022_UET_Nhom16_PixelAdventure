@@ -46,6 +46,7 @@ public:
 	void DoStone_Circle();
 	void stone_move_up(SDL_Renderer* renderer);
 	void show_stand(SDL_Renderer* renderer);
+	void Free();
 }
 
 #endif // !STONE_H

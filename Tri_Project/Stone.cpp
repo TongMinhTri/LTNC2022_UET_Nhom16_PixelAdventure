@@ -2,6 +2,7 @@
 
 Stone::Stone()
 {
+	body = NULL;
 	x = 480;
 	y = 384;
 	stone.x = stone.y = stone.h = stone.w = 0;
@@ -116,6 +117,12 @@ void Stone::stone_move_up(SDL_Renderer* renderer)
 	}
 	setPos(x, y);
 	SDL_RenderCopy(renderer, body, &test, &stone);
+}
+
+void Stone::Free()
+{
+	SDL_DestroyTexture(body);
+	body = NULL;
 }
 
 void Stone::show_stand(SDL_Renderer* renderer)

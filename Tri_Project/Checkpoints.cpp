@@ -2,12 +2,14 @@
 
 Checkpoints::Checkpoints()
 {
+	body = NULL;
 	x = 0;
 	y = 0;
 	points.x = points.y = points.h = points.w = 0;
 	test.x = test.y = 0;
 	test.w = test.h = 64;
 	k = 0;
+	frame_w = frame_h = 0;
 }
 
 Checkpoints::~Checkpoints()
@@ -77,4 +79,10 @@ SDL_Rect Checkpoints::getRect_points()
 	test.w = frame_w;
 	test.h = frame_h;
 	return test;
+}
+
+void Checkpoints::Free()
+{
+	SDL_DestroyTexture(body);
+	body = NULL;
 }

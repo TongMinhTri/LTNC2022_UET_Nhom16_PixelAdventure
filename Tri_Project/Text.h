@@ -1,6 +1,7 @@
 #pragma once
 #ifndef TEXT_H
 #define TEXT_H
+
 #include "BaseData.h"
 using namespace std;
 
@@ -16,10 +17,8 @@ public:
 	//Loads image at specified path
 	bool loadFromFile(std::string path, SDL_Renderer* renderer);
 
-#if defined(SDL_TTF_MAJOR_VERSION)
 	//Creates image from font string
 	bool loadFromRenderedText(std::string textureText, SDL_Color textColor, TTF_Font* gFont, SDL_Renderer* renderer);
-#endif
 
 	//Deallocates texture
 	void free();
@@ -39,7 +38,6 @@ private:
 	int mWidth;
 	int mHeight;
 };
-
 
 #endif // !TEXT_H
 

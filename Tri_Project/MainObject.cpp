@@ -43,19 +43,64 @@ MainObject::~MainObject()
 {
 }
 
-void MainObject::setIMG(SDL_Renderer* renderer)
+void MainObject::setIMG(SDL_Renderer* renderer, string s)
 {
-	img_run_left = LoadIMG("Characters/Mask Dude/Run_left.png", renderer);
-	img_run_right = LoadIMG("Characters/Mask Dude/Run_right.png", renderer);
+	if (s == "Virtual Guy")
+	{
+		img_run_left = LoadIMG("Images/Characters/Virtual Guy/Run_left.png", renderer);
+		img_run_right = LoadIMG("Images/Characters/Virtual Guy/Run_right.png", renderer);
 
-	img_idle_left = LoadIMG("Characters/Mask Dude/Idle_left.png", renderer);
-	img_idle_right = LoadIMG("Characters/Mask Dude/Idle_right.png", renderer);
+		img_idle_left = LoadIMG("Images/Characters/Virtual Guy/Idle_left.png", renderer);
+		img_idle_right = LoadIMG("Images/Characters/Virtual Guy/Idle_right.png", renderer);
 
-	img_jump_left = LoadIMG("Characters/Mask Dude/Jump_left.png", renderer);
-	img_jump_right = LoadIMG("Characters/Mask Dude/Jump_right.png", renderer);
+		img_jump_left = LoadIMG("Images/Characters/Virtual Guy/Jump_left.png", renderer);
+		img_jump_right = LoadIMG("Images/Characters/Virtual Guy/Jump_right.png", renderer);
 
-	img_fall_left = LoadIMG("Characters/Mask Dude/Fall_left.png", renderer);
-	img_fall_right = LoadIMG("Characters/Mask Dude/Fall_right.png", renderer);
+		img_fall_left = LoadIMG("Images/Characters/Virtual Guy/Fall_left.png", renderer);
+		img_fall_right = LoadIMG("Images/Characters/Virtual Guy/Fall_right.png", renderer);
+	}
+	else if (s == "Mask Dude")
+	{
+		img_run_left = LoadIMG("Images/Characters/Mask Dude/Run_left.png", renderer);
+		img_run_right = LoadIMG("Images/Characters/Mask Dude/Run_right.png", renderer);
+
+		img_idle_left = LoadIMG("Images/Characters/Mask Dude/Idle_left.png", renderer);
+		img_idle_right = LoadIMG("Images/Characters/Mask Dude/Idle_right.png", renderer);
+
+		img_jump_left = LoadIMG("Images/Characters/Mask Dude/Jump_left.png", renderer);
+		img_jump_right = LoadIMG("Images/Characters/Mask Dude/Jump_right.png", renderer);
+
+		img_fall_left = LoadIMG("Images/Characters/Mask Dude/Fall_left.png", renderer);
+		img_fall_right = LoadIMG("Images/Characters/Mask Dude/Fall_right.png", renderer);
+	}
+	else if (s == "Ninja Frog")
+	{
+		img_run_left = LoadIMG("Images/Characters/Ninja Frog/Run_left.png", renderer);
+		img_run_right = LoadIMG("Images/Characters/Ninja Frog/Run_right.png", renderer);
+
+		img_idle_left = LoadIMG("Images/Characters/Ninja Frog/Idle_left.png", renderer);
+		img_idle_right = LoadIMG("Images/Characters/Ninja Frog/Idle_right.png", renderer);
+
+		img_jump_left = LoadIMG("Images/Characters/Ninja Frog/Jump_left.png", renderer);
+		img_jump_right = LoadIMG("Images/Characters/Ninja Frog/Jump_right.png", renderer);
+
+		img_fall_left = LoadIMG("Images/Characters/Ninja Frog/Fall_left.png", renderer);
+		img_fall_right = LoadIMG("Images/Characters/Ninja Frog/Fall_right.png", renderer);
+	}
+	else if (s == "Pink Man")
+	{
+		img_run_left = LoadIMG("Images/Characters/Pink Man/Run_left.png", renderer);
+		img_run_right = LoadIMG("Images/Characters/Pink Man/Run_right.png", renderer);
+
+		img_idle_left = LoadIMG("Images/Characters/Pink Man/Idle_left.png", renderer);
+		img_idle_right = LoadIMG("Images/Characters/Pink Man/Idle_right.png", renderer);
+
+		img_jump_left = LoadIMG("Images/Characters/Pink Man/Jump_left.png", renderer);
+		img_jump_right = LoadIMG("Images/Characters/Pink Man/Jump_right.png", renderer);
+
+		img_fall_left = LoadIMG("Images/Characters/Pink Man/Fall_left.png", renderer);
+		img_fall_right = LoadIMG("Images/Characters/Pink Man/Fall_right.png", renderer);
+	}
 
 	object = img_idle_right;
 }
@@ -76,11 +121,13 @@ SDL_Texture* MainObject::LoadIMG(string path, SDL_Renderer* renderer)
 		}
 
 		SDL_FreeSurface(loadedSurface);
+		loadedSurface = NULL;
 	}
 	frame_w = rect.w / 12;
 	frame_h = rect.h;
 
 	return newTexture;
+	SDL_DestroyTexture(newTexture);
 }
 
 // Ham load hinh anh sau moi thao tac di chuyen
@@ -562,6 +609,16 @@ SDL_Rect MainObject::getRect()
 	return test;
 }
 
+bool MainObject::checkWin()
+{
+	bool check = false;
+	if (x_pos >= 912 && y_pos >= 432)
+	{
+		check = true;
+	}
+	return check;
+}
+
 void MainObject::setPos(int x, int y)
 {
 	rect.x = x;
@@ -578,4 +635,35 @@ void MainObject::setPos(int x, int y)
 	on_ground = true;
 	jump = false;
 }
+
+void MainObject::Free()
+{
+	SDL_DestroyTexture(img_run_right);
+	img_run_right = NULL;
+
+	SDL_DestroyTexture(img_run_left);
+	img_run_left = NULL;
+
+	SDL_DestroyTexture(img_idle_right);
+	img_idle_right = NULL;
+
+	SDL_DestroyTexture(img_idle_left);
+	img_idle_left = NULL;
+
+	SDL_DestroyTexture(img_jump_right);
+	img_jump_right = NULL;
+
+	SDL_DestroyTexture(img_jump_left);
+	img_jump_left = NULL;
+
+	SDL_DestroyTexture(img_fall_right);
+	img_fall_right = NULL;
+
+	SDL_DestroyTexture(img_fall_left);
+	img_fall_left = NULL;
+
+	SDL_DestroyTexture(object);
+	object = NULL;
+}
+
 

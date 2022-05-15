@@ -2,6 +2,7 @@
 
 Heart::Heart()
 {
+	body = NULL;
 	x = 0;
 	y = 0;
 	size = 32;
@@ -10,7 +11,7 @@ Heart::Heart()
 	heart.w = 32;
 	heart.h = 32;
 	test.x = test.y = test.w = test.h = 0;
-	setImg(renderer, "heart.png");
+	setImg(renderer, "Images/Heart/heart.png");
 }
 
 Heart::~Heart()
@@ -57,12 +58,19 @@ void Heart::setHeart(SDL_Renderer* renderer, int a, int b)
 	heart.w = 32;
 	heart.h = 32;
 	setPos(x, y);
-	setImg(renderer, "Heart/heart.png");
+	setImg(renderer, "Images/Heart/heart.png");
 	test.x = test.y = test.w = test.h = 0;
 }
 
-int Heart::get_heard()
+int Heart::get_heart()
 {
 	if (dead == false) return 1;
 	return 0;
+}
+
+void Heart::Free()
+{
+	life.clear();
+	SDL_DestroyTexture(body);
+	body = NULL;
 }

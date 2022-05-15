@@ -31,6 +31,7 @@ public:
 	void setColor(const int& type);
 	void createText(TTF_Font* font, SDL_Renderer* renderer, bool check_score);
 	void show(SDL_Renderer* renderer);
+	void Free();
 };
 
 #endif // !TEXTSCORE_H

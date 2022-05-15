@@ -29,6 +29,7 @@ public:
 	void setPos(int x, int y); //xet kich thuoc anh
 	SDL_Rect getRect_fruits();
 	void setFruits(SDL_Renderer* renderer, int a, int b, string path);
+	void Free();
 };
 
 #endif // !FRUITS_H

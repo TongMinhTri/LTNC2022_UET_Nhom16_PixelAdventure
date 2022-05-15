@@ -21,6 +21,7 @@ public:
 	void setPos(int x, int y);//xet kich thuoc anh
 	void showImg(SDL_Renderer* renderer);
 	SDL_Rect getRect_spike();
+	void Free();
 };
 
 

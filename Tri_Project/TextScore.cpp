@@ -2,6 +2,8 @@
 
 TextScore::TextScore()
 {
+	body = NULL;
+	textSurface = NULL;
 	rect.x = 400;
 	rect.y = 10;
 	rect.w = 100;
@@ -26,7 +28,7 @@ void TextScore::initText(TTF_Font*& fontText, int k)
 	rect.h = k * 3 / 4;
 	if (TTF_Init() == -10)
 		cout << -1;
-	fontText = TTF_OpenFont("SHOWG.ttf", k);
+	fontText = TTF_OpenFont("Fonts/SHOWG.ttf", k);
 	if (fontText == NULL)
 		cout << "Font Error!" << endl;
 
@@ -56,6 +58,7 @@ void TextScore::createText(TTF_Font* font, SDL_Renderer* renderer, bool check_sc
 		textSurface = TTF_RenderText_Blended(font, str.c_str(), text_color);
 		body = SDL_CreateTextureFromSurface(renderer, textSurface);
 		SDL_FreeSurface(textSurface);
+		textSurface = NULL;
 	}
 }
 
@@ -67,4 +70,10 @@ void TextScore::setPos(int x, int y)
 void TextScore::show(SDL_Renderer* renderer)
 {
 	SDL_RenderCopy(renderer, body, NULL, &rect);
+}
+
+void TextScore::Free()
+{
+	SDL_DestroyTexture(body);
+	body = NULL;
 }

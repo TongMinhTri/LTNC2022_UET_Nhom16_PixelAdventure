@@ -23,7 +23,6 @@ Other_Enemy::Other_Enemy()
 
 Other_Enemy::~Other_Enemy()
 {
-	delete[]frame_clips;
 }
 
 void Other_Enemy::inita_enemy(SDL_Renderer* renderer, int a, int b, int limitx, int limity, int k, int Status, int w, int h)
@@ -70,23 +69,28 @@ void Other_Enemy::setIMG(SDL_Renderer* renderer, string k)
 {
 	if (k == "Ghost")
 	{
-		img_left = LoadIMG("Enemies/Ghost/Idle_left.png", renderer);
-		img_right = LoadIMG("Enemies/Ghost/Idle_right.png", renderer);
+		img_left = LoadIMG("Images/Enemies/Ghost/Idle_left.png", renderer);
+		img_right = LoadIMG("Images/Enemies/Ghost/Idle_right.png", renderer);
 	}
 	else if (k == "Chicken")
 	{
-		img_left = LoadIMG("Enemies/Chicken/Run_left.png", renderer);
-		img_right = LoadIMG("Enemies/Chicken/Run_right.png", renderer);
+		img_left = LoadIMG("Images/Enemies/Chicken/Run_left.png", renderer);
+		img_right = LoadIMG("Images/Enemies/Chicken/Run_right.png", renderer);
 	}
 	else if (k == "Pig")
 	{
-		img_left = LoadIMG("Enemies/AngryPig/Run_left.png", renderer);
-		img_right = LoadIMG("Enemies/AngryPig/Run_right.png", renderer);
+		img_left = LoadIMG("Images/Enemies/AngryPig/Run_left.png", renderer);
+		img_right = LoadIMG("Images/Enemies/AngryPig/Run_right.png", renderer);
 	}
 	else if (k == "Bird")
 	{
-		img_left = LoadIMG("Enemies/BlueBird/Flying_left.png", renderer);
-		img_right = LoadIMG("Enemies/BlueBird/Flying_right.png", renderer);
+		img_left = LoadIMG("Images/Enemies/BlueBird/Flying_left.png", renderer);
+		img_right = LoadIMG("Images/Enemies/BlueBird/Flying_right.png", renderer);
+	}
+	else if (k == "Slime")
+	{
+		img_left = LoadIMG("Images/Enemies/Slime/Run_left.png", renderer);
+		img_right = LoadIMG("Images/Enemies/Slime/Run_right.png", renderer);
 	}
 	object = img_right;
 }
@@ -142,13 +146,28 @@ void Other_Enemy::enemy_move(SDL_Renderer* renderer)
 	show_frame(renderer);
 }
 
+void Other_Enemy::Free()
+{
+	SDL_DestroyTexture(img_right);
+	img_right = NULL;
+
+	SDL_DestroyTexture(img_left);
+	img_left = NULL;
+
+	SDL_DestroyTexture(object);
+	object = NULL;
+
+	delete[]frame_clips;
+
+}
+
 void Other_Enemy::show_frame(SDL_Renderer* renderer)
 {
 	if (status == RIGHT) object = img_right;
 	else object = img_left;
 	frame++;
-	if (frame == number_frclips - 1) frame = 0; // ngan cho frame ko qua 3
-	SDL_Rect* current_clips = &frame_clips[frame]; // rect nguon de in ra anh
+	if (frame == number_frclips - 1) frame = 0; 
+	SDL_Rect* current_clips = &frame_clips[frame]; 
 	SDL_Rect renderquad = { x, y, frame_w, frame_h };
 	SDL_RenderCopy(renderer, object, current_clips, &renderquad);
 }

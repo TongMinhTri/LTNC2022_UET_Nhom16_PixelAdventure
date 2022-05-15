@@ -28,5 +28,6 @@ public:
 	void setPos(int x_, int y_);//xet kich thuoc anh
 	void set_clips();
 	SDL_Rect getRect_points();
+	void Free();
 };
 #endif // !STONE_H

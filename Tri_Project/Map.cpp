@@ -17,7 +17,7 @@ void GameMap::loadTiles(SDL_Renderer* renderer)
 	FILE* p = NULL;
 	for (int i = 0; i < mapNums; i++)
 	{
-		sprintf_s(file_img, "Maps/map%d.png", i); // Chuyen xau "Maps/map%d.png" vao mang file_img (VD: i = 1 se chuyen hinh anh co ten map1.png vao file_img)
+		sprintf_s(file_img, "Images/Maps/map%d.png", i); // Chuyen xau "Maps/map%d.png" vao mang file_img (VD: i = 1 se chuyen hinh anh co ten map1.png vao file_img)
 
 		fopen_s(&p, file_img, "rb"); // Mo file
 		if (p == NULL) // Neu khong mo duoc file
@@ -52,6 +52,14 @@ void GameMap::DrawMap(SDL_Renderer* renderer)
 		id_y++;
 	}
 
+}
+
+void GameMap::free()
+{
+	for (int i = 0; i < mapNums; i++)
+	{
+		tile_map[i].Free();
+	}
 }
 
 bool TileMap::loadImg(string path, SDL_Renderer* renderer)
@@ -101,7 +109,7 @@ void GameMap2::loadTiles(SDL_Renderer* renderer)
 	FILE* p = NULL;
 	for (int i = 0; i < mapNums; i++)
 	{
-		sprintf_s(file_img, "Maps/map%d.png", i); // Chuyen xau "Maps/map%d.png" vao mang file_img (VD: i = 1 se chuyen hinh anh co ten map1.png vao file_img)
+		sprintf_s(file_img, "Images/Maps/map%d.png", i); // Chuyen xau "Maps/map%d.png" vao mang file_img (VD: i = 1 se chuyen hinh anh co ten map1.png vao file_img)
 
 		fopen_s(&p, file_img, "rb"); // Mo file
 		if (p == NULL) // Neu khong mo duoc file
@@ -136,4 +144,12 @@ void GameMap2::DrawMap(SDL_Renderer* renderer)
 		id_y++;
 	}
 
+}
+
+void GameMap2::free()
+{
+	for (int i = 0; i < mapNums; i++)
+	{
+		tile_map[i].Free();
+	}
 }

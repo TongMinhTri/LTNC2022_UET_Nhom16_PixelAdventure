@@ -25,7 +25,7 @@ public:
 
 	SDL_Texture* LoadIMG(string path, SDL_Renderer* renderer);
 	void showImage(SDL_Renderer* renderer);
-	void setIMG(SDL_Renderer* renderer);
+	void setIMG(SDL_Renderer* renderer, string s);
 	void handleMovement(SDL_Event event, SDL_Renderer* renderer, Mix_Chunk* soundEffect[]);
 	void setClips();
 	void updatePlayerPosition(Map& map_data);
@@ -34,6 +34,8 @@ public:
 	void checkCollisionS2(Map2& map_data);
 	SDL_Rect getRect();
 	void setPos(int x, int y);
+	bool checkWin();
+	void Free();
 private:
 	SDL_Texture *img_run_right, *img_run_left, *img_idle_right, *img_idle_left, *img_jump_right, *img_jump_left, *img_fall_right, *img_fall_left, *object;
 	SDL_Rect rect;

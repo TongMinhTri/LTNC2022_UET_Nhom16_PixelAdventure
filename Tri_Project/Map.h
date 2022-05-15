@@ -22,6 +22,12 @@ public:
 		rect.y = y;
 	}
 	void renderImg(SDL_Renderer* renderer, const SDL_Rect* clip = NULL);
+	void Free() 
+	{
+		SDL_DestroyTexture(object);
+		object = NULL;
+	};
+
 protected:
 	SDL_Texture* object;
 	SDL_Rect rect;
@@ -33,11 +39,10 @@ public:
 	GameMap();
 	~GameMap();
 
-	//void loadMap(const char* path); // Doc thong tin tu file Map_data
 	void loadTiles(SDL_Renderer* renderer); // Load hinh anh cho tile map
 	void DrawMap(SDL_Renderer* renderer); // Fill hinh anh vao cac vi tri
 	Map getMap() const { return firstMap; }
-
+	void free();
 private:
 	Map firstMap; // Chua thong tin ve ban do: trang thai, vi tri va chi so cua cac o tile map
 	TileMap tile_map[mapNums]; // Mang luu tru cac loai hinh anh cho ban do
@@ -49,11 +54,10 @@ public:
 	GameMap2();
 	~GameMap2();
 
-	//void loadMap(const char* path); // Doc thong tin tu file Map_data
 	void loadTiles(SDL_Renderer* renderer); // Load hinh anh cho tile map
 	void DrawMap(SDL_Renderer* renderer); // Fill hinh anh vao cac vi tri
 	Map2 getMap() const { return secondMap; }
-
+	void free();
 private:
 	Map2 secondMap; // Chua thong tin ve ban do: trang thai, vi tri va chi so cua cac o tile map
 	TileMap tile_map[mapNums]; // Mang luu tru cac loai hinh anh cho ban do

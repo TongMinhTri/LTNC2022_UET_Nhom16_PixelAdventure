@@ -71,3 +71,9 @@ SDL_Rect Spike::getRect_spike()
 {
 	return spike;
 }
+
+void Spike::Free()
+{
+	SDL_DestroyTexture(body);
+	body = NULL;
+}
