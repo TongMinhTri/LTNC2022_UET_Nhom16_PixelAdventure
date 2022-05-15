@@ -528,18 +528,38 @@ int main(int argc, char* args[])
 					if (event.motion.x >= 117 && event.motion.x <= 247 && event.motion.y >= 472 && event.motion.y <= 510)
 					{
 						cha_select = "Mask Dude";
+						character_choose.Free();
+						SDL_DestroyRenderer(renderer);
+						renderer = NULL;
+						Game_Status = MAP_CHOOSING;
+						goto Map_choose;
 					}
 					else if (event.motion.x >= 315 && event.motion.x <= 445 && event.motion.y >= 472 && event.motion.y <= 510)
 					{
 						cha_select = "Ninja Frog";
+						character_choose.Free();
+						SDL_DestroyRenderer(renderer);
+						renderer = NULL;
+						Game_Status = MAP_CHOOSING;
+						goto Map_choose;
 					}
 					else if (event.motion.x >= 507 && event.motion.x <= 637 && event.motion.y >= 472 && event.motion.y <= 510)
 					{
 						cha_select = "Pink Man";
+						character_choose.Free();
+						SDL_DestroyRenderer(renderer);
+						renderer = NULL;
+						Game_Status = MAP_CHOOSING;
+						goto Map_choose;
 					}
 					else if (event.motion.x >= 701 && event.motion.x <= 831  && event.motion.y >= 472 && event.motion.y <= 510)
 					{
 						cha_select = "Virtual Guy";
+						character_choose.Free();
+						SDL_DestroyRenderer(renderer);
+						renderer = NULL;
+						Game_Status = MAP_CHOOSING;
+						goto Map_choose;
 					}
 					else if (event.motion.x >= 837 && event.motion.x <= 930 && event.motion.y >= 128 && event.motion.y <= 166)
 					{
@@ -549,12 +569,6 @@ int main(int argc, char* args[])
 						renderer = NULL;
 						goto Menu;
 					}
-					character_choose.Free();
-					SDL_DestroyRenderer(renderer);
-					renderer = NULL;
-					Game_Status = MAP_CHOOSING;
-					goto Map_choose;
-
 				}
 			}
 			character_choose.Render(renderer, NULL);
