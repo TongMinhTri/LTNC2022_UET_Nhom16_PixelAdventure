@@ -23,6 +23,14 @@ TextScore::TextScore(int x, int y, int k)
 	setColor(2);
 }
 
+void TextScore::init(int x, int y, int k)
+{
+	setPos(x, y);
+	rect.w = k;
+	rect.h = 30;
+	setColor(2);
+}
+
 void TextScore::initText(TTF_Font*& fontText, int k)
 {
 	rect.h = k * 3 / 4;

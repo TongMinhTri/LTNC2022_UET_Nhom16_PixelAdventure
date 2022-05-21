@@ -1,24 +1,9 @@
-1.      di ngu cho 100 0 false
-2.          asdasd 100 0 false
-3.          bhjvgh 100 0 false
-4.          dubuty 100 0 false
-5.          gvhjcg 100 0 false
-6.           kyler 100 0 false
-7.  kyler xinh dep 100 0 false
-8.            okok 0   5 false
-9.    Lily bao lam 0   0 false
-10.         asdasd 0   0 false
-11.         asdasd 0   0 false
-12.         asdasd 0   0 false
-13.           asdf 0   0 false
-14.         dubuty 0   0 false
-15.           fake 0   0 false
-16.         gvhjcg 0   0 false
-17.          kyler 0   0 false
-18.            lam 0   0 false
-19.            lam 0   0 false
-20.            lam 0   0 false
-21.         ljklkj 0   0 false
-22.         okokok 0   0 false
-23.         okokok 0   0 false
-24.         okokok 0   0 false
+1.       aiai 500 2 win
+2.   lienlien 500 1 win
+3.     asdasd 100 0 lose
+4.     bhjvgh 100 0 lose
+5. di ngu cho 100 0 lose
+6.     dubuty 100 0 lose
+7.     gvhjcg 100 0 lose
+8.      kyler 100 0 lose
+9.       lele 0   0 lose

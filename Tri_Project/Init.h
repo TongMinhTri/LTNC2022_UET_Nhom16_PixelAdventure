@@ -3,9 +3,11 @@
 #define INIT_H
 
 #include "BaseData.h"
+#include "BaseObject.h"
+#include "Text.h"
 using namespace std;
 
-bool init()
+bool init(SDL_Window *window, SDL_Renderer* renderer)
 {
 	bool success = true;
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
@@ -49,7 +51,7 @@ bool init()
 	return success;
 }
 
-bool initRenderer()
+bool initRenderer( SDL_Window *window, SDL_Renderer * renderer)
 {
 	bool success;
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -65,7 +67,7 @@ bool initRenderer()
 	return success;
 }
 
-bool loadBackground()
+bool loadBackground( BaseOject &background, SDL_Renderer* renderer)
 {
 	bool bg = background.loadImg("Images/Background/Pink.png", renderer);
 	if (!bg)
@@ -75,7 +77,7 @@ bool loadBackground()
 	return true;
 }
 
-bool loadBackground2()
+bool loadBackground2(BaseOject& background2, SDL_Renderer* renderer)
 {
 	bool bg2 = background2.loadImg("Images/Background/Blue.png", renderer);
 	if (!bg2)
@@ -85,7 +87,7 @@ bool loadBackground2()
 	return true;
 }
 
-bool loadInstruction()
+bool loadInstruction(BaseOject& instruction, SDL_Renderer* renderer)
 {
 	bool ins = instruction.loadImg("Images/Menu/instruction.png", renderer);
 	if (!ins)
@@ -95,7 +97,7 @@ bool loadInstruction()
 	return true;
 }
 
-bool loadGameOver()
+bool loadGameOver(BaseOject& game_over, SDL_Renderer* renderer)
 {
 	bool end = game_over.loadImg("Images/Game over/game_over.png", renderer);
 	if (!end)
@@ -105,7 +107,7 @@ bool loadGameOver()
 	return true;
 }
 
-bool loadMenu()
+bool loadMenu(BaseOject& menu, SDL_Renderer* renderer)
 {
 	bool home = menu.loadImg("Images/Menu/menu.png", renderer);
 	if (!home)
@@ -115,7 +117,7 @@ bool loadMenu()
 	return true;
 }
 
-bool loadMapChoose()
+bool loadMapChoose(BaseOject& map_choose, SDL_Renderer* renderer)
 {
 	bool choose = map_choose.loadImg("Images/Menu/map_choose.png", renderer);
 	if (!choose)
@@ -125,7 +127,7 @@ bool loadMapChoose()
 	return true;
 }
 
-bool loadWin()
+bool loadWin(BaseOject& win, SDL_Renderer* renderer)
 {
 	bool check_win = win.loadImg("Images/Win/victory.png", renderer);
 	if (!check_win)
@@ -172,7 +174,7 @@ bool loadSound()
 	return success;
 }
 
-void close()
+void close(SDL_Window *window, SDL_Renderer *renderer, LTexture &gPromptTextTexture, LTexture& gInputTextTexture, BaseOject & background)
 {
 	gPromptTextTexture.free();
 	gInputTextTexture.free();
@@ -211,7 +213,7 @@ void close()
 	SDL_Quit();
 }
 
-bool loadMedia()
+bool loadMedia(LTexture& gPromptTextTexture, SDL_Renderer *renderer)
 {
 	bool success = true;
 
@@ -234,6 +236,34 @@ bool loadMedia()
 	}
 
 	return success;
+}
+bool loadCharacterChoose( BaseOject &character_choose, SDL_Renderer* renderer)
+{
+	bool check = character_choose.loadImg("Images/Character_choose/select.png", renderer);
+	if (!check)
+	{
+		return false;
+	}
+	return true;
+}
+bool loadMapPass1(BaseOject & map_pass1, SDL_Renderer* renderer)
+{
+	bool check = map_pass1.loadImg("Images/Map_pass/map_pass1.png", renderer);
+	if (!check)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool loadMapPass2(BaseOject & map_pass2, SDL_Renderer* renderer)
+{
+	bool check = map_pass2.loadImg("Images/Map_pass/map_pass2.png", renderer);
+	if (!check)
+	{
+		return false;
+	}
+	return true;
 }
 
 #endif // !INIT_H

@@ -68,7 +68,8 @@ enum Game_status {
 	MAP_PASS_TWO,
 	PLAY2,
 	GAME_OVER,
-	WIN
+	WIN,
+	TOP_SCORE,
 };
 
 struct Map

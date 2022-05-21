@@ -1,5 +1,9 @@
-1.        okokok 200 0 false
-2.        asdasd 100 0 false
-3.          fake 100 0 false
-4.        ljklkj 100 0 false
-5.  Lily bao lam 0   0 false
+1.      chan ai 0   0 win
+2.       okokok 200 0 lose
+3.       asdasd 100 0 lose
+4.         fake 100 0 lose
+5.       ljklkj 100 0 lose
+6.          lll 0   5 lose
+7. Lily bao lam 0   0 lose
+8.       hihi08 0   0 lose
+9.          lee 0   0 lose

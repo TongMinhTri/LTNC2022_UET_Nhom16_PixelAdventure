@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void update_data1(int sco, int heart_game, string inputText)
+void update_data1(int sco, int heart_game, string inputText, string Victory)
 {
 	char c;
 	int lines = 1;
@@ -32,14 +32,14 @@ void update_data1(int sco, int heart_game, string inputText)
 	int pos1, pos2;
 	int space1 = 0;
 	pos1 = pos2 = 0;
-	if (lines > 0)
+	if (lines > 1)
 	{
 		while (!f2.eof())
 		{
 			string s;
 			string s2 = "";
 			getline(f2, s);
-			diem = 0;
+			diem  = space1 = 0;
 			for (int i = 3; i < s.length(); i++)
 			{
 				if (s[i] != ' ')
@@ -51,7 +51,7 @@ void update_data1(int sco, int heart_game, string inputText)
 			for (int i = space1; i < s.length(); i++)
 			{
 				if ((s[i] >= '1' && s[i] <= '9' || (s[i] == '0' && s[i + 1] == ' '))
-					&& s[i + 3] == ' ' && s[i + 4] >= '0' && s[i + 4] <= '9' && (s[i + 6] == 'f' || s[i + 6] == 't'))
+					&& s[i + 3] == ' ' && s[i + 4] >= '0' && s[i + 4] <= '9' && (s[i + 6] == 'w' || s[i + 6] == 'l'))
 				{
 					pos1 = i;
 					break;
@@ -68,8 +68,8 @@ void update_data1(int sco, int heart_game, string inputText)
 				players[p].init_score(diem);
 				pos2 = pos1 + 4;
 				players[p].init_heart(int(char(s[pos2]) - '0'));
-				if (s[pos2 + 2] == 't') players[p].init_win("true");
-				else players[p].init_win("false");
+				if (s[pos2 + 2] == 'w') players[p].init_win("win");
+				else players[p].init_win("lose");
 				p++;
 			}
 			if (int(s2.length()) > max_name) max_name = int(s2.length());
@@ -87,7 +87,7 @@ void update_data1(int sco, int heart_game, string inputText)
 	players[p].init_name(inputText);
 	players[p].init_score(sco);
 	players[p].init_heart(heart_game);
-	players[p].init_win("false");
+	players[p].init_win(Victory);
 	if (int(inputText.length()) > max_name) max_name = int(inputText.length());
 	sort(players, players + lines, sort_data);
 	ofstream f4("Data1.txt", ios::out | ios::trunc);
@@ -115,7 +115,7 @@ void update_data1(int sco, int heart_game, string inputText)
 	delete[]players;
 }
 
-void update_data2(int sco, int heart_game, string inputText)
+void update_data2(int sco, int heart_game, string inputText, string Victory)
 {
 	char c;
 	int lines = 1;
@@ -138,7 +138,7 @@ void update_data2(int sco, int heart_game, string inputText)
 	int diem;
 	int pos1 = 0, pos2 = 0;
 	int space1 = 0;
-	if (lines > 0)
+	if (lines > 1)
 	{
 		while (!f2.eof())
 		{
@@ -157,7 +157,7 @@ void update_data2(int sco, int heart_game, string inputText)
 			for (int i = space1; i < s.length(); i++)
 			{
 				if ((s[i] >= '1' && s[i] <= '9' || (s[i] == '0' && s[i + 1] == ' '))
-					&& s[i + 3] == ' ' && s[i + 4] >= '0' && s[i + 4] <= '9' && (s[i + 6] == 'f' || s[i + 6] == 't'))
+					&& s[i + 3] == ' ' && s[i + 4] >= '0' && s[i + 4] <= '9' && (s[i + 6] == 'w' || s[i + 6] == 'l'))
 				{
 					pos1 = i;
 					break;
@@ -174,8 +174,8 @@ void update_data2(int sco, int heart_game, string inputText)
 				players[p].init_score(diem);
 				pos2 = pos1 + 4;
 				players[p].init_heart(int(char(s[pos2]) - '0'));
-				if (s[pos2 + 2] == 't') players[p].init_win("true");
-				else players[p].init_win("false");
+				if (s[pos2 + 2] == 'w') players[p].init_win("win");
+				else players[p].init_win("lose");
 				p++;
 			}
 			if (int(s2.length()) > max_name) max_name = int(s2.length());
@@ -193,7 +193,7 @@ void update_data2(int sco, int heart_game, string inputText)
 	players[p].init_name(inputText);
 	players[p].init_score(sco);
 	players[p].init_heart(heart_game);
-	players[p].init_win("false");
+	players[p].init_win(Victory);
 	if (int(inputText.length()) > max_name) max_name = int(inputText.length());
 	sort(players, players + lines, sort_data);
 	ofstream f4("Data2.txt", ios::out | ios::trunc);
@@ -244,7 +244,7 @@ void update_big_data(int sco, int heart_game, string inputText, string Victory)
 	int diem;
 	int pos1 = 0, pos2 = 0;
 	int space1 = 0;
-	if (lines > 0)
+	if (lines > 1)
 	{
 		while (!f2.eof())
 		{
@@ -263,7 +263,7 @@ void update_big_data(int sco, int heart_game, string inputText, string Victory)
 			for (int i = space1; i < s.length(); i++)
 			{
 				if ((s[i] >= '1' && s[i] <= '9' || (s[i] == '0' && s[i + 1] == ' '))
-					&& s[i + 3] == ' ' && s[i + 4] >= '0' && s[i + 4] <= '9' && (s[i + 6] == 'f' || s[i + 6] == 't'))
+					&& s[i + 3] == ' ' && s[i + 4] >= '0' && s[i + 4] <= '9' && (s[i + 6] == 'l' || s[i + 6] == 'w'))
 				{
 					pos1 = i;
 					break;
@@ -280,8 +280,8 @@ void update_big_data(int sco, int heart_game, string inputText, string Victory)
 				players[p].init_score(diem);
 				pos2 = pos1 + 4;
 				players[p].init_heart(int(char(s[pos2]) - '0'));
-				if (s[pos2 + 2] == 't') players[p].init_win("true");
-				else players[p].init_win("false");
+				if (s[pos2 + 2] == 'w') players[p].init_win("win");
+				else players[p].init_win("lose");
 				p++;
 			}
 			if (int(s2.length()) > max_name) max_name = int(s2.length());
