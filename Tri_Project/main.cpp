@@ -328,7 +328,7 @@ int main(int argc, char* args[])
 	int sco = 0;
 	int heart_game = 0;
 	bool put_data = false;
-	
+
 	Mix_PlayMusic(menu_music, -1);
 	if (Game_Status == MENU)
 	{
@@ -468,7 +468,7 @@ int main(int argc, char* args[])
 						inputText = SDL_GetClipboardText();
 						renderText = true;
 					}
-					else if (event.key.keysym.sym == SDLK_RETURN && inputText[inputText.length()-1] != ' ' )
+					else if (event.key.keysym.sym == SDLK_RETURN && inputText[inputText.length() - 1] != ' ')
 					{
 						Game_Status = CHARACTER_CHOOSING;
 					}
@@ -582,7 +582,7 @@ int main(int argc, char* args[])
 						Game_Status = MAP_CHOOSING;
 						goto Map_choose;
 					}
-					else if (event.motion.x >= 701 && event.motion.x <= 831  && event.motion.y >= 472 && event.motion.y <= 510)
+					else if (event.motion.x >= 701 && event.motion.x <= 831 && event.motion.y >= 472 && event.motion.y <= 510)
 					{
 						cha_select = "Virtual Guy";
 						character_choose.Free();
@@ -708,6 +708,7 @@ int main(int argc, char* args[])
 	if (Game_Status == TOP_SCORE)
 	{
 	Top_Score:
+
 		if (!initRenderer())
 		{
 			return -1;
@@ -791,72 +792,111 @@ int main(int argc, char* args[])
 			o /= 10;
 		}
 		sort(players, players + lines, sort_data);
-
-		TextScore* name = new TextScore[8];
-		TextScore* score = new TextScore[8];
-		TextScore* heart = new TextScore[8];
-		TextScore* r_status = new TextScore[8];
-		int d = 45;
-		for (int i = 0; i < 8; i++)
+		int a = 8;
+		if (min(a, lines) > 0)
 		{
-			name[i].init(165, 185 + i * 41, 15 * players[i].get_length());
-			name[i].initText(fontText, 20);
-			name[i].setText(players[i].get_name());
-			name[i].createText(fontText, renderer, true);
-		
-			score[i].init(570, 185 + i * 41, 45);
-			score[i].initText(fontText, 20);
-			score[i].setText( to_string(players[i].get_score()) );
-			score[i].createText(fontText, renderer, true);
-			
-			heart[i].init(705, 185 + i * 41, 15 );
-			heart[i].initText(fontText, 20);
-			heart[i].setText(to_string(players[i].get_heart()));
-			heart[i].createText(fontText, renderer, true);
-
-			d = 45;
-			if (players[i].get_win() == "lose") d = 60;
-			r_status[i].init(830, 185 + i * 41, d );
-			r_status[i].initText(fontText, 20);
-			r_status[i].setText(players[i].get_win());
-			r_status[i].createText(fontText, renderer, true);
-		}
-
-
-		bool quit = false;
-
-		while (!quit)
-		{
-			while (SDL_PollEvent(&event) != 0)
+			TextScore* name = new TextScore[min(a, lines)];
+			TextScore* score = new TextScore[min(a, lines)];
+			TextScore* heart = new TextScore[min(a, lines)];
+			TextScore* r_status = new TextScore[min(a, lines)];
+			int d = 45;
+			for (int i = 0; i < min(a, lines); i++)
 			{
-				if (event.type == SDL_QUIT)
+				d = 45;
+				name[i].init(165, 185 + i * 41, 15 * players[i].get_length());
+				name[i].initText(fontText, 20);
+				name[i].setText(players[i].get_name());
+				name[i].createText(fontText, renderer, true);
+
+				if (players[i].get_score() == 0) d = 15;
+				score[i].init(570, 185 + i * 41, d);
+				score[i].initText(fontText, 20);
+				score[i].setText(to_string(players[i].get_score()));
+				score[i].createText(fontText, renderer, true);
+
+				heart[i].init(705, 185 + i * 41, 15);
+				heart[i].initText(fontText, 20);
+				heart[i].setText(to_string(players[i].get_heart()));
+				heart[i].createText(fontText, renderer, true);
+
+				d = 45;
+				if (players[i].get_win() == "lose") d = 60;
+				r_status[i].init(830, 185 + i * 41, d);
+				r_status[i].initText(fontText, 20);
+				r_status[i].setText(players[i].get_win());
+				r_status[i].createText(fontText, renderer, true);
+			}
+			bool quit = false;
+
+			while (!quit)
+			{
+				while (SDL_PollEvent(&event) != 0)
 				{
-					quit = true;
-				}
-				else if (event.type == SDL_MOUSEBUTTONDOWN)
-				{
-					if (event.motion.x >= 845 && event.motion.x <= 930 && event.motion.y >= 5 && event.motion.y <= 50)
+					if (event.type == SDL_QUIT)
 					{
-						delete[]name;
-						delete[]score;
-						delete[]heart;
-						delete[]r_status;
-						SDL_DestroyRenderer(renderer);
-						renderer = NULL;
-						top_score.Free();
-						goto Menu;
+						quit = true;
+					}
+					else if (event.type == SDL_MOUSEBUTTONDOWN)
+					{
+						if (event.motion.x >= 845 && event.motion.x <= 930 && event.motion.y >= 5 && event.motion.y <= 50)
+						{
+							for (int i = min(a, lines) - 1; i >= 0; i--)
+							{
+								name[i].Free();
+								score[i].Free();
+								heart[i].Free();
+								r_status[i].Free();
+							}
+							delete[]players;
+							delete[]name;
+							delete[]score;
+							delete[]heart;
+							delete[]r_status;
+							TTF_CloseFont(fontText);
+							fontText = NULL;
+							SDL_DestroyRenderer(renderer);
+							renderer = NULL;
+							top_score.Free();
+							goto Menu;
+						}
 					}
 				}
+				top_score.Render(renderer, NULL);
+				for (int i = 0; i < min(a, lines); i++)
+				{
+					name[i].show(renderer);
+					score[i].show(renderer);
+					heart[i].show(renderer);
+					r_status[i].show(renderer);
+				}
+				SDL_RenderPresent(renderer);
 			}
-			top_score.Render(renderer, NULL);
-			for (int i = 0; i < 8; i++)
+		}
+		else
+		{
+			bool quit = false;
+			while (!quit)
 			{
-				name[i].show(renderer);
-				score[i].show(renderer);
-				heart[i].show(renderer);
-				r_status[i].show(renderer);
+				while (SDL_PollEvent(&event) != 0)
+				{
+					if (event.type == SDL_QUIT)
+					{
+						quit = true;
+					}
+					else if (event.type == SDL_MOUSEBUTTONDOWN)
+					{
+						if (event.motion.x >= 845 && event.motion.x <= 930 && event.motion.y >= 5 && event.motion.y <= 50)
+						{
+							SDL_DestroyRenderer(renderer);
+							renderer = NULL;
+							top_score.Free();
+							goto Menu;
+						}
+					}
+				}
+				top_score.Render(renderer, NULL);
+				SDL_RenderPresent(renderer);
 			}
-			SDL_RenderPresent(renderer);
 		}
 	}
 	if (Game_Status == PLAY || Game_Status == GAME_OVER)
@@ -897,13 +937,13 @@ int main(int argc, char* args[])
 
 
 		Checkpoints* point = new Checkpoints[3];
-		point[0].set_checkpoints(renderer, 912, 432,  8, 48, "Images/Checkpoints/End/End(48x48).png");
-		point[1].set_checkpoints(renderer,   0, 416, 17, 64, "Images/Checkpoints/Start/Start (Moving) (64x64).png");
+		point[0].set_checkpoints(renderer, 912, 432, 8, 48, "Images/Checkpoints/End/End(48x48).png");
+		point[1].set_checkpoints(renderer, 0, 416, 17, 64, "Images/Checkpoints/Start/Start (Moving) (64x64).png");
 		point[2].set_checkpoints(renderer, 624, 144, 26, 48, "Images/Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
 		for (int i = 0; i <= 2; i++)
 			point[i].set_clips();
 
-		MainObject character(864,432);
+		MainObject character(864, 432);
 		character.setIMG(renderer, cha_select);
 		character.setClips();
 		bool quit = false;
@@ -914,7 +954,7 @@ int main(int argc, char* args[])
 		fruits[2].setFruits(renderer, 192, 192, "Images/Fruits/Apple.png");
 		fruits[3].setFruits(renderer, 240, 192, "Images/Fruits/Orange.png");
 		fruits[4].setFruits(renderer, 288, 192, "Images/Fruits/Kiwi.png");
-		fruits[5].setFruits(renderer, 864,  96, "Images/Fruits/Bananas.png");
+		fruits[5].setFruits(renderer, 864, 96, "Images/Fruits/Bananas.png");
 		fruits[6].setFruits(renderer, 864, 144, "Images/Fruits/Cherries.png");
 		fruits[7].setFruits(renderer, 576, 192, "Images/Fruits/Pineapple.png");
 		fruits[8].setFruits(renderer, 432, 192, "Images/Fruits/Strawberry.png");
@@ -924,18 +964,18 @@ int main(int argc, char* args[])
 		}
 
 		Stone* stone = new Stone[7];
-		stone[0].init_stone(renderer, 480, 432, 192, 480, "Images/Stones/Spike_Idle.png", 1);
+		//stone[0].init_stone(renderer, 480, 432, 192, 480, "Images/Stones/Spike_Idle.png", 1);
 		stone[1].init_stone(renderer, 576, 144, 432, 288, "Images/Stones/Spike_Idle.png", 1);
-		stone[2].init_stone(renderer, 768,  48,  96, 240, "Images/Stones/Spike_Idle.png", 1);
+		stone[2].init_stone(renderer, 768, 48, 96, 240, "Images/Stones/Spike_Idle.png", 1);
 		stone[3].init_stone(renderer, 288, 192, 192, 240, "Images/Stones/Spike_Idle.png", 1);
-		stone[4].init_stone(renderer,  48,  96,  48, 864, "Images/Stones/Spike_Idle.png", 1);
+		stone[4].init_stone(renderer, 48, 96, 48, 864, "Images/Stones/Spike_Idle.png", 1);
 		stone[5].init_stone(renderer, 720, 336, 336, 432, "Images/Stones/Spike_Idle.png", 1);
-		stone[6].init_stone(renderer, 816,  48,  96, 192, "Images/Stones/Spike_Idle.png", 1);
+		stone[6].init_stone(renderer, 816, 48, 96, 192, "Images/Stones/Spike_Idle.png", 1);
 		stone[0].set_clips();
 
 		Spike* spike = new Spike[5];
 		spike[0].set_spike(renderer, 196, 464, 0, "Images/Spikes/spike_bottom.png");
-		spike[1].set_spike(renderer,  48, 192, 1, "Images/Spikes/spike_right.png");
+		spike[1].set_spike(renderer, 48, 192, 1, "Images/Spikes/spike_right.png");
 		spike[2].set_spike(renderer, 176, 144, 2, "Images/Spikes/spike_left.png");
 		spike[3].set_spike(renderer, 436, 320, 0, "Images/Spikes/spike_bottom.png");
 		spike[4].set_spike(renderer, 672, 384, 1, "Images/Spikes/spike_right.png");
@@ -955,7 +995,7 @@ int main(int argc, char* args[])
 		player.createText(fontText, renderer, name_check);
 
 		TextScore name(130, 20, 15 * int(inputText.length()));
-		name.initText(fontText,20);
+		name.initText(fontText, 20);
 		name.setText(inputText);
 		name.createText(fontText, renderer, name_check);
 
@@ -972,6 +1012,13 @@ int main(int argc, char* args[])
 		}
 		int number_dead = 0;
 
+		Other_Enemy trunk;
+		trunk.inita_enemy(renderer, 224, 448, 224, 480, 14, 1, 64, 32);
+		trunk.set_speedx(0.08);
+		trunk.setIMG(renderer, "Trunk");
+		trunk.set_clips();
+		Bullet bullet;
+		bullet.set_bullet(renderer,256, 456,"Images/Enemies/Trunk/Bullet.png");
 		while (!quit)
 		{
 			timer.start();
@@ -999,7 +1046,7 @@ int main(int argc, char* args[])
 			character.updatePlayerPosition(map_data);
 			character.showImage(renderer);
 
-			stone[0].stone_move(renderer);
+			//stone[0].stone_move(renderer);
 			stone[1].DoStone_Circle();
 			stone[1].Stone_Move_Circle(renderer);
 			stone[2].stone_move_up(renderer);
@@ -1009,12 +1056,46 @@ int main(int argc, char* args[])
 			stone[5].stone_move_up(renderer);
 			stone[6].stone_move_up(renderer);
 
+			if (bullet.is_move() == false && trunk.getRect_x() == 224 
+				|| bullet.is_move() == false && trunk.getRect_x() == 480 
+				 || bullet.is_move() == false && trunk.getRect_x() == 349)
+			{
+				bullet.setPos(trunk.getRect_x() + 20, trunk.getRect_y() + 8);
+			}
+			trunk.enemy_move(renderer);
+			
+			if(trunk.getDirection() == 0)
+			{ 
+				bullet.fire_right();
+			}
+			if (trunk.getDirection() == 1)
+			{
+				bullet.fire_left();
+			}
+
+			bullet.show(renderer);
+			
 			for (int i = 0; i < 5; i++)
 			{
 				spike[i].showImg(renderer);
 			}
 
-
+			if (checkCollision_ghost(trunk.getRect_enemy(), character.getRect(), 12, 12))
+			{
+				Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
+				character.setPos(0, 448);
+				live[4 - number_dead].kill();
+				number_dead++;
+			}
+				
+			if (checkCollision_ghost(bullet.getRect_bullet(), character.getRect(), 2, 6))
+				{
+					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
+					character.setPos(0, 448);
+					live[4 - number_dead].kill();
+					number_dead++;
+				}
+		
 			for (int i = 0; i < 9; i++)
 			{
 
@@ -1029,7 +1110,7 @@ int main(int argc, char* args[])
 			}
 
 
-			for (int i = 0; i < 7; i++)
+			for (int i = 1; i < 7; i++)
 			{
 				if (checkCollision(stone[i].getRect_stone(), character.getRect(), 4, 4))
 				{
@@ -1116,6 +1197,10 @@ int main(int argc, char* args[])
 				{
 					live[i].Free();
 				}
+
+				trunk.Free();
+				bullet.Free();
+				
 				delete[]stone;
 				delete[]fruits;
 				delete[]spike;
@@ -1127,7 +1212,7 @@ int main(int argc, char* args[])
 				score.Free();
 				mark.Free();
 				player.Free();
-				name.Free(); 
+				name.Free();
 				TTF_CloseFont(fontText);
 				fontText = NULL;
 				SDL_DestroyRenderer(renderer);
@@ -1267,7 +1352,7 @@ int main(int argc, char* args[])
 		{
 			return -1;
 		}
-		
+
 		Time timer;
 
 		put_data = false;
@@ -1286,34 +1371,34 @@ int main(int argc, char* args[])
 		bool quit = false;
 
 		Checkpoints* point = new Checkpoints[3];
-		point[0].set_checkpoints(renderer, 912, 432,  8, 48, "Images/Checkpoints/End/End(48x48).png");
-		point[1].set_checkpoints(renderer,   0,  80, 17, 64, "Images/Checkpoints/Start/Start (Moving) (64x64).png");
+		point[0].set_checkpoints(renderer, 912, 432, 8, 48, "Images/Checkpoints/End/End(48x48).png");
+		point[1].set_checkpoints(renderer, 0, 80, 17, 64, "Images/Checkpoints/Start/Start (Moving) (64x64).png");
 		point[2].set_checkpoints(renderer, 672, 240, 26, 48, "Images/Checkpoints/Checkpoint/Checkpoint (Flag Out) (48x48).png");
 
 		for (int i = 0; i <= 2; i++)
 			point[i].set_clips();
 
 		Stone* saw = new Stone[6];
-		saw[0].init_stone(renderer,  48, 192, 192, 384, "Images/Saw/On (48x48).png", 8);
+		saw[0].init_stone(renderer, 48, 192, 192, 384, "Images/Saw/On (48x48).png", 8);
 		saw[1].init_stone(renderer, 144, 432, 192, 432, "Images/Saw/On (48x48).png", 8);
 		saw[2].init_stone(renderer, 240, 192, 192, 432, "Images/Saw/On (48x48).png", 8);
-		saw[3].init_stone(renderer, 720,  48,  48, 240, "Images/Saw/On (48x48).png", 8);
-		saw[4].init_stone(renderer, 816, 240,  48, 240, "Images/Saw/On (48x48).png", 8);
-		saw[5].init_stone(renderer, 912,  48,  48, 240, "Images/Saw/On (48x48).png", 8);
+		saw[3].init_stone(renderer, 720, 48, 48, 240, "Images/Saw/On (48x48).png", 8);
+		saw[4].init_stone(renderer, 816, 240, 48, 240, "Images/Saw/On (48x48).png", 8);
+		saw[5].init_stone(renderer, 912, 48, 48, 240, "Images/Saw/On (48x48).png", 8);
 		for (int i = 0; i <= 5; i++)
 		{
 			saw[i].set_clips();
 		}
 		Stone* stand_saw = new Stone[6];
-		stand_saw[0].set_Stand(renderer,  69, 216, "Images/Stand/stand_192.png");
+		stand_saw[0].set_Stand(renderer, 69, 216, "Images/Stand/stand_192.png");
 		stand_saw[1].set_Stand(renderer, 165, 216, "Images/Stand/stand_240.png");
 		stand_saw[2].set_Stand(renderer, 261, 216, "Images/Stand/stand_240.png");
-		stand_saw[3].set_Stand(renderer, 741,  72, "Images/Stand/stand_192.png");
-		stand_saw[4].set_Stand(renderer, 837,  72, "Images/Stand/stand_192.png");
-		stand_saw[5].set_Stand(renderer, 933,  72, "Images/Stand/stand_192.png");
+		stand_saw[3].set_Stand(renderer, 741, 72, "Images/Stand/stand_192.png");
+		stand_saw[4].set_Stand(renderer, 837, 72, "Images/Stand/stand_192.png");
+		stand_saw[5].set_Stand(renderer, 933, 72, "Images/Stand/stand_192.png");
 
 		Spike* spike = new Spike[9];
-		spike[0].set_spike(renderer, 144,  96, 1, "Images/Spikes/spike_right.png");
+		spike[0].set_spike(renderer, 144, 96, 1, "Images/Spikes/spike_right.png");
 		spike[1].set_spike(renderer, 720, 144, 1, "Images/Spikes/spike_right.png");
 		spike[2].set_spike(renderer, 580, 320, 0, "Images/Spikes/spike_bottom.png");
 		spike[3].set_spike(renderer, 388, 320, 0, "Images/Spikes/spike_bottom.png");
@@ -1326,14 +1411,14 @@ int main(int argc, char* args[])
 		Fruits* fruits = new Fruits[10];
 		fruits[0].setFruits(renderer, 816, 240, "Images/Fruits/Cherries.png");
 		fruits[1].setFruits(renderer, 912, 242, "Images/Fruits/Melon.png");
-		fruits[2].setFruits(renderer,   0, 272, "Images/Fruits/Apple.png");
-		fruits[3].setFruits(renderer,   0, 320, "Images/Fruits/Orange.png");
+		fruits[2].setFruits(renderer, 0, 272, "Images/Fruits/Apple.png");
+		fruits[3].setFruits(renderer, 0, 320, "Images/Fruits/Orange.png");
 		fruits[4].setFruits(renderer, 336, 192, "Images/Fruits/Kiwi.png");
 		fruits[5].setFruits(renderer, 432, 192, "Images/Fruits/Bananas.png");
 		fruits[6].setFruits(renderer, 576, 48, "Images/Fruits/Cherries.png");
 		fruits[7].setFruits(renderer, 624, 192, "Images/Fruits/Pineapple.png");
 		fruits[8].setFruits(renderer, 528, 192, "Images/Fruits/Strawberry.png");
-		fruits[9].setFruits(renderer, 384,  48, "Images/Fruits/Melon.png");
+		fruits[9].setFruits(renderer, 384, 48, "Images/Fruits/Melon.png");
 		for (int i = 0; i < 10; i++)
 		{
 			fruits[i].set_clips();
@@ -1427,7 +1512,7 @@ int main(int argc, char* args[])
 			{
 				enemies[i].enemy_move(renderer);
 			}
-
+		
 			for (int i = 0; i < 6; i++)
 			{
 				stand_saw[i].show_stand(renderer);
@@ -1810,14 +1895,14 @@ int main(int argc, char* args[])
 			SDL_RenderPresent(renderer);
 		}
 	}
-	
-	
+
+
 	if (!put_data)
 	{
 		put_data = true;
 		if (MAP[1] == 1 && MAP[2] == 0) update_data1(sco, heart_game, inputText, "lose");
 		else if (MAP[2] == 1 && MAP[1] == 0) update_data2(sco, heart_game, inputText, "lose");
-		else if( MAP[2]*MAP[1] != 0 ) update_big_data(sco, heart_game, inputText, "lose");
+		else if (MAP[2] * MAP[1] != 0) update_big_data(sco, heart_game, inputText, "lose");
 	}
 
 	close();

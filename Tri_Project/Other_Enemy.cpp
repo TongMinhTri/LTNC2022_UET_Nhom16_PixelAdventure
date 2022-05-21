@@ -92,6 +92,11 @@ void Other_Enemy::setIMG(SDL_Renderer* renderer, string k)
 		img_left = LoadIMG("Images/Enemies/Slime/Run_left.png", renderer);
 		img_right = LoadIMG("Images/Enemies/Slime/Run_right.png", renderer);
 	}
+	else if (k == "Trunk")
+	{
+		img_left = LoadIMG("Images/Enemies/Trunk/Run_left.png", renderer);
+		img_right = LoadIMG("Images/Enemies/Trunk/Run_right.png", renderer);
+	}
 	object = img_right;
 }
 
@@ -145,6 +150,29 @@ void Other_Enemy::enemy_move(SDL_Renderer* renderer)
 	setPos(x, y);
 	show_frame(renderer);
 }
+void Other_Enemy::enemy_move_normal(SDL_Renderer* renderer)
+{
+	if (status == LEFT)
+	{
+		if (x - 2 > limit_x) x -= 2;
+		else
+		{
+			x = limit_x;
+			status = RIGHT;
+		}
+	}
+	else if (status == RIGHT)
+	{
+		if (x + 2 < limit_y) x += 2;
+		else
+		{
+			x = limit_y;
+			status = LEFT;
+		}
+	}
+	setPos(x, y);
+	show_frame(renderer);
+}
 
 void Other_Enemy::Free()
 {
@@ -166,8 +194,12 @@ void Other_Enemy::show_frame(SDL_Renderer* renderer)
 	if (status == RIGHT) object = img_right;
 	else object = img_left;
 	frame++;
-	if (frame == number_frclips - 1) frame = 0; 
-	SDL_Rect* current_clips = &frame_clips[frame]; 
+	if (frame == number_frclips - 1) frame = 0;
+	SDL_Rect* current_clips = &frame_clips[frame];
 	SDL_Rect renderquad = { x, y, frame_w, frame_h };
 	SDL_RenderCopy(renderer, object, current_clips, &renderquad);
+}
+int Other_Enemy::getDirection()
+{
+	return status;
 }

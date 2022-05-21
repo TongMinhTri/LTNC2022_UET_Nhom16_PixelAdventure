@@ -2,7 +2,7 @@
 #ifndef OTHER_ENEMY_H
 #define OTHER_ENEMY_H
 #include "BaseData.h"
-
+#include "Bullet.h"
 using namespace std;
 
 #define w_ 44;
@@ -28,9 +28,10 @@ private:
 	int limit_x;
 	int limit_y;
 	int status;
+protected:
 	SDL_Rect enemy;
 	SDL_Rect test;
-	SDL_Texture* img_right, * img_left, *object;
+	SDL_Texture* img_right, * img_left, * object;
 public:
 	Other_Enemy();
 	~Other_Enemy();
@@ -47,11 +48,18 @@ public:
 	SDL_Rect getRect_enemy();
 	void set_clips();
 	void enemy_move(SDL_Renderer* renderer);
-	void set_speedx(double a) { speedx = a;  }
+	void enemy_move_normal(SDL_Renderer* renderer);
+	void set_speedx(double a) { speedx = a; }
 	void Free();
+	int getRect_x()
+	{
+		return enemy.x;
+	}
+	int getRect_y()
+	{
+		return enemy.y;
+	}
+	int getDirection();
 };
 
 #endif // OTHER_ENEMY_H
-
-
-
