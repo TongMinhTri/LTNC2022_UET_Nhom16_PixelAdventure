@@ -12,9 +12,9 @@
 3. Dương Quang Minh:
 
 ***GIỚI THIỆU VỀ PROJECT**
-1. Tên game: Pixel Adventure
-2. Thể loại: Phiêu lưu, đi cảnh (vượt chướng ngại vật, thu thập vật phẩm để về đích)
+* Tên game: Pixel Adventure
+* Thể loại: Phiêu lưu, đi cảnh (vượt chướng ngại vật, thu thập vật phẩm để về đích)
 
 ***CÁC LỆNH ĐỂ CHẠY PROJECT**
-1. Cách 1: Nhập lệnh make compile (biên dịch project) rồi nhập lệnh make run-only (chạy file main.exe)
-2. Cách 2: Nhập lệnh make run (biên dịch project và chạy file main.exe)
+* Cách 1: Nhập lệnh make compile (biên dịch project) rồi nhập lệnh make run-only (chạy file main.exe)
+* Cách 2: Nhập lệnh make run (biên dịch project và chạy file main.exe)
