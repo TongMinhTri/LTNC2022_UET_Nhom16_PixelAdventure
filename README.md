@@ -10,6 +10,11 @@
 
 2. Lê Văn Bảo:
 3. Dương Quang Minh:
+* Thiết kế map
+* Tạo và xây dựng hình ảnh trong game, các chướng ngại vật di chuyển
+* Tạo text trong game
+* Làm số mạng cho nhân vật
+* Chỉnh sửa và ghép code
 
 ***GIỚI THIỆU VỀ PROJECT**
 * Tên game: Pixel Adventure
