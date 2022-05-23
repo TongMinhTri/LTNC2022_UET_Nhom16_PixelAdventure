@@ -1359,10 +1359,10 @@ int main(int argc, char* args[])
 		enemies[0].set_speedx(0.7);
 		enemies[0].setIMG(renderer, "Ghost");
 		enemies[1].inita_enemy(renderer, 153, 110, 153, 690, 14, 0, 32, 34);
-		enemies[1].set_speedx(0.65);
+		enemies[1].set_speedx(0.4);
 		enemies[1].setIMG(renderer, "Chicken");
 		enemies[2].inita_enemy(renderer, 686, 114, 153, 686, 12, 1, 36, 30);
-		enemies[2].set_speedx(0.65);
+		enemies[2].set_speedx(0.4);
 		enemies[2].setIMG(renderer, "Pig");
 		enemies[3].inita_enemy(renderer, 0, 192, 0, 928, 9, 1, 32, 32);
 		enemies[3].set_speedx(0.85);
@@ -1771,7 +1771,7 @@ int main(int argc, char* args[])
 					{
 						Game_Status = GAME_OVER;
 						game_over.Free();
-						inputText = " ";
+						inputText = "";
 						Mix_FreeMusic(gameover_music);
 						gameover_music = NULL;
 						SDL_DestroyRenderer(renderer);
@@ -1813,7 +1813,7 @@ int main(int argc, char* args[])
 					if (event.motion.x >= 482 && event.motion.x <= 546 && event.motion.y >= 425 && event.motion.y <= 489)
 					{
 						victory = 0;
-						inputText = " ";
+						inputText = "";
 						win.Free();
 						Mix_FreeMusic(victory_music);
 						gameover_music = NULL;
