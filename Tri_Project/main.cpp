@@ -873,7 +873,7 @@ int main(int argc, char* args[])
 		for (int i = 0; i <= 2; i++)
 			point[i].set_clips();
 
-		MainObject character(864, 432);
+		MainObject character(0, 432);
 		character.setIMG(renderer, cha_select);
 		character.setClips();
 		bool quit = false;
@@ -1295,7 +1295,7 @@ int main(int argc, char* args[])
 		gm2.loadTiles(renderer);
 		Map2 map_data2 = gm2.getMap();
 
-		MainObject character(864, 432);
+		MainObject character(0, 96);
 		character.setIMG(renderer, cha_select);
 		character.setClips();
 		bool quit = false;
@@ -1501,7 +1501,7 @@ int main(int argc, char* args[])
 			for (int i = 0; i < 6; i++)
 			{
 				if (i > 0) kc = 3;
-				if (checkCollision_ghost(enemies[i].getRect_enemy(), character.getRect(), kc, 4) && i != 4)
+				if (checkCollision_ghost(enemies[i].getRect_enemy(), character.getRect(), kc, 4))
 				{
 					Mix_PlayChannel(-1, soundEffect[hitSpike_sound], 0);
 					if (i == 1 || i == 2) character.setPos(0, 96);
