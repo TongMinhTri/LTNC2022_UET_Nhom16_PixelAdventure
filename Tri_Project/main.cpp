@@ -283,7 +283,6 @@ bool loadMedia()
 {
 	bool success = true;
 
-	// load front chu
 	gFont = TTF_OpenFont("Fonts/SHOWG.ttf", 40);
 	if (gFont == NULL)
 	{
@@ -292,7 +291,6 @@ bool loadMedia()
 	}
 	else
 	{
-		//Render the prompt
 		SDL_Color textColor = { 250, 128, 114 };
 		if (!gPromptTextTexture.loadFromRenderedText("Enter your Name:", textColor, gFont, renderer))
 		{
@@ -435,7 +433,6 @@ int main(int argc, char* args[])
 		gFontN = TTF_OpenFont("Fonts/SHOWG.ttf", 30);
 		gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
 
-		//Enable text input
 		SDL_StartTextInput();
 
 		while (!quit)
@@ -444,27 +441,21 @@ int main(int argc, char* args[])
 
 			while (SDL_PollEvent(&event) != 0)
 			{
-				//User requests quit
 				if (event.type == SDL_QUIT)
 				{
 					quit = true;
 				}
-				//Special key input
 				else if (event.type == SDL_KEYDOWN)
 				{
-					//Handle backspace
 					if (event.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0)
 					{
-						//lop off character
 						inputText.pop_back();
 						renderText = true;
 					}
-					//Handle copy
 					else if (event.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL)
 					{
 						SDL_SetClipboardText(inputText.c_str());
 					}
-					//Handle paste
 					else if (event.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL)
 					{
 						inputText = SDL_GetClipboardText();
@@ -475,45 +466,33 @@ int main(int argc, char* args[])
 						Game_Status = CHARACTER_CHOOSING;
 					}
 				}
-				//Special text input event
 				else if (event.type == SDL_TEXTINPUT)
 				{
-					//Not copy or pasting
 					if (!(SDL_GetModState() & KMOD_CTRL && (event.text.text[0] == 'c' || event.text.text[0] == 'C' || event.text.text[0] == 'v' || event.text.text[0] == 'V')))
 					{
-						//Append character
 						inputText += event.text.text;
 						renderText = true;
 					}
 				}
 			}
 			if (inputText.length() >= 20) inputText.resize(20);
-			//Rerender text if needed
 			if (renderText)
 			{
-				//Text is not empty
 				if (inputText != "")
 				{
-					//Render new text
 					gInputTextTexture.loadFromRenderedText(inputText.c_str(), textColor, gFontN, renderer);
 				}
-				//Text is empty
 				else
 				{
-					//Render space texture
 					gInputTextTexture.loadFromRenderedText("", textColor, gFontN, renderer);
 				}
 			}
-
-			//Clear screen
 			SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
 			SDL_RenderClear(renderer);
 
-			//Render text textures
 			gPromptTextTexture.render((SCREEN_WIDTH - gPromptTextTexture.getWidth()) / 2, 204, renderer);
 			gInputTextTexture.render((SCREEN_WIDTH - gInputTextTexture.getWidth()) / 2, 254, renderer);
 
-			//Update screen
 			SDL_RenderPresent(renderer);
 
 			if (Game_Status == CHARACTER_CHOOSING)
@@ -529,8 +508,6 @@ int main(int argc, char* args[])
 				goto Character_choose;
 			}
 		}
-
-		//Disable text input
 		SDL_StopTextInput();
 	}
 	if (Game_Status == CHARACTER_CHOOSING)
