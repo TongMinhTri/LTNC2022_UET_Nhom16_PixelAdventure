@@ -9,7 +9,7 @@
 * Làm video giới thiệu game
 
 2. Lê Văn Bảo:
-* Tạo và xây dựng hình ảnh, các chướng ngại vật trong game.
+* Tạo và xây dựng hình ảnh, các chướng ngại vật trong game (hoa quả, gai, đá gai, ...)
 * Làm phần Rank và lưu dữ liệu người chơi
 * Làm phần check va chạm với chướng ngại vật
 * Chỉnh sửa phần nhập tên để phù hợp với game 
@@ -17,7 +17,7 @@
 
 3. Dương Quang Minh:
 * Thiết kế map
-* Tạo và xây dựng hình ảnh trong game, các chướng ngại vật di chuyển
+* Tạo và xây dựng hình ảnh trong game (hoa quả), các chướng ngại vật di chuyển(lưỡi cưa, kẻ địch, ...)
 * Tạo text trong game (name, score, ...)
 * Làm số mạng và điểm cho nhân vật
 * Chỉnh sửa và ghép code
@@ -28,5 +28,5 @@
 * Tóm tắt: Game gồm có 4 nhân vật và 2 map với độ khó khác nhau để người chơi lựa chọn. Người chơi có nhiệm vụ điều khiển nhân vật của mình vượt qua các cạm bẫy (gai, đá, lưỡi cưa, ...) và kẻ địch, đồng thời thu thập hoa quả để gia tắng số điểm và đi về phía chiếc cúp để giành chiến thắng. Nếu vượt qua được cả 2 map thì sẽ phá đảo game.
 
 ***CÁC LỆNH ĐỂ CHẠY PROJECT**
-* Cách 1: Nhập lệnh make compile (biên dịch project) rồi nhập lệnh make run-only (chạy file main.exe)
-* Cách 2: Nhập lệnh make run (biên dịch project và chạy file main.exe)
+* Cách 1: Nhập lệnh mingw32-make compile (biên dịch project) rồi nhập lệnh mingw32-make run-only (chạy file main.exe)
+* Cách 2: Nhập lệnh mingw32-make run (biên dịch project và chạy file main.exe)
