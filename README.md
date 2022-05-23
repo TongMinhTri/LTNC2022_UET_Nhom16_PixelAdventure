@@ -28,5 +28,5 @@
 * Tóm tắt: Game gồm có 4 nhân vật và 2 map với độ khó khác nhau để người chơi lựa chọn. Người chơi có nhiệm vụ điều khiển nhân vật của mình vượt qua các cạm bẫy (gai, đá, lưỡi cưa, ...) và kẻ địch, đồng thời thu thập hoa quả để gia tắng số điểm và đi về phía chiếc cúp để giành chiến thắng. Nếu vượt qua được cả 2 map thì sẽ phá đảo game.
 
 ***CÁC LỆNH ĐỂ CHẠY PROJECT**
-* Cách 1: Nhập lệnh make compile (biên dịch project) rồi nhập lệnh make run-only (chạy file main.exe)
-* Cách 2: Nhập lệnh make run (biên dịch project và chạy file main.exe)
+* Cách 1: Nhập lệnh mingw32-make compile (biên dịch project) rồi nhập lệnh mingw32-make run-only (chạy file main.exe)
+* Cách 2: Nhập lệnh mingw32-make run (biên dịch project và chạy file main.exe)
