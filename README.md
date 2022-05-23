@@ -25,6 +25,7 @@
 ***GIỚI THIỆU VỀ PROJECT**
 * Tên game: Pixel Adventure
 * Thể loại: Phiêu lưu, đi cảnh (vượt chướng ngại vật, thu thập vật phẩm để về đích)
+* Tóm tắt: Game gồm có 4 nhân vật và 2 map với độ khó khác nhau để người chơi lựa chọn. Người chơi có nhiệm vụ điều khiển nhân vật của mình vượt qua các cạm bẫy (gai, đá, lưỡi cưa, ...) và kẻ địch, đồng thời thu thập hoa quả để gia tắng số điểm và đi về phía chiếc cúp để giành chiến thắng. Nếu vượt qua được cả 2 map thì sẽ phá đảo game.
 
 ***CÁC LỆNH ĐỂ CHẠY PROJECT**
 * Cách 1: Nhập lệnh make compile (biên dịch project) rồi nhập lệnh make run-only (chạy file main.exe)
