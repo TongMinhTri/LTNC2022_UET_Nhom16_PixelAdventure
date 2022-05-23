@@ -131,7 +131,7 @@ SDL_Texture* MainObject::LoadIMG(string path, SDL_Renderer* renderer)
 }
 
 // Ham load hinh anh sau moi thao tac di chuyen
-// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
+// source: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
 
 void MainObject::showImage(SDL_Renderer* renderer)
 {
@@ -348,9 +348,6 @@ void MainObject::handleMovement(SDL_Event event, SDL_Renderer* renderer, Mix_Chu
 	}
 }
 
-
-// Ham chia anh thanh 12 frame
-
 void MainObject::setClips()
 {
 	if (frame_w > 0 && frame_h > 0)
@@ -367,7 +364,7 @@ void MainObject::setClips()
 
 
 // Ham thay doi vi tri cua nhan vat sau moi thao tac di chuyen
-// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
+// source: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
 
 void MainObject::updatePlayerPosition(Map& map_data)
 {
@@ -431,7 +428,7 @@ void MainObject::updatePlayerPosition2(Map2& map_data)
 
 
 // Ham xu ly va cham 
-// Nguon tham khao: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
+// source: https://www.youtube.com/watch?v=ma-h2RxBBaY&t=508s
 
 void MainObject::checkCollisionS(Map& map_data)
 {
@@ -450,7 +447,7 @@ void MainObject::checkCollisionS(Map& map_data)
 
 	if (x1 >= 0 && x2 < TILEMAP_NUM_X && y1 >= 0 && y2 < TILEMAP_NUM_Y)
 	{
-		if (x > 0) //Nhan vat di chuyen sang phai
+		if (x > 0) //move to the right
 		{
 			if (map_data.tile[y1][x2] != 0 || map_data.tile[y2][x2] != 0)
 			{
@@ -459,7 +456,7 @@ void MainObject::checkCollisionS(Map& map_data)
 				x = 0;
 			}
 		}
-		else if (x < 0) //Nhan vat di chuyen sang trai
+		else if (x < 0) //move to the left
 		{
 			if (map_data.tile[y1][x1] != 0 || map_data.tile[y2][x1] != 0)
 			{

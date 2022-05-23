@@ -1,9 +1,21 @@
-1.       aiai 500 2 win
-2.   lienlien 500 1 win
-3.     asdasd 100 0 lose
-4.     bhjvgh 100 0 lose
-5. di ngu cho 100 0 lose
-6.     dubuty 100 0 lose
-7.     gvhjcg 100 0 lose
-8.      kyler 100 0 lose
-9.       lele 0   0 lose
+1.       hihihi 900  2 win
+2.    oi doi oi 700  5 win
+3.     ltnc kho 600  5 win
+4.      le bao  600  3 win
+5.         aiai 500  2 win
+6.     lienlien 500  1 win
+7.     llllllll 1000 0 lose
+8.  ngon nhu yi 800  0 lose
+9.         hieu 700  0 lose
+10.    i am bao 700  0 lose
+11.     yi ngon 700  0 lose
+12.      asdasd 100  0 lose
+13.      bhjvgh 100  0 lose
+14.  di ngu cho 100  0 lose
+15.      dubuty 100  0 lose
+16.      gvhjcg 100  0 lose
+17.        hihi 100  0 lose
+18.         lll 0    5 lose
+19.       kyler 0    0 lose
+20.        lele 0    0 lose
+21.         lll 0    0 lose

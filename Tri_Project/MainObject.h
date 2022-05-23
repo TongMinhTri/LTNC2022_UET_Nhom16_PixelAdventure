@@ -45,7 +45,7 @@ private:
 
 	int frame_w, frame_h;
 
-	SDL_Rect frame_clips[12]; //Luu frame
+	SDL_Rect frame_clips[12];
 	Input input_type;
 	int frame;
 	int status;

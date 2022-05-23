@@ -25,7 +25,7 @@ public:
 	void set_checkpoints(SDL_Renderer* renderer, int x_, int y_, int k_, int framew, string path);
 	void setImg(SDL_Renderer* renderer, string path);
 	void showImg(SDL_Renderer* renderer);
-	void setPos(int x_, int y_);//xet kich thuoc anh
+	void setPos(int x_, int y_);
 	void set_clips();
 	SDL_Rect getRect_points();
 	void Free();

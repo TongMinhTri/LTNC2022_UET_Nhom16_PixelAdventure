@@ -1,7 +1,8 @@
-1.  le van bao 900 3 lose
-2.       quang 100 0 lose
-3.       QUang 0   5 lose
-4.        fake 0   0 lose
-5.      hihi08 0   0 lose
-6. lam beo phi 0   0 lose
-7.         mpt 0   0 lose
+1.  le van bao 900  3 lose
+2.        hihi 100  0 lose
+3.       quang 100  0 lose
+4.       QUang 0    5 lose
+5.        fake 0    0 lose
+6.      hihi08 0    0 lose
+7. lam beo phi 0    0 lose
+8.         mpt 0    0 lose

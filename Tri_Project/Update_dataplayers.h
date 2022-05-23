@@ -50,8 +50,8 @@ void update_data1(int sco, int heart_game, string inputText, string Victory)
 			}
 			for (int i = space1; i < s.length(); i++)
 			{
-				if ((s[i] >= '1' && s[i] <= '9' || (s[i] == '0' && s[i + 1] == ' '))
-					&& s[i + 3] == ' ' && s[i + 4] >= '0' && s[i + 4] <= '9' && (s[i + 6] == 'w' || s[i + 6] == 'l'))
+				if ( (s[i] >= '1' && s[i] <= '9' || (s[i] == '0' && s[i + 1] == ' '))
+					&& s[i + 4] == ' ' && s[i + 5] >= '0' && s[i + 5] <= '9' && (s[i + 7] == 'w' || s[i + 7] == 'l'))
 				{
 					pos1 = i;
 					break;
@@ -64,9 +64,10 @@ void update_data1(int sco, int heart_game, string inputText, string Victory)
 			if (s2.length() > 1)
 			{
 				players[p].init_name(s2);
-				diem = (int(char(s[pos1]) - '0')) * 100;
+				if (s[pos1 + 3] == ' ') diem = (int(char(s[pos1]) - '0')) * 100;
+				else diem = (int(char(s[pos1 + 1]) - '0')) * 100 + (int(char(s[pos1]) - '0')) * 1000;
 				players[p].init_score(diem);
-				pos2 = pos1 + 4;
+				pos2 = pos1 + 5;
 				players[p].init_heart(int(char(s[pos2]) - '0'));
 				if (s[pos2 + 2] == 'w') players[p].init_win("win");
 				else players[p].init_win("lose");
@@ -107,7 +108,8 @@ void update_data1(int sco, int heart_game, string inputText, string Victory)
 			f4 << " ";
 		}
 		f4 << players[i].get_name() << " " << players[i].get_score();
-		if (players[i].get_score() == 0) f4 << "   ";
+		if (players[i].get_score() == 0) f4 << "    ";
+		else if (players[i].get_score() >= 100 && players[i].get_score() < 1000) f4 << "  ";
 		else f4 << " ";
 		f4 << players[i].get_heart() << " " << players[i].get_win();
 	}
@@ -157,7 +159,7 @@ void update_data2(int sco, int heart_game, string inputText, string Victory)
 			for (int i = space1; i < s.length(); i++)
 			{
 				if ((s[i] >= '1' && s[i] <= '9' || (s[i] == '0' && s[i + 1] == ' '))
-					&& s[i + 3] == ' ' && s[i + 4] >= '0' && s[i + 4] <= '9' && (s[i + 6] == 'w' || s[i + 6] == 'l'))
+					&& s[i + 4] == ' ' && s[i + 5] >= '0' && s[i + 5] <= '9' && (s[i + 7] == 'w' || s[i + 7] == 'l'))
 				{
 					pos1 = i;
 					break;
@@ -170,9 +172,10 @@ void update_data2(int sco, int heart_game, string inputText, string Victory)
 			if (s2.length() > 1)
 			{
 				players[p].init_name(s2);
-				diem = (int(char(s[pos1]) - '0')) * 100;
+				if (s[pos1 + 3] == ' ') diem = (int(char(s[pos1]) - '0')) * 100;
+				else diem = (int(char(s[pos1 + 1]) - '0')) * 100 + (int(char(s[pos1]) - '0')) * 1000;
 				players[p].init_score(diem);
-				pos2 = pos1 + 4;
+				pos2 = pos1 + 5;
 				players[p].init_heart(int(char(s[pos2]) - '0'));
 				if (s[pos2 + 2] == 'w') players[p].init_win("win");
 				else players[p].init_win("lose");
@@ -213,7 +216,8 @@ void update_data2(int sco, int heart_game, string inputText, string Victory)
 			f4 << " ";
 		}
 		f4 << players[i].get_name() << " " << players[i].get_score();
-		if (players[i].get_score() == 0) f4 << "   ";
+		if (players[i].get_score() == 0) f4 << "    ";
+		else if (players[i].get_score() >= 100 && players[i].get_score() < 1000) f4 << "  ";
 		else f4 << " ";
 		f4 << players[i].get_heart() << " " << players[i].get_win();
 	}
@@ -263,7 +267,7 @@ void update_big_data(int sco, int heart_game, string inputText, string Victory)
 			for (int i = space1; i < s.length(); i++)
 			{
 				if ((s[i] >= '1' && s[i] <= '9' || (s[i] == '0' && s[i + 1] == ' '))
-					&& s[i + 3] == ' ' && s[i + 4] >= '0' && s[i + 4] <= '9' && (s[i + 6] == 'l' || s[i + 6] == 'w'))
+					&& s[i + 4] == ' ' && s[i + 5] >= '0' && s[i + 5] <= '9' && (s[i + 7] == 'w' || s[i + 7] == 'l'))
 				{
 					pos1 = i;
 					break;
@@ -276,9 +280,10 @@ void update_big_data(int sco, int heart_game, string inputText, string Victory)
 			if (s2.length() > 1)
 			{
 				players[p].init_name(s2);
-				diem = (int(char(s[pos1]) - '0')) * 100;
+				if (s[pos1 + 3] == ' ') diem = (int(char(s[pos1]) - '0')) * 100;
+				else diem = (int(char(s[pos1 + 1]) - '0')) * 100 + (int(char(s[pos1]) - '0')) * 1000;
 				players[p].init_score(diem);
-				pos2 = pos1 + 4;
+				pos2 = pos1 + 5;
 				players[p].init_heart(int(char(s[pos2]) - '0'));
 				if (s[pos2 + 2] == 'w') players[p].init_win("win");
 				else players[p].init_win("lose");
@@ -319,7 +324,8 @@ void update_big_data(int sco, int heart_game, string inputText, string Victory)
 			f4 << " ";
 		}
 		f4 << players[i].get_name() << " " << players[i].get_score();
-		if (players[i].get_score() == 0) f4 << "   ";
+		if (players[i].get_score() == 0) f4 << "    ";
+		else if (players[i].get_score() >= 100 && players[i].get_score() < 1000) f4 << "  ";
 		else f4 << " ";
 		f4 << players[i].get_heart() << " " << players[i].get_win();
 	}

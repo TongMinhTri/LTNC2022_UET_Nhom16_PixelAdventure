@@ -23,18 +23,19 @@ TextScore::TextScore(int x, int y, int k)
 	setColor(2);
 }
 
-void TextScore::init(int x, int y, int k)
+void TextScore::init(int x, int y)
 {
 	setPos(x, y);
-	rect.w = k;
+	rect.w = 30;
 	rect.h = 30;
 	setColor(2);
+	str = "";
 }
 
 void TextScore::initText(TTF_Font*& fontText, int k)
 {
 	rect.h = k * 3 / 4;
-	if (TTF_Init() == -10)
+	if (TTF_Init() < 0)
 		cout << -1;
 	fontText = TTF_OpenFont("Fonts/SHOWG.ttf", k);
 	if (fontText == NULL)

@@ -18,7 +18,7 @@ public:
 	~Spike();
 	void set_spike(SDL_Renderer* renderer, int a, int b, int c, string path);
 	void setImg(SDL_Renderer* renderer, string path);
-	void setPos(int x, int y);//xet kich thuoc anh
+	void setPos(int x, int y);
 	void showImg(SDL_Renderer* renderer);
 	SDL_Rect getRect_spike();
 	void Free();

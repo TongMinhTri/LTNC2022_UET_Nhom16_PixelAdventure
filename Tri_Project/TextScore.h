@@ -22,12 +22,16 @@ public:
 	TextScore();
 	~TextScore();
 	TextScore(int x, int y, int k);
-	void init(int x, int y, int k);
+	void init(int x, int y);
 	void setPos(int x, int y);
 	void initText(TTF_Font*& fontText, int k);
 	void setText(string text)
 	{
 		str = text;
+	}
+	void set_W(int k)
+	{
+		rect.w = k;
 	}
 	void setColor(const int& type);
 	void createText(TTF_Font* font, SDL_Renderer* renderer, bool check_score);

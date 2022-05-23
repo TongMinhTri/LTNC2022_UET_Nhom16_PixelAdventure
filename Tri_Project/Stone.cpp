@@ -203,8 +203,8 @@ void Stone::show_frame_up(SDL_Renderer* renderer, double speed_run)
 	}
 	setPos(x, y);
 	frame++;
-	if (2 * frame / 3 >= number_frame) frame = 0; // ngan cho frame ko qua 3
-	SDL_Rect* current_clips = &frame_clips[2 * frame / 3]; // rect nguon de in ra anh
+	if (2 * frame / 3 >= number_frame) frame = 0;
+	SDL_Rect* current_clips = &frame_clips[2 * frame / 3];
 	SDL_Rect renderquad = { x, y, frame_w, frame_h };
 	SDL_RenderCopy(renderer, body, current_clips, &renderquad);
 }

@@ -5,8 +5,8 @@
 #include "BaseData.h"
 
 using namespace std;
-// su dung ma nguyen de dem so dong trong file
-// https://nguyenvanhieu.vn/dem-so-dong-so-ky-tu-trong-file-text-su-dung-c/
+
+// source: https://nguyenvanhieu.vn/dem-so-dong-so-ky-tu-trong-file-text-su-dung-c/
 class Player
 {
 private:

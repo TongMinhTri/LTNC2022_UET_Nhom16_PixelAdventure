@@ -200,7 +200,7 @@ bool loadSound()
 	victory_music = Mix_LoadMUS("Adv-music/victory/victory.wav");
 	gameover_music = Mix_LoadMUS("Adv-music/lose/game_over.wav");
 	pass_music = Mix_LoadMUS("Adv-music/map_pass/map_pass.wav");
-	soundEffect[jump_sound] = Mix_LoadWAV("Adv-SFX/Jump 4.wav");
+	soundEffect[jump_sound] = Mix_LoadWAV("Adv-SFX/jump.wav");
 	soundEffect[collect_sound] = Mix_LoadWAV("Adv-SFX/Collect 5.wav");
 	soundEffect[hitSpike_sound] = Mix_LoadWAV("Adv-SFX/Hit 1.wav");
 	soundEffect[hitRock_sound] = Mix_LoadWAV("Adv-SFX/Hit 5.wav");
@@ -232,7 +232,7 @@ bool loadSound()
 
 bool loadTop_Score()
 {
-	bool check = top_score.loadImg("Rank.png", renderer);
+	bool check = top_score.loadImg("Images/Rank/Rank.png", renderer);
 	if (!check)
 	{
 		return false;
@@ -307,7 +307,25 @@ bool loadMedia()
 int main(int argc, char* args[])
 {
 	int MAP[3] = { 0, 0, 0 };
+	TextScore name[8];
+	TextScore score[8];
+	TextScore heart[8];
+	TextScore r_status[8];
+	for (int i = 0; i < 8; i++)
+	{
+		name[i].init(165, 185 + i * 41);
+		name[i].initText(fontText, 20);
 
+		score[i].init(570, 185 + i * 41);
+		score[i].initText(fontText, 20);
+
+		heart[i].init(705, 185 + i * 41);
+		heart[i].set_W(15);
+		heart[i].initText(fontText, 20);
+
+		r_status[i].init(830, 185 + i * 41);
+		r_status[i].initText(fontText, 20);
+	}
 	if (!init())
 	{
 		return -1;
@@ -333,7 +351,7 @@ int main(int argc, char* args[])
 	if (Game_Status == MENU)
 	{
 	Menu:
-		if (Game_Status == GAME_OVER || Game_Status == WIN || Game_Status == MAP_CHOOSING || Game_Status == CHARACTER_CHOOSING)
+		if (Game_Status == GAME_OVER || Game_Status == WIN || Game_Status == MAP_CHOOSING || Game_Status == CHARACTER_CHOOSING || Game_Status == TOP_SCORE || Game_Status == INSTRUCTION)
 		{
 			if (!initRenderer())
 			{
@@ -344,22 +362,6 @@ int main(int argc, char* args[])
 				victory_music = Mix_LoadMUS("Adv-music/victory/victory.wav");
 				menu_music = Mix_LoadMUS("Adv-music/menu/menu.wav");
 				Mix_PlayMusic(menu_music, -1);
-			}
-			Game_Status = MENU;
-		}
-		if (Game_Status == INSTRUCTION)
-		{
-			if (!initRenderer())
-			{
-				return -1;
-			}
-			Game_Status = MENU;
-		}
-		if (Game_Status == TOP_SCORE)
-		{
-			if (!initRenderer())
-			{
-				return -1;
 			}
 			Game_Status = MENU;
 		}
@@ -758,7 +760,7 @@ int main(int argc, char* args[])
 				for (int i = space1; i < s.length(); i++)
 				{
 					if ((s[i] >= '1' && s[i] <= '9' || (s[i] == '0' && s[i + 1] == ' '))
-						&& s[i + 3] == ' ' && s[i + 4] >= '0' && s[i + 4] <= '9' && (s[i + 6] == 'l' || s[i + 6] == 'w'))
+						&& s[i + 4] == ' ' && s[i + 5] >= '0' && s[i + 5] <= '9' && (s[i + 7] == 'w' || s[i + 7] == 'l'))
 					{
 						pos1 = i;
 						break;
@@ -771,9 +773,10 @@ int main(int argc, char* args[])
 				if (s2.length() > 1)
 				{
 					players[p].init_name(s2);
-					diem = (int(char(s[pos1]) - '0')) * 100;
+					if (s[pos1 + 3] == ' ') diem = (int(char(s[pos1]) - '0')) * 100;
+					else diem = (int(char(s[pos1 + 1]) - '0')) * 100 + (int(char(s[pos1]) - '0')) * 1000;
 					players[p].init_score(diem);
-					pos2 = pos1 + 4;
+					pos2 = pos1 + 5;
 					players[p].init_heart(int(char(s[pos2]) - '0'));
 					if (s[pos2 + 2] == 'w') players[p].init_win("win");
 					else players[p].init_win("lose");
@@ -793,111 +796,62 @@ int main(int argc, char* args[])
 		}
 		sort(players, players + lines, sort_data);
 		int a = 8;
-		if (min(a, lines) > 0)
+		int d = 45;
+		for (int i = 0; i < min(a, lines); i++)
 		{
-			TextScore* name = new TextScore[min(a, lines)];
-			TextScore* score = new TextScore[min(a, lines)];
-			TextScore* heart = new TextScore[min(a, lines)];
-			TextScore* r_status = new TextScore[min(a, lines)];
-			int d = 45;
+			name[i].set_W(15 * players[i].get_length());
+			name[i].setText(players[i].get_name());
+			name[i].createText(fontText, renderer, true);
+
+			d = 45;
+			if (players[i].get_score() == 0) d = 15;
+			else if (players[i].get_score() >= 1000 ) d = 60;
+			score[i].set_W(d);
+			score[i].setText(to_string(players[i].get_score()));
+			score[i].createText(fontText, renderer, true);
+
+			heart[i].setText(to_string(players[i].get_heart()));
+			heart[i].createText(fontText, renderer, true);
+
+			d = 45;
+			if (players[i].get_win() == "lose") d = 60;
+			r_status[i].set_W(d);
+			r_status[i].setText(players[i].get_win());
+			r_status[i].createText(fontText, renderer, true);
+		}
+		bool quit = false;
+
+		while (!quit)
+		{
+			while (SDL_PollEvent(&event) != 0)
+			{
+				if (event.type == SDL_QUIT)
+				{
+					quit = true;
+				}
+				else if (event.type == SDL_MOUSEBUTTONDOWN)
+				{
+					if (event.motion.x >= 845 && event.motion.x <= 930 && event.motion.y >= 5 && event.motion.y <= 50)
+					{
+						top_score.Free();
+						delete[]players;
+						SDL_DestroyRenderer(renderer);
+						renderer = NULL;
+						goto Menu;
+					}
+				}
+			}
+			top_score.Render(renderer, NULL);
 			for (int i = 0; i < min(a, lines); i++)
 			{
-				d = 45;
-				name[i].init(165, 185 + i * 41, 15 * players[i].get_length());
-				name[i].initText(fontText, 20);
-				name[i].setText(players[i].get_name());
-				name[i].createText(fontText, renderer, true);
-
-				if (players[i].get_score() == 0) d = 15;
-				score[i].init(570, 185 + i * 41, d);
-				score[i].initText(fontText, 20);
-				score[i].setText(to_string(players[i].get_score()));
-				score[i].createText(fontText, renderer, true);
-
-				heart[i].init(705, 185 + i * 41, 15);
-				heart[i].initText(fontText, 20);
-				heart[i].setText(to_string(players[i].get_heart()));
-				heart[i].createText(fontText, renderer, true);
-
-				d = 45;
-				if (players[i].get_win() == "lose") d = 60;
-				r_status[i].init(830, 185 + i * 41, d);
-				r_status[i].initText(fontText, 20);
-				r_status[i].setText(players[i].get_win());
-				r_status[i].createText(fontText, renderer, true);
+				name[i].show(renderer);
+				score[i].show(renderer);
+				heart[i].show(renderer);
+				r_status[i].show(renderer);
 			}
-			bool quit = false;
-
-			while (!quit)
-			{
-				while (SDL_PollEvent(&event) != 0)
-				{
-					if (event.type == SDL_QUIT)
-					{
-						quit = true;
-					}
-					else if (event.type == SDL_MOUSEBUTTONDOWN)
-					{
-						if (event.motion.x >= 845 && event.motion.x <= 930 && event.motion.y >= 5 && event.motion.y <= 50)
-						{
-							for (int i = min(a, lines) - 1; i >= 0; i--)
-							{
-								name[i].Free();
-								score[i].Free();
-								heart[i].Free();
-								r_status[i].Free();
-							}
-							delete[]players;
-							delete[]name;
-							delete[]score;
-							delete[]heart;
-							delete[]r_status;
-							TTF_CloseFont(fontText);
-							fontText = NULL;
-							SDL_DestroyRenderer(renderer);
-							renderer = NULL;
-							top_score.Free();
-							goto Menu;
-						}
-					}
-				}
-				top_score.Render(renderer, NULL);
-				for (int i = 0; i < min(a, lines); i++)
-				{
-					name[i].show(renderer);
-					score[i].show(renderer);
-					heart[i].show(renderer);
-					r_status[i].show(renderer);
-				}
-				SDL_RenderPresent(renderer);
-			}
+			SDL_RenderPresent(renderer);
 		}
-		else
-		{
-			bool quit = false;
-			while (!quit)
-			{
-				while (SDL_PollEvent(&event) != 0)
-				{
-					if (event.type == SDL_QUIT)
-					{
-						quit = true;
-					}
-					else if (event.type == SDL_MOUSEBUTTONDOWN)
-					{
-						if (event.motion.x >= 845 && event.motion.x <= 930 && event.motion.y >= 5 && event.motion.y <= 50)
-						{
-							SDL_DestroyRenderer(renderer);
-							renderer = NULL;
-							top_score.Free();
-							goto Menu;
-						}
-					}
-				}
-				top_score.Render(renderer, NULL);
-				SDL_RenderPresent(renderer);
-			}
-		}
+
 	}
 	if (Game_Status == PLAY || Game_Status == GAME_OVER)
 	{
@@ -926,7 +880,6 @@ int main(int argc, char* args[])
 		Time timer;
 
 		put_data = false;
-		sco = 0;
 		heart_game = 0;
 
 		Mix_PlayMusic(game_music, -1);
@@ -964,7 +917,6 @@ int main(int argc, char* args[])
 		}
 
 		Stone* stone = new Stone[7];
-		//stone[0].init_stone(renderer, 480, 432, 192, 480, "Images/Stones/Spike_Idle.png", 1);
 		stone[1].init_stone(renderer, 576, 144, 432, 288, "Images/Stones/Spike_Idle.png", 1);
 		stone[2].init_stone(renderer, 768, 48, 96, 240, "Images/Stones/Spike_Idle.png", 1);
 		stone[3].init_stone(renderer, 288, 192, 192, 240, "Images/Stones/Spike_Idle.png", 1);
@@ -1019,6 +971,7 @@ int main(int argc, char* args[])
 		trunk.set_clips();
 		Bullet bullet;
 		bullet.set_bullet(renderer,256, 456,"Images/Enemies/Trunk/Bullet.png");
+
 		while (!quit)
 		{
 			timer.start();
@@ -1046,7 +999,6 @@ int main(int argc, char* args[])
 			character.updatePlayerPosition(map_data);
 			character.showImage(renderer);
 
-			//stone[0].stone_move(renderer);
 			stone[1].DoStone_Circle();
 			stone[1].Stone_Move_Circle(renderer);
 			stone[2].stone_move_up(renderer);
@@ -1175,6 +1127,10 @@ int main(int argc, char* args[])
 			}
 			if (live[0].isKill() == true)
 			{
+				for (int i = 0; i < 9; i++)
+				{
+					heart_game += live[i].get_heart();
+				}
 				Mix_FreeMusic(game_music);
 				game_music = NULL;
 				for (int i = 0; i < 3; i++)
@@ -1213,8 +1169,6 @@ int main(int argc, char* args[])
 				mark.Free();
 				player.Free();
 				name.Free();
-				TTF_CloseFont(fontText);
-				fontText = NULL;
 				SDL_DestroyRenderer(renderer);
 				renderer = NULL;
 				goto Game_over;
@@ -1224,6 +1178,10 @@ int main(int argc, char* args[])
 				victory++;
 				Mix_FreeMusic(game_music);
 				game_music = NULL;
+				for (int i = 0; i < 9; i++)
+				{
+					heart_game += live[i].get_heart();
+				}
 				for (int i = 0; i < 3; i++)
 				{
 					point[i].Free();
@@ -1249,6 +1207,8 @@ int main(int argc, char* args[])
 				delete[]spike;
 				delete[]live;
 				delete[]point;
+				trunk.Free();
+				bullet.Free();
 				background.Free();
 				character.Free();
 				gm.free();
@@ -1256,8 +1216,6 @@ int main(int argc, char* args[])
 				mark.Free();
 				player.Free();
 				name.Free();
-				TTF_CloseFont(fontText);
-				fontText = NULL;
 				SDL_DestroyRenderer(renderer);
 				renderer = NULL;
 				if (victory == 2)
@@ -1284,10 +1242,6 @@ int main(int argc, char* args[])
 				if (delay_time >= 0)
 					SDL_Delay(delay_time);
 			}
-		}
-		for (int i = 0; i < 9; i++)
-		{
-			heart_game += live[i].get_heart();
 		}
 	}
 	if (Game_Status == MAP_PASS_ONE)
@@ -1356,7 +1310,6 @@ int main(int argc, char* args[])
 		Time timer;
 
 		put_data = false;
-		sco = 0;
 		heart_game = 0;
 
 		Mix_PlayMusic(game_music, -1);
@@ -1365,7 +1318,7 @@ int main(int argc, char* args[])
 		gm2.loadTiles(renderer);
 		Map2 map_data2 = gm2.getMap();
 
-		MainObject character(0, 96);
+		MainObject character(864, 432);
 		character.setIMG(renderer, cha_select);
 		character.setClips();
 		bool quit = false;
@@ -1617,6 +1570,10 @@ int main(int argc, char* args[])
 			}
 			if (live[0].isKill() == true)
 			{
+				for (int i = 0; i < 9; i++)
+				{
+					heart_game += live[i].get_heart();
+				}
 				Mix_FreeMusic(game_music);
 				game_music = NULL;
 				for (int i = 0; i < 3; i++)
@@ -1661,8 +1618,6 @@ int main(int argc, char* args[])
 				mark.Free();
 				player.Free();
 				name.Free();
-				TTF_CloseFont(fontText);
-				fontText = NULL;
 				SDL_DestroyRenderer(renderer);
 				renderer = NULL;
 				goto Game_over;
@@ -1672,6 +1627,10 @@ int main(int argc, char* args[])
 				victory++;
 				Mix_FreeMusic(game_music);
 				game_music = NULL;
+				for (int i = 0; i < 9; i++)
+				{
+					heart_game += live[i].get_heart();
+				}
 				for (int i = 0; i < 3; i++)
 				{
 					point[i].Free();
@@ -1714,8 +1673,6 @@ int main(int argc, char* args[])
 				mark.Free();
 				player.Free();
 				name.Free();
-				TTF_CloseFont(fontText);
-				fontText = NULL;
 				SDL_DestroyRenderer(renderer);
 				renderer = NULL;
 				if (victory == 2)
@@ -1742,10 +1699,6 @@ int main(int argc, char* args[])
 				if (delay_time >= 0)
 					SDL_Delay(delay_time);
 			}
-		}
-		for (int i = 0; i < 9; i++)
-		{
-			heart_game += live[i].get_heart();
 		}
 	}
 	if (Game_Status == MAP_PASS_TWO)
@@ -1797,6 +1750,7 @@ int main(int argc, char* args[])
 			else if (MAP[2] == 1 && MAP[1] == 0) update_data2(sco, heart_game, inputText, "lose");
 			else update_big_data(sco, heart_game, inputText, "lose");
 		}
+		sco = 0;
 		Mix_PlayMusic(gameover_music, 1);
 		if (!initRenderer())
 		{
@@ -1857,6 +1811,7 @@ int main(int argc, char* args[])
 	{
 	Win:
 		update_big_data(sco, heart_game, inputText, "win");
+		sco = 0;
 		put_data = true;
 		Mix_PlayMusic(victory_music, 1);
 		if (!initRenderer())
@@ -1895,7 +1850,6 @@ int main(int argc, char* args[])
 			SDL_RenderPresent(renderer);
 		}
 	}
-
 
 	if (!put_data)
 	{

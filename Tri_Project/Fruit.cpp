@@ -52,8 +52,8 @@ void Fruits::showImg(SDL_Renderer* renderer)
 	if (alive)
 	{
 		frame++;
-		if (frame == 16) frame = 0; // ngan cho frame ko qua 16
-		SDL_Rect* current_clips = &frame_clips[frame]; // rect nguon de in ra anh
+		if (frame == 16) frame = 0; 
+		SDL_Rect* current_clips = &frame_clips[frame]; 
 		SDL_Rect renderquad = { x, y, frame_w, frame_h };
 		SDL_RenderCopy(renderer, body, current_clips, &renderquad);
 	}
