@@ -9,6 +9,12 @@
 * Làm video giới thiệu game
 
 2. Lê Văn Bảo:
+* Tạo và xây dựng hình ảnh, các chướng ngại vật trong game.
+* Làm phần Rank và lưu dữ liệu người chơi
+* Làm phần check va chạm
+* Chỉnh sửa phần nhập tên để phù hợp với game 
+* Chỉnh sửa và ghép code 
+
 3. Dương Quang Minh:
 * Thiết kế map
 * Tạo và xây dựng hình ảnh trong game, các chướng ngại vật di chuyển
