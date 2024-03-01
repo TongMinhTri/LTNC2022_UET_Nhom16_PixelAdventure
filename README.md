@@ -28,5 +28,6 @@
 * Tóm tắt: Game gồm có 4 nhân vật và 2 map với độ khó khác nhau để người chơi lựa chọn. Người chơi có nhiệm vụ điều khiển nhân vật của mình vượt qua các cạm bẫy (gai, đá, lưỡi cưa, ...) và kẻ địch, đồng thời thu thập hoa quả để gia tắng số điểm và đi về phía chiếc cúp để giành chiến thắng. Nếu vượt qua được cả 2 map thì sẽ phá đảo game.
 
 ***CÁC LỆNH ĐỂ CHẠY PROJECT**
-* Bước 1(Biên dịch project): Bật CMD ở project rồi nhập lệnh g++ -Iinclude -Iinclude/sdl -Iinclude/headers -Llib -o main src/*.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+* Đảm bảo máy tính đã cài đặt các thư viện SDL2, SDL2_mixer, SDL2_ttf, SDL2_image
+* Bước 1(Biên dịch project): Vào thư mục Game_project mở CMD ở project rồi nhập lệnh g++ -Iinclude -Iinclude/sdl -Iinclude/headers -Llib -o main src/*.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 * Bước 2(Chạy game): Nhập main.exe 
