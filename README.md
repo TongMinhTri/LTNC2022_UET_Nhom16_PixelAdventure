@@ -29,5 +29,5 @@
 
 ***CÁC LỆNH ĐỂ CHẠY PROJECT**
 * Đảm bảo máy tính đã cài đặt các thư viện SDL2, SDL2_mixer, SDL2_ttf, SDL2_image
-* Bước 1(Biên dịch project): Vào thư mục Game_project mở CMD ở project rồi nhập lệnh g++ -Iinclude -Iinclude/sdl -Iinclude/headers -Llib -o main src/*.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+* Bước 1(Biên dịch project): Vào thư mục Game_project mở CMD rồi nhập lệnh g++ -Iinclude -Iinclude/sdl -Iinclude/headers -Llib -o main src/*.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 * Bước 2(Chạy game): Nhập main.exe 
